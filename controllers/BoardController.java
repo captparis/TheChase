@@ -31,8 +31,8 @@ public class BoardController {
 	private Board board;
 	private BoardView boardView;
 	private HudView hudView;
-	private Ground ground;
-	private MovableGround movableGround;
+	private BoardItem ground;
+	private BoardItem movableGround;
 
 	public BoardController(GameController gameController) {
 
