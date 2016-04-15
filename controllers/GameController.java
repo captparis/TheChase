@@ -55,6 +55,7 @@ public class GameController {
 
     public GameController(JFrame mainWindow) {
         this.mainWindow = mainWindow;
+        mainWindow.setResizable(false);
         this.game = new Game();
         boardController = new BoardController(this);
         unitController = new UnitController(this);
