@@ -1,0 +1,11 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix} OSSD Asignment 1 - The Chase
+${licensePrefix} Charles Yim - S3570764
+${licensePrefix} Jacob Paris - S3238163
+${licensePrefix} Chen Liu- S3481556
+${licensePrefix} Taison Eady - S3282633
+<#if licenseLast??>
+${licenseLast}
+</#if>
