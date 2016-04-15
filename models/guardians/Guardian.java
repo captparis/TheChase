@@ -12,11 +12,9 @@ import models.Actor;
 
 public abstract class Guardian extends Actor {
 
-	public Guardian()
-	{
+	public Guardian() {
 		super();
 
 	}
 
-	
 }

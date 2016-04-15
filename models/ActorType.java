@@ -6,8 +6,8 @@ public class ActorType {
 	private String pack;
 	private int initX;
 	private int initY;
-	
-	public ActorType(String type, String pack, int initX, int initY){
+
+	public ActorType(String type, String pack, int initX, int initY) {
 		this.type = type;
 		this.pack = pack;
 		this.initX = initX;
@@ -17,7 +17,7 @@ public class ActorType {
 	public String getType() {
 		return type;
 	}
-	
+
 	public String getPack() {
 		return pack;
 	}
@@ -31,6 +31,6 @@ public class ActorType {
 	}
 
 	public String getQualifiedName() {
-		return pack +"."+ type;
+		return pack + "." + type;
 	}
 }

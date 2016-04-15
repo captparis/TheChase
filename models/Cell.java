@@ -21,44 +21,44 @@ import models.items.MovableGround;
 public class Cell extends JButton {
 
 	int xPos;
-    int yPos;
-    
-    BoardItem item;
-    Unit unit;
+	int yPos;
 
-    public Cell(int x, int y, BoardItem item) {
-        this.xPos = x;
-        this.yPos = y;
-        this.item = item;
-        setBorder(new LineBorder(Color.black, 1)); // Set cell's border
-        
-    }
+	BoardItem item;
+	Unit unit;
 
-    /**
-     * Paint the cell
-     */
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        this.setBackground(null); // background color
-        
-        ImageIcon icon;
-        
-        if(unit == null){
-        	icon = item.getIcon();
-        }else{
-            icon = unit.getIcon();
-        }
+	public Cell(int x, int y, BoardItem item) {
+		this.xPos = x;
+		this.yPos = y;
+		this.item = item;
+		setBorder(new LineBorder(Color.black, 1)); // Set cell's border
 
-        g.drawImage(icon.getImage(), 0, 0, getSize().width, getSize().height, this);
-    }
+	}
 
-    public Unit getUnit() {
-        return this.unit;
-    }
+	/**
+	 * Paint the cell
+	 */
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		this.setBackground(null); // background color
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
-    }
+		ImageIcon icon;
+
+		if (unit == null) {
+			icon = item.getIcon();
+		} else {
+			icon = unit.getIcon();
+		}
+
+		g.drawImage(icon.getImage(), 0, 0, getSize().width, getSize().height, this);
+	}
+
+	public Unit getUnit() {
+		return this.unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 
 	public int getXPos() {
 		return xPos;

@@ -8,34 +8,29 @@
 
 package models.guardians;
 
-public class Hunter extends Guardian
-{
+public class Hunter extends Guardian {
 
-	public Hunter()
-	{
+	public Hunter() {
 		super();
 	}
 
 	@Override
-	public boolean attack()
-	{
+	public boolean attack() {
 		System.out.println("Hunter attack!!!");
 		return true;
 	}
 
 	@Override
-	public boolean useAbility()
-	{
-		throw new UnsupportedOperationException("Not supported yet."); 
+	public boolean useAbility() {
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
 	@Override
-	public boolean moveable(int x,int y)
-	{
-		//Hunter can only move on the diagonal
-		if(Math.abs(x)==Math.abs(y)){
+	public boolean moveable(int x, int y) {
+		// Hunter can only move on the diagonal
+		if (Math.abs(x) == Math.abs(y)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

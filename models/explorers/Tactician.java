@@ -8,25 +8,22 @@
 
 package models.explorers;
 
+public class Tactician extends Explorer {
 
-public class Tactician extends Explorer{
-
-
-
-    public Tactician()
-	{
+	public Tactician() {
 		super();
 	}
 
 	@Override
-    public boolean useAbility(){
-        System.out.println("Tactician use ability");
-        return true;
-    }
+	public boolean useAbility() {
+		System.out.println("Tactician use ability");
+		return true;
+	}
 
-    @Override
-    public boolean attack() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+	@Override
+	public boolean attack() {
+		// To change body of generated methods, choose Tools | Templates.
+		throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 }

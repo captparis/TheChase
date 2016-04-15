@@ -2,22 +2,18 @@ package models.explorers;
 
 import models.Actor;
 
-public abstract class Explorer extends Actor
-{
+public abstract class Explorer extends Actor {
 
-	public Explorer()
-	{
+	public Explorer() {
 		super();
 	}
-	
-	public boolean attack(int[] pos)
-	{
+
+	public boolean attack(int[] pos) {
 		return false;
 	}
 
-    @Override
-	public boolean moveable(int x, int y)
-	{
+	@Override
+	public boolean moveable(int x, int y) {
 		return true;
 	}
 

@@ -9,6 +9,7 @@ package main;
 
 import java.util.Random;
 
+// the dice can return a random number from 1-6
 public class DiceUtility {
 	public int roll() {
 		int number = 0;

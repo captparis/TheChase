@@ -9,37 +9,36 @@ package controllers;
 
 import models.*;
 
-
 public class UnitController {
-    
-    private GameController gameController;
 
-    public UnitController(GameController gameController) {
-        this.gameController = gameController;
-    }
-    
-    public Actor newActor(ActorType actorType) throws Exception {
-    	
-    	Class<?> unitClass;
-    	Actor actor;
+	private GameController gameController;
+
+	public UnitController(GameController gameController) {
+		this.gameController = gameController;
+	}
+
+	public Actor newActor(ActorType actorType) throws Exception {
+
+		Class<?> unitClass;
+		Actor actor;
 
 		unitClass = Class.forName(actorType.getQualifiedName());
-		actor = (Actor)unitClass.newInstance();
-		
+		actor = (Actor) unitClass.newInstance();
+
 		actor.setInitX(actorType.getInitX());
 		actor.setInitY(actorType.getInitY());
-		
-    	return actor;	
-    }
-    
-    public Unit newUnit(String qualifiedUnitType) throws Exception {
-    	Class<?> unitClass;
-    	Unit unit;
+
+		return actor;
+	}
+
+	public Unit newUnit(String qualifiedUnitType) throws Exception {
+		Class<?> unitClass;
+		Unit unit;
 
 		unitClass = Class.forName(qualifiedUnitType);
-		unit = (Unit)unitClass.newInstance();
+		unit = (Unit) unitClass.newInstance();
 
-    	return unit;	
-    }
-    
+		return unit;
+	}
+
 }
