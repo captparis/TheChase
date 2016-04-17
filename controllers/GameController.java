@@ -84,8 +84,6 @@ public class GameController {
 						new ActorType("Hunter", "models.guardians", ROWS - 1, 0) });
 	}
 
-	//
-
 	public void startGame() {
 		System.out.println("Start Game");
 		try {
@@ -179,7 +177,6 @@ public class GameController {
 		return playerController;
 	}
 
-	// TODO reset the dice value after end turn is pressed
 	public void hudButtonClicked() {
 		// Determines what actions should be completed when HUD button is
 		// pressed and instigates them
@@ -188,14 +185,7 @@ public class GameController {
 			playerController.newDiceRoll(currentPlayer, rollDice());
 
 			// update the hud view with the new dice amount
-			boardController.setDiceRoll(currentPlayer.getRemainingMoves()); // TODO
-																			// possibly
-																			// move
-																			// current
-																			// player
-																			// to
-																			// player
-																			// controller
+			boardController.setDiceRoll(currentPlayer.getRemainingMoves()); 
 			gameState = GameController.State.ACTION;
 			boardController.setUnitState();
 		} // Move to check win state, restart if nobody won

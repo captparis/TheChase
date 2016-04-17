@@ -15,7 +15,6 @@ public class HudView extends JPanel{
 	public Boolean isExplorer;
 
 	public HudView(ActionListener hudListener){
-		// TODO Auto-generated constructor stub
 		
 		Color bluegrey = new Color(179, 204, 204);
 		this.setBackground(bluegrey);

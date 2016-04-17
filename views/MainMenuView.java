@@ -39,7 +39,6 @@ public class MainMenuView extends javax.swing.JPanel {
         try {
 			backgroundImage = ImageIO.read(new File("bin/images/menuBG.jpg"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         this.setPreferredSize(new Dimension(919,566));
