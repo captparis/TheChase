@@ -27,7 +27,7 @@ public class GameController {
 	private static DiceUtility dice;
 
 	public static enum State {
-		DICE_ROLL, ACTION, CHECK_WIN
+		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
 	};
 
 	private static final int ROWS = 15;
@@ -136,6 +136,17 @@ public class GameController {
 		if (gameState == State.DICE_ROLL || gameState == State.CHECK_WIN) {
 			return;
 		}
+		if(cell == selectedCell){
+			if( gameState ==State.MOVE){
+				gameState = State.ATTACK;
+			}
+			else {
+				gameState = State.MOVE;
+			}
+			System.out.println("gameState : "+gameState);
+				
+		}
+		if(gameState == State.MOVE) {
 
 		if (currentPlayer.hasActor((Actor) cell.getUnit())) {
 			boardController.resetMovable(lastMovableCells);
@@ -162,8 +173,19 @@ public class GameController {
 			// update the hudview with the number of remaining moves
 			boardController.setDiceRoll(currentPlayer.getRemainingMoves());
 			// reset the movable squares to ground and repaint the board
+		
 			boardController.resetMovable(lastMovableCells);
 			boardController.repaintBoard();
+		}
+		}
+		else {
+			if (currentPlayer.hasActor((Actor) cell.getUnit())) {
+				boardController.resetMovable(lastMovableCells);
+				selectedCell = cell;
+				lastMovableCells = boardController.attackable(cell);
+				boardController.drawAttackable(lastMovableCells);
+			}
+			
 		}
 	}
 
@@ -186,12 +208,14 @@ public class GameController {
 
 			// update the hud view with the new dice amount
 			boardController.setDiceRoll(currentPlayer.getRemainingMoves()); 
-			gameState = GameController.State.ACTION;
+			gameState = GameController.State.MOVE;
 			boardController.setUnitState();
 		} // Move to check win state, restart if nobody won
-		else if (gameState == GameController.State.ACTION) {
+		else if (gameState == GameController.State.MOVE || gameState == GameController.State.ATTACK) {
 			// Reset the dice rolls to 0
 			boardController.setDiceRoll(0);
+			boardController.resetMovable(lastMovableCells);
+			boardController.repaintBoard();
 			// Check if the player has won
 			gameState = GameController.State.CHECK_WIN;
 			if (winner == null) {

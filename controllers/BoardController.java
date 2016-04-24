@@ -30,6 +30,7 @@ public class BoardController {
 	private HudView hudView;
 	private BoardItem ground;
 	private BoardItem movableGround;
+	private BoardItem attackableGround;
 
 
 	public BoardController(GameController gameController) {
@@ -37,6 +38,7 @@ public class BoardController {
 		this.gameController = gameController;
 		ground = new Ground();
 		movableGround = new MovableGround();
+		attackableGround = new Gate();
 
 
 	}
@@ -130,6 +132,39 @@ public class BoardController {
 
 		return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
 	}
+	public List<Cell> attackable(Cell origin) {
+		List<Cell> attackCells = new ArrayList<>();
+		int xPos = origin.getXPos();
+		int yPos = origin.getYPos();
+		//temp
+		int range = 1;
+		
+		for (int x = -range; x <= range; x++) {
+			if (xPos + x < 0 || xPos + x >= board.getColumns()) {
+				continue;
+			}
+			for (int y = -range; y <= range; y++) {
+				if (yPos + y < 0 || yPos + y >= board.getRows()) {
+					continue;
+				}
+
+				int movableX = origin.getXPos() + x;
+				int movableY = origin.getYPos() + y;
+
+				if (origin.getUnit().moveable(x, y)) {
+					Cell movableCell = board.getCells()[movableX][movableY];
+					if (movableCell.getItem() instanceof Gate || movableCell.getUnit() != null) {
+						continue;
+					}
+					attackCells.add(movableCell);
+				}
+			}
+		}
+		
+		return attackCells;
+	
+	
+	}
 
 	// returns the array of possible coordinates for a unit to move to.
 	// assumes origin contains movable unit and rollCount is a valid dice roll.
@@ -169,6 +204,13 @@ public class BoardController {
 		for (Cell movableCell : movableCells) {
 			movableCell.setItem(movableGround);
 			movableCell.repaint();
+		}
+	}
+	// Assumes the movable cells passed in are on the board
+	public void drawAttackable(List<Cell> Cells) {
+		for (Cell cell : Cells) {
+			cell.setItem(attackableGround);
+			cell.repaint();
 		}
 	}
 
