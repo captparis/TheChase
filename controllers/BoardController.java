@@ -10,13 +10,10 @@ package controllers;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.swing.*;
 import models.*;
 import models.explorers.Explorer;
@@ -34,11 +31,13 @@ public class BoardController {
 	private BoardItem ground;
 	private BoardItem movableGround;
 
+
 	public BoardController(GameController gameController) {
 
 		this.gameController = gameController;
 		ground = new Ground();
 		movableGround = new MovableGround();
+
 
 	}
 
@@ -54,9 +53,10 @@ public class BoardController {
 	}
 
 	public void initBoard(int rows, int columns) {
+		
 		board = new Board(rows, columns, ground);
 
-		boardView = new BoardView(new BoardActionListener(), rows, columns, board.getCells());
+		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
 		hudView = new HudView(new HUDActionListener());
 
 		for (Player player : gameController.getPlayers().values()) {
@@ -179,17 +179,59 @@ public class BoardController {
 		}
 	}
 
-	class BoardActionListener implements ActionListener {
+	class MouseActionListener implements MouseListener{
 
 		@Override
-		public void actionPerformed(ActionEvent e) {
-
+		public void mouseClicked(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
 			Cell cell = ((Cell) e.getSource());
 
 			gameController.cellClicked(cell);
-
+			
 		}
 
+		@Override
+		public void mousePressed(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			//0 = item, 1 = ally, 2 = enemy
+			int type = 0;
+
+			
+			if(((Cell) e.getSource()).getUnit() != null) {
+				if (gameController.getCurrentPlayer().hasActor((Actor) ((Cell) e.getSource()).getUnit())) {
+				    type = 1;
+				}
+				else {
+					type = 2;
+				}
+			}
+			boardView.changeBorder(((Cell) e.getSource()), board.getMouseOverBorder(type));	
+		}
+
+		@Override
+		public void mouseExited(MouseEvent e)
+		{
+			// TODO Auto-generated method stub
+			boardView.changeBorder(((Cell) e.getSource()), board.getBorder());
+			
+		}
+		
 	}
 
 	class HUDActionListener implements ActionListener {

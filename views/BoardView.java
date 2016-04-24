@@ -1,11 +1,11 @@
 package views;
 
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.LineBorder;
+import javax.swing.border.Border;
 import models.Cell;
 
 public class BoardView extends JPanel {
@@ -17,7 +17,7 @@ public class BoardView extends JPanel {
 	 * Initialize UI with number of rows, columns.
 	 * Initialize cells and add listener on each cell
 	 */
-	public BoardView(ActionListener listener, int rows, int columns, Cell[][] cells) {
+	public BoardView(MouseListener mouseListener, int rows, int columns, Cell[][] cells,Border border) {
 
 		super(new GridLayout(rows, columns, 0, 0));
 		this.setPreferredSize(new Dimension(700, 700));
@@ -26,13 +26,14 @@ public class BoardView extends JPanel {
 		// add listener on cell, and add cell on board
 		for (Cell[] cellRow : cells) {
 			for (Cell cell : cellRow) {
-				cell.addActionListener(listener);
+				cell.addMouseListener(mouseListener);
+				cell.setBorder(border);
 				this.add(cell);
 				System.out.println("Cell added");
 			}
 		}
 		// Set line borders on the cells panel and the status label
-		this.setBorder(new LineBorder(Color.black, 1));
+		this.setBorder(border);
 	}
 
 	// draw image on each cell
@@ -42,5 +43,9 @@ public class BoardView extends JPanel {
 				cell.repaint();
 			}
 		}
+	}
+	// set border
+	public void changeBorder(Cell cell,Border border) {
+		cell.setBorder(border);
 	}
 }

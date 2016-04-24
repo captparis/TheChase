@@ -253,8 +253,10 @@ public class GameController {
 	public Map<String, Player> getPlayers() {
 		return game.getPlayers();
 	}
+	
 
 	public void setWinner(Player winner) {
 		this.winner = winner;
 	}
+
 }

@@ -8,20 +8,17 @@
 
 package models;
 
-import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.border.LineBorder;
-
-import models.items.MovableGround;
 
 //An inner class for a cell
 public class Cell extends JButton {
 
 	int xPos;
 	int yPos;
+
 
 	BoardItem item;
 	Unit unit;
@@ -30,7 +27,6 @@ public class Cell extends JButton {
 		this.xPos = x;
 		this.yPos = y;
 		this.item = item;
-		setBorder(new LineBorder(Color.black, 1)); // Set cell's border
 
 	}
 
