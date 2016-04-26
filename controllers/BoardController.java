@@ -31,6 +31,7 @@ public class BoardController {
 	private BoardItem ground;
 	private BoardItem movableGround;
 	private BoardItem attackableGround;
+	private BoardItem gate;
 
 
 	public BoardController(GameController gameController) {
@@ -70,7 +71,10 @@ public class BoardController {
 	}
 
 	private void initItems() {
-		BoardItem gate = new Gate();
+		gate = new Gate();
+		setItem();
+	}
+	private void setItem() {
 		setCellItem(0, 0, gate);
 		setCellItem(1, 0, gate);
 		setCellItem(0, 1, gate);
@@ -153,7 +157,7 @@ public class BoardController {
 
 				if (origin.getUnit().moveable(x, y)) {
 					Cell movableCell = board.getCells()[movableX][movableY];
-					if (movableCell.getItem() instanceof Gate || movableCell.getUnit() != null) {
+					if (movableCell.getUnit() != null) {
 						continue;
 					}
 					attackCells.add(movableCell);
@@ -188,7 +192,7 @@ public class BoardController {
 
 				if (origin.getUnit().moveable(x, y)) {
 					Cell movableCell = board.getCells()[movableX][movableY];
-					if (movableCell.getItem() instanceof Gate || movableCell.getUnit() != null) {
+					if ( movableCell.getUnit() != null) {
 						continue;
 					}
 					movableCells.add(movableCell);
@@ -284,6 +288,7 @@ public class BoardController {
 	}
 
 	public void repaintBoard() {
+		setItem();
 		boardView.repaintBoard();
 	}
 }

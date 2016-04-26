@@ -153,7 +153,7 @@ public class GameController {
 			selectedCell = cell;
 			lastMovableCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
 			boardController.drawMovable(lastMovableCells);
-		} else if (cell.getItem() instanceof MovableGround || cell.getItem() instanceof Gate) {
+		} else if (cell.getItem() instanceof MovableGround) {
 			// move the unit in the selected cell to the clicked cell
 			int moveDistance = boardController.move(selectedCell, cell);
 
