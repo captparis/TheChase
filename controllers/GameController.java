@@ -51,7 +51,7 @@ public class GameController {
 	// State variables
 	private Player currentPlayer;
 	private Cell selectedCell;
-	private List<Cell> lastMovableCells;
+	private List<Cell> lastCells;
 	private State gameState;
 	private Player winner;
 
@@ -62,7 +62,7 @@ public class GameController {
 		boardController = new BoardController(this);
 		unitController = new UnitController(this);
 		playerController = new PlayerController(this, unitController);
-		lastMovableCells = new ArrayList<Cell>();
+		lastCells = new ArrayList<Cell>();
 		dice = new DiceUtility();
 		gameState = State.DICE_ROLL;
 		setupTeams();
@@ -136,7 +136,7 @@ public class GameController {
 		if (gameState == State.DICE_ROLL || gameState == State.CHECK_WIN) {
 			return;
 		}
-		if(cell == selectedCell){
+		if(cell == selectedCell && currentPlayer.getTeam() == "Guardian"){
 			if( gameState ==State.MOVE){
 				gameState = State.ATTACK;
 			}
@@ -149,10 +149,10 @@ public class GameController {
 		if(gameState == State.MOVE) {
 
 		if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-			boardController.resetMovable(lastMovableCells);
+			boardController.resetMovable(lastCells);
 			selectedCell = cell;
-			lastMovableCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
-			boardController.drawMovable(lastMovableCells);
+			lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
+			boardController.drawMovable(lastCells);
 		} else if (cell.getItem() instanceof MovableGround) {
 			// move the unit in the selected cell to the clicked cell
 			int moveDistance = boardController.move(selectedCell, cell);
@@ -174,16 +174,16 @@ public class GameController {
 			boardController.setDiceRoll(currentPlayer.getRemainingMoves());
 			// reset the movable squares to ground and repaint the board
 		
-			boardController.resetMovable(lastMovableCells);
+			boardController.resetMovable(lastCells);
 			boardController.repaintBoard();
 		}
 		}
 		else {
 			if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-				boardController.resetMovable(lastMovableCells);
+				boardController.resetMovable(lastCells);
 				selectedCell = cell;
-				lastMovableCells = boardController.attackable(cell);
-				boardController.drawAttackable(lastMovableCells);
+				lastCells = boardController.attackable(cell);
+				boardController.drawAttackable(lastCells);
 			}
 			
 		}
@@ -214,7 +214,7 @@ public class GameController {
 		else if (gameState == GameController.State.MOVE || gameState == GameController.State.ATTACK) {
 			// Reset the dice rolls to 0
 			boardController.setDiceRoll(0);
-			boardController.resetMovable(lastMovableCells);
+			boardController.resetMovable(lastCells);
 			boardController.repaintBoard();
 			// Check if the player has won
 			gameState = GameController.State.CHECK_WIN;

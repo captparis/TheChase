@@ -17,6 +17,7 @@ import java.util.List;
 import javax.swing.*;
 import models.*;
 import models.explorers.Explorer;
+import models.guardians.Guardian;
 import models.items.*;
 import views.BoardView;
 import views.HudView;
@@ -137,34 +138,29 @@ public class BoardController {
 		return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
 	}
 	public List<Cell> attackable(Cell origin) {
+		Guardian unit = (Guardian) origin.getUnit();
+		List<Pos> attackRange = new ArrayList<Pos>(unit.getAttackRange());
 		List<Cell> attackCells = new ArrayList<>();
 		int xPos = origin.getXPos();
 		int yPos = origin.getYPos();
 		//temp
-		int range = 1;
-		
-		for (int x = -range; x <= range; x++) {
-			if (xPos + x < 0 || xPos + x >= board.getColumns()) {
+		for (Pos range :attackRange){
+			if (xPos + range.getXPos() < 0 || xPos + range.getXPos() >= board.getColumns()) {
 				continue;
 			}
-			for (int y = -range; y <= range; y++) {
-				if (yPos + y < 0 || yPos + y >= board.getRows()) {
-					continue;
-				}
+			else if (yPos + range.getYPos() < 0 || yPos + range.getYPos() >= board.getRows()) {
+				continue;
+			}
+			else{
+				int movableX = origin.getXPos() + range.getXPos();
+				int movableY = origin.getYPos() + range.getYPos();
 
-				int movableX = origin.getXPos() + x;
-				int movableY = origin.getYPos() + y;
-
-				if (origin.getUnit().moveable(x, y)) {
 					Cell movableCell = board.getCells()[movableX][movableY];
-					if (movableCell.getUnit() != null) {
-						continue;
-					}
+					
 					attackCells.add(movableCell);
-				}
 			}
 		}
-		
+	
 		return attackCells;
 	
 	
