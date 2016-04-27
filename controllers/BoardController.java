@@ -42,7 +42,7 @@ public class BoardController {
 		this.gameController = gameController;
 		ground = new Ground();
 		movableGround = new MovableGround();
-		attackableGround = new Gate();
+		attackableGround = new AttackGround();
 
 
 	}
