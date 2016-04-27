@@ -8,10 +8,13 @@
 
 package models.guardians;
 
+import models.Pos;
+
 public class Hunter extends Guardian {
 
 	public Hunter() {
 		super();
+		this.setAttakrange();
 	}
 
 	@Override
@@ -33,6 +36,18 @@ public class Hunter extends Guardian {
 		} else {
 			return false;
 		}
+	}
+	private void setAttakrange(){
+		for(int i=-2;i<3;i++){
+			for(int j=-2;j<3;j++){
+				if(i==0||j==0){
+					Pos pos = new Pos(i,j);
+					super.setAttackRange(pos);
+					}
+				
+			}
+		}
+		
 	}
 
 }

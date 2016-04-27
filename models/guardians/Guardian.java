@@ -20,22 +20,18 @@ public abstract class Guardian extends Actor {
 	public Guardian() {
 		super();
 		attackRange = new ArrayList<Pos>();
-		setAttackRange();
+
 		
 	}
 	public Guardian(List<Pos> attackPos){
 		super();
 		this.attackRange = attackPos;
 	}
-	private void setAttackRange(){
+	protected void setAttackRange(Pos pos){
 		
-		for(int i=-1;i<2;i++){
-			for(int j=-1;j<2;j++){
-				Pos pos = new Pos(i,j);
+
 				this.attackRange.add(pos);
-			}
-		}
-		
+					
 	}
 	public List<Pos> getAttackRange(){
 		return attackRange;

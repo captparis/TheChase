@@ -150,6 +150,7 @@ public class GameController {
 
 		if (currentPlayer.hasActor((Actor) cell.getUnit())) {
 			boardController.resetMovable(lastCells);
+			boardController.repaintBoard();
 			selectedCell = cell;
 			lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
 			boardController.drawCells(lastCells, gameState);

@@ -1,9 +1,12 @@
 package models.guardians;
 
+import models.Pos;
+
 public class Golem extends Guardian {
 
 	public Golem() {
 		super();
+		this.setAttakrange();
 	}
 
 	@Override
@@ -27,6 +30,18 @@ public class Golem extends Guardian {
 			return true;
 		}
 
+	}
+	private void setAttakrange(){
+		for(int i=-2;i<3;i++){
+			for(int j=-2;j<3;j++){
+				if(!((Math.abs(i)==2)&&(Math.abs(j)==2)||(Math.abs(i)<2&Math.abs(j)<2))){
+					Pos pos = new Pos(i,j);
+					super.setAttackRange(pos);
+
+			}
+		}
+		
+	}
 	}
 
 }
