@@ -30,8 +30,8 @@ public class GameController {
 		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
 	};
 
-	private static final int ROWS = 15;
-	private static final int COLUMNS = 15;
+	private static final int ROWS = 8;
+	private static final int COLUMNS = 8;
 
 	private Map<String, ActorType[]> teamSetup;
 
@@ -152,7 +152,7 @@ public class GameController {
 			boardController.resetMovable(lastCells);
 			selectedCell = cell;
 			lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
-			boardController.drawMovable(lastCells);
+			boardController.drawCells(lastCells, gameState);
 		} else if (cell.getItem() instanceof MovableGround) {
 			// move the unit in the selected cell to the clicked cell
 			int moveDistance = boardController.move(selectedCell, cell);
@@ -183,10 +183,24 @@ public class GameController {
 				boardController.resetMovable(lastCells);
 				selectedCell = cell;
 				lastCells = boardController.attackable(cell);
-				boardController.drawAttackable(lastCells);
+				boardController.drawCells(lastCells, gameState);
+			}
+			else if(!currentPlayer.hasActor((Actor) cell.getUnit())&& cell.getUnit()!=null){
+				for (Cell temp:lastCells)
+				{
+					if(cell.getXPos()==temp.getXPos()&&cell.getYPos()==temp.getYPos())
+					{
+						
+						System.out.println(selectedCell.getUnit().getClass().getSimpleName()+" is attacking " + cell.getUnit().getClass().getSimpleName());
+						boardController.kill(cell);
+						return;
+					}
+				}
+				
 			}
 			
-		}
+			
+	}
 	}
 
 	private void quitGame() {
@@ -216,6 +230,7 @@ public class GameController {
 			boardController.setDiceRoll(0);
 			boardController.resetMovable(lastCells);
 			boardController.repaintBoard();
+			selectedCell= null;
 			// Check if the player has won
 			gameState = GameController.State.CHECK_WIN;
 			if (winner == null) {

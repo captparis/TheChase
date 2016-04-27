@@ -15,6 +15,8 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+
+import controllers.GameController.State;
 import models.*;
 import models.explorers.Explorer;
 import models.guardians.Guardian;
@@ -127,6 +129,9 @@ public class BoardController {
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
 	}
+	public void kill(Cell target){
+		target.setUnit(null);
+	}
 
 	// calculates the absolute distance between two given cells
 	private int getDistance(Cell origin, Cell target) {
@@ -138,6 +143,7 @@ public class BoardController {
 		return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
 	}
 	public List<Cell> attackable(Cell origin) {
+		// TODO need to fix 
 		Guardian unit = (Guardian) origin.getUnit();
 		List<Pos> attackRange = new ArrayList<Pos>(unit.getAttackRange());
 		List<Cell> attackCells = new ArrayList<>();
@@ -152,12 +158,12 @@ public class BoardController {
 				continue;
 			}
 			else{
-				int movableX = origin.getXPos() + range.getXPos();
-				int movableY = origin.getYPos() + range.getYPos();
+				int attackX = origin.getXPos() + range.getXPos();
+				int attackY = origin.getYPos() + range.getYPos();
 
-					Cell movableCell = board.getCells()[movableX][movableY];
+					Cell attackCell = board.getCells()[attackX][attackY];
 					
-					attackCells.add(movableCell);
+					attackCells.add(attackCell);
 			}
 		}
 	
@@ -199,17 +205,17 @@ public class BoardController {
 		return movableCells;
 	}
 
-	// Assumes the movable cells passed in are on the board
-	public void drawMovable(List<Cell> movableCells) {
-		for (Cell movableCell : movableCells) {
-			movableCell.setItem(movableGround);
-			movableCell.repaint();
-		}
-	}
-	// Assumes the movable cells passed in are on the board
-	public void drawAttackable(List<Cell> Cells) {
+
+	// Assumes the draw cells passed in are on the board
+	public void drawCells(List<Cell> Cells , GameController.State state) {
+		
 		for (Cell cell : Cells) {
-			cell.setItem(attackableGround);
+			if(state == State.MOVE){
+				cell.setItem(movableGround);
+			}
+			else{
+				cell.setItem(attackableGround);
+			}
 			cell.repaint();
 		}
 	}
