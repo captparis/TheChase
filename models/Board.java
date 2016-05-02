@@ -31,12 +31,15 @@ public class Board {
 		this.mouseOverEnemy = new LineBorder(Color.red, 3);
 		this.mouseOverAlly = new LineBorder(Color.green, 3);
 		
-		cells = new Cell[rows][columns];
-		for (int x = 0; x < rows; x++) {
-			for (int y = 0; y < columns; y++) {
-				cells[x][y] = new Cell(x, y, item);
-			}
-		}
+      cells = new Cell[columns][rows];
+    System.out.println(rows+" "+columns);
+    for (int x = 0; x < columns; x++) {
+        for (int y = 0; y < rows; y++) {
+            cells[x][y] = new Cell(x, y, item);
+            System.out.println("X: "+x+"y : "+y);
+        }
+    }
+
 	}
 
 	public Cell[][] getCells() {

@@ -7,6 +7,7 @@
  */
 package controllers;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -30,8 +31,8 @@ public class GameController {
 		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
 	};
 
-	private static final int ROWS = 8;
-	private static final int COLUMNS = 8;
+	private static final int ROWS = 3;
+	private static final int COLUMNS = 3;
 
 	private Map<String, ActorType[]> teamSetup;
 
@@ -57,7 +58,7 @@ public class GameController {
 
 	public GameController(JFrame mainWindow) {
 		this.mainWindow = mainWindow;
-		mainWindow.setResizable(false);
+		mainWindow.setResizable(true);
 		this.game = new Game();
 		boardController = new BoardController(this);
 		unitController = new UnitController(this);
@@ -73,15 +74,16 @@ public class GameController {
 		teamSetup = new HashMap<>();
 
 		teamSetup.put("Explorer",
-				new ActorType[] { new ActorType("Hero", "models.explorers", ROWS - 1, COLUMNS - 2),
-						new ActorType("Scout", "models.explorers", ROWS - 2, COLUMNS - 1),
-						new ActorType("Tactician", "models.explorers", ROWS - 1, COLUMNS - 1),
-						new ActorType("TrapMaster", "models.explorers", ROWS - 2, COLUMNS - 2), });
+				new ActorType[] { new ActorType("Hero", "models.explorers", COLUMNS - 1, ROWS - 2),
+						new ActorType("Scout", "models.explorers", COLUMNS - 2, ROWS - 1),
+						new ActorType("Tactician", "models.explorers", COLUMNS - 1, ROWS - 1),
+						new ActorType("TrapMaster", "models.explorers", COLUMNS - 2, ROWS - 2), });
 
 		teamSetup.put("Guardian",
 				new ActorType[] { new ActorType("Behemoth", "models.guardians", 0, 0),
-						new ActorType("Golem", "models.guardians", 0, COLUMNS - 1),
-						new ActorType("Hunter", "models.guardians", ROWS - 1, 0) });
+						new ActorType("Golem", "models.guardians", 0, ROWS - 1),
+						new ActorType("Hunter", "models.guardians", COLUMNS - 1, 0) 
+				        });
 	}
 
 	public void startGame() {

@@ -8,6 +8,7 @@
 package controllers;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -51,7 +52,9 @@ public class BoardController {
 	public void showBoard(JFrame mainWindow) {
 		// create a new content panel holding both the grid and the hud
 		JPanel contentPanel = new JPanel(new BorderLayout());
-		contentPanel.add(boardView, BorderLayout.CENTER);
+		JPanel boardSpace = new JPanel(new GridBagLayout());
+		boardSpace.add(boardView);
+		contentPanel.add(boardSpace, BorderLayout.CENTER);
 		contentPanel.add(hudView, BorderLayout.SOUTH);
 		mainWindow.getContentPane().add(contentPanel);
 		mainWindow.pack();
@@ -234,6 +237,7 @@ public class BoardController {
 		{
 			// TODO Auto-generated method stub
 			Cell cell = ((Cell) e.getSource());
+			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
 
 			gameController.cellClicked(cell);
 			

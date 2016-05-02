@@ -8,6 +8,7 @@
 
 package models;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
@@ -18,6 +19,8 @@ public class Cell extends JButton {
 
 	int xPos;
 	int yPos;
+	
+	public static int CELL_SIZE = 50;
 
 
 	BoardItem item;
@@ -27,6 +30,7 @@ public class Cell extends JButton {
 		this.xPos = x;
 		this.yPos = y;
 		this.item = item;
+		
 
 	}
 
@@ -36,7 +40,8 @@ public class Cell extends JButton {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.setBackground(null); // background color
-
+//		this.setText(String.format("X: %d Y: %d", this.xPos, this.yPos));
+		this.setSize(CELL_SIZE,CELL_SIZE);
 		ImageIcon icon;
 
 		if (unit == null) {
@@ -46,6 +51,7 @@ public class Cell extends JButton {
 		}
 
 		g.drawImage(icon.getImage(), 0, 0, getSize().width, getSize().height, this);
+		
 	}
 
 	public Unit getUnit() {

@@ -22,7 +22,7 @@ public class TheChase {
 
 		JFrame mainWindow = new JFrame();
 		mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		mainWindow.setSize(700, 700);
+		//mainWindow.setSize(700, 700);
 		mainWindow.setVisible(true);
 		GameController gameController = new GameController(mainWindow);
 		gameController.showMainMenu();

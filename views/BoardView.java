@@ -2,6 +2,7 @@ package views;
 
 
 import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import javax.swing.*;
@@ -19,21 +20,24 @@ public class BoardView extends JPanel {
 	 */
 	public BoardView(MouseListener mouseListener, int rows, int columns, Cell[][] cells,Border border) {
 
-		super(new GridLayout(rows, columns, 0, 0));
-		this.setPreferredSize(new Dimension(700, 700));
+		super(new GridLayout(rows, columns, 0,0));
+		this.setPreferredSize(new Dimension(Cell.CELL_SIZE*columns, Cell.CELL_SIZE*rows));
 		this.cells = cells;
 		
 		// add listener on cell, and add cell on board
-		for (Cell[] cellRow : cells) {
-			for (Cell cell : cellRow) {
-				cell.addMouseListener(mouseListener);
-				cell.setBorder(border);
-				this.add(cell);
-				System.out.println("Cell added");
-			}
+		
+		for (int i = 0; i< rows; i++){
+		    for (int j=0;j<columns; j++){
+		        cells[j][i].addMouseListener(mouseListener);
+                cells[j][i].setBorder(border);
+                this.add(cells[j][i]);
+                System.out.println("Cell added");
+		    }
 		}
+
 		// Set line borders on the cells panel and the status label
 		this.setBorder(border);
+		this.setSize(getSize().width, getSize().height);
 	}
 
 	// draw image on each cell
