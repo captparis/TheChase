@@ -12,6 +12,7 @@ package controllers;
 
 import javax.swing.*;
 
+import models.Actor;
 import models.ActorType;
 import models.Player;
 
@@ -74,6 +75,18 @@ public class PlayerController {
 	public void newDiceRoll(Player player, int diceAmount) {
 		player.setCurrentRoll(diceAmount);
 		player.resetRemainingMoves();
+	}
+	
+	public boolean hasLiveActor(String team){
+	    
+	    Player player = gameController.getPlayers().get(team);
+	    for(Actor actor : player.getActors().values()){
+	        if(actor.isAlive()){
+	            return true;
+	        }
+	    }
+	    
+	    return false;
 	}
 
 }

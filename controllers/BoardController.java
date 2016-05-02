@@ -69,7 +69,7 @@ public class BoardController {
 		hudView = new HudView(new HUDActionListener());
 
 		for (Player player : gameController.getPlayers().values()) {
-			for (Actor actor : player.actors.values()) {
+			for (Actor actor : player.getActors().values()) {
 				setCellUnit(actor.getInitX(), actor.getInitY(), actor);
 			}
 		}
@@ -118,22 +118,25 @@ public class BoardController {
 
 	// assumes origin contains a movable unit and can legally move to target.
 	public int move(Cell origin, Cell target) {
-		// move the unit from the origin to the target and replace the origin
-		// with ground.
-		target.setUnit(origin.getUnit());
-		origin.setUnit(null);
+	     // move the unit from the origin to the target and replace the origin
+        // with ground.
+        target.setUnit(origin.getUnit());
+        origin.setUnit(null);
 
 		// if the explorer moving into a gate cell update game controller
 		// winstate
+		
 		if (target.getUnit() instanceof Explorer && target.getItem() instanceof Gate) {
 			gameController.setWinner(gameController.getPlayers().get("Explorer"));
 		}
-
+        
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
 	}
 	public void kill(Cell target){
+	    ((Actor)target.getUnit()).setStatus(false);
 		target.setUnit(null);
+	
 	}
 
 	// calculates the absolute distance between two given cells
@@ -223,10 +226,10 @@ public class BoardController {
 		}
 	}
 
-	public void resetMovable(List<Cell> movableCells) {
-		for (Cell movableCell : movableCells) {
-			movableCell.setItem(ground);
-			movableCell.repaint();
+	public void resetCells(List<Cell> Cells) {
+		for (Cell Cell : Cells) {
+			Cell.setItem(ground);
+			Cell.repaint();
 		}
 	}
 

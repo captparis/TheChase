@@ -13,7 +13,7 @@ public class Player {
 
 	private final String name;
 	private final String team;
-	public Map<String, Actor> actors;
+	private Map<String, Actor> actors;
 	private int currentRoll;
 	private int remainingMoves;
 
@@ -29,6 +29,10 @@ public class Player {
 
 	public String getTeam() {
 		return team;
+	}
+	
+	public Map<String,Actor> getActors(){
+	    return actors;
 	}
 
 	public Unit addActor(String actorType, Actor newActor) throws Exception {

@@ -31,8 +31,8 @@ public class GameController {
 		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
 	};
 
-	private static final int ROWS = 3;
-	private static final int COLUMNS = 3;
+	private static final int ROWS = 6;
+	private static final int COLUMNS = 6;
 
 	private Map<String, ActorType[]> teamSetup;
 
@@ -81,8 +81,8 @@ public class GameController {
 
 		teamSetup.put("Guardian",
 				new ActorType[] { new ActorType("Behemoth", "models.guardians", 0, 0),
-						new ActorType("Golem", "models.guardians", 0, ROWS - 1),
-						new ActorType("Hunter", "models.guardians", COLUMNS - 1, 0) 
+						new ActorType("Golem", "models.guardians", COLUMNS - 1, 0),
+						new ActorType("Hunter", "models.guardians", 0, ROWS - 1) 
 				        });
 	}
 
@@ -119,6 +119,38 @@ public class GameController {
 	State getGameState() {
 		return this.gameState;
 	}
+	public void checkWin(){
+        // Reset the dice rolls to 0
+        boardController.setDiceRoll(0);
+        boardController.resetCells(lastCells);
+        boardController.repaintBoard();
+        selectedCell= null;
+	    gameState = GameController.State.CHECK_WIN;
+        if (winner == null) {
+            boardController.setDiceState();
+            // Swap to the next player, this could be changed later to
+            // facilitate more than 2 players
+            boardController.swapPlayer();
+            if (getCurrentPlayer().getTeam() == "Explorer") {
+                try {
+                    setCurrentPlayer(game.getPlayer("Guardian"));
+                } catch (Exception noPlayer) {
+                    System.out.println("Guardian player not found");
+                    noPlayer.printStackTrace();
+                }
+            } else {
+                try {
+                    setCurrentPlayer(game.getPlayer("Explorer"));
+                } catch (Exception noPlayer) {
+                    System.out.println("Explorer player not found");
+                    noPlayer.printStackTrace();
+                }
+            }
+            gameState = GameController.State.DICE_ROLL;
+        } else {
+            boardController.setWinState();
+        }
+	}
 
 	public Player getCurrentPlayer() {
 		return currentPlayer;
@@ -151,14 +183,16 @@ public class GameController {
 		if(gameState == State.MOVE) {
 
 		if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-			boardController.resetMovable(lastCells);
+			boardController.resetCells(lastCells);
 			boardController.repaintBoard();
 			selectedCell = cell;
 			lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
 			boardController.drawCells(lastCells, gameState);
 		} else if (cell.getItem() instanceof MovableGround) {
 			// move the unit in the selected cell to the clicked cell
-			int moveDistance = boardController.move(selectedCell, cell);
+			boardController.resetCells(lastCells);
+			boardController.repaintBoard();
+		    int moveDistance = boardController.move(selectedCell, cell);
 
 			// subtract the current players remaining moves by the distance
 			// moved
@@ -169,6 +203,7 @@ public class GameController {
 					currentPlayer.subtractRemainingMoves(currentPlayer.getRemainingMoves());
 				} else {
 					currentPlayer.subtractRemainingMoves(moveDistance);
+					
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -177,13 +212,13 @@ public class GameController {
 			boardController.setDiceRoll(currentPlayer.getRemainingMoves());
 			// reset the movable squares to ground and repaint the board
 		
-			boardController.resetMovable(lastCells);
+			boardController.resetCells(lastCells);
 			boardController.repaintBoard();
 		}
 		}
 		else {
 			if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-				boardController.resetMovable(lastCells);
+				boardController.resetCells(lastCells);
 				selectedCell = cell;
 				lastCells = boardController.attackable(cell);
 				boardController.drawCells(lastCells, gameState);
@@ -196,6 +231,11 @@ public class GameController {
 						
 						System.out.println(selectedCell.getUnit().getClass().getSimpleName()+" is attacking " + cell.getUnit().getClass().getSimpleName());
 						boardController.kill(cell);
+						if(!playerController.hasLiveActor("Explorer")){
+						    this.setWinner(currentPlayer);
+						    
+						}
+						checkWin();
 						return;
 					}
 				}
@@ -229,37 +269,9 @@ public class GameController {
 			boardController.setUnitState();
 		} // Move to check win state, restart if nobody won
 		else if (gameState == GameController.State.MOVE || gameState == GameController.State.ATTACK) {
-			// Reset the dice rolls to 0
-			boardController.setDiceRoll(0);
-			boardController.resetMovable(lastCells);
-			boardController.repaintBoard();
-			selectedCell= null;
+
 			// Check if the player has won
-			gameState = GameController.State.CHECK_WIN;
-			if (winner == null) {
-				boardController.setDiceState();
-				// Swap to the next player, this could be changed later to
-				// facilitate more than 2 players
-				boardController.swapPlayer();
-				if (getCurrentPlayer().getTeam() == "Explorer") {
-					try {
-						setCurrentPlayer(game.getPlayer("Guardian"));
-					} catch (Exception noPlayer) {
-						System.out.println("Guardian player not found");
-						noPlayer.printStackTrace();
-					}
-				} else {
-					try {
-						setCurrentPlayer(game.getPlayer("Explorer"));
-					} catch (Exception noPlayer) {
-						System.out.println("Explorer player not found");
-						noPlayer.printStackTrace();
-					}
-				}
-				gameState = GameController.State.DICE_ROLL;
-			} else {
-				boardController.setWinState();
-			}
+			checkWin();
 		}
 	}
 
