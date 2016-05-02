@@ -31,10 +31,10 @@ public class GameController {
 		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
 	};
 
-	private static final int ROWS = 6;
-	private static final int COLUMNS = 6;
+	private static final int ROWS = 10;
+	private static final int COLUMNS = 10;
 
-	private Map<String, ActorType[]> teamSetup;
+	private Map<String, UnitType[]> teamSetup;
 
 	// models
 	private Game game;
@@ -74,15 +74,15 @@ public class GameController {
 		teamSetup = new HashMap<>();
 
 		teamSetup.put("Explorer",
-				new ActorType[] { new ActorType("Hero", "models.explorers", COLUMNS - 1, ROWS - 2),
-						new ActorType("Scout", "models.explorers", COLUMNS - 2, ROWS - 1),
-						new ActorType("Tactician", "models.explorers", COLUMNS - 1, ROWS - 1),
-						new ActorType("TrapMaster", "models.explorers", COLUMNS - 2, ROWS - 2), });
+				new UnitType[] { new UnitType("Hero", "models.explorers", COLUMNS - 1, ROWS - 2),
+						new UnitType("Scout", "models.explorers", COLUMNS - 2, ROWS - 1),
+						new UnitType("Tactician", "models.explorers", COLUMNS - 1, ROWS - 1),
+						new UnitType("TrapMaster", "models.explorers", COLUMNS - 2, ROWS - 2), });
 
 		teamSetup.put("Guardian",
-				new ActorType[] { new ActorType("Behemoth", "models.guardians", 0, 0),
-						new ActorType("Golem", "models.guardians", COLUMNS - 1, 0),
-						new ActorType("Hunter", "models.guardians", 0, ROWS - 1) 
+				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
+						new UnitType("Golem", "models.guardians", COLUMNS - 1, 0),
+						new UnitType("Hunter", "models.guardians", 0, ROWS - 1) 
 				        });
 	}
 
@@ -178,57 +178,55 @@ public class GameController {
 				gameState = State.MOVE;
 			}
 			System.out.println("gameState : "+gameState);
-				
 		}
 		if(gameState == State.MOVE) {
 
-		if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-			boardController.resetCells(lastCells);
-			boardController.repaintBoard();
-			selectedCell = cell;
-			lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
-			boardController.drawCells(lastCells, gameState);
-		} else if (cell.getItem() instanceof MovableGround) {
-			// move the unit in the selected cell to the clicked cell
-			boardController.resetCells(lastCells);
-			boardController.repaintBoard();
-		    int moveDistance = boardController.move(selectedCell, cell);
-
-			// subtract the current players remaining moves by the distance
-			// moved
-			// (remaining moves go to zero for guardians as they can only move
-			// once)
-			try {
-				if (currentPlayer.getTeam() == "Guardian") {
-					currentPlayer.subtractRemainingMoves(currentPlayer.getRemainingMoves());
-				} else {
-					currentPlayer.subtractRemainingMoves(moveDistance);
-					
+			if (currentPlayer.hasUnit(cell.getUnit())) {
+				boardController.resetCells(lastCells);
+				boardController.repaintBoard();
+				selectedCell = cell;
+				lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
+				boardController.drawActionCells(lastCells, gameState);
+			} else if (cell.getItem() instanceof MovableGround) {
+				// move the unit in the selected cell to the clicked cell
+				boardController.resetCells(lastCells);
+				boardController.repaintBoard();
+			    int moveDistance = boardController.move(selectedCell, cell);
+	
+				// subtract the current players remaining moves by the distance
+				// moved
+				// (remaining moves go to zero for guardians as they can only move
+				// once)
+				try {
+					if (currentPlayer.getTeam() == "Guardian") {
+						currentPlayer.subtractRemainingMoves(currentPlayer.getRemainingMoves());
+					} else {
+						currentPlayer.subtractRemainingMoves(moveDistance);
+						
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
+				// update the hudview with the number of remaining moves
+				boardController.setDiceRoll(currentPlayer.getRemainingMoves());
+				// reset the movable squares to ground and repaint the board
+			
+				boardController.resetCells(lastCells);
+				boardController.repaintBoard();
 			}
-			// update the hudview with the number of remaining moves
-			boardController.setDiceRoll(currentPlayer.getRemainingMoves());
-			// reset the movable squares to ground and repaint the board
-		
-			boardController.resetCells(lastCells);
-			boardController.repaintBoard();
-		}
 		}
 		else {
-			if (currentPlayer.hasActor((Actor) cell.getUnit())) {
+			if (currentPlayer.hasUnit(cell.getUnit())) {
 				boardController.resetCells(lastCells);
 				selectedCell = cell;
 				lastCells = boardController.attackable(cell);
-				boardController.drawCells(lastCells, gameState);
+				boardController.drawActionCells(lastCells, gameState);
 			}
-			else if(!currentPlayer.hasActor((Actor) cell.getUnit())&& cell.getUnit()!=null){
-				for (Cell temp:lastCells)
+			else if(!currentPlayer.hasUnit(cell.getUnit())&& cell.getUnit()!=null){
+				for (Cell temp :lastCells)
 				{
 					if(cell.getXPos()==temp.getXPos()&&cell.getYPos()==temp.getYPos())
 					{
-						
 						System.out.println(selectedCell.getUnit().getClass().getSimpleName()+" is attacking " + cell.getUnit().getClass().getSimpleName());
 						boardController.kill(cell);
 						if(!playerController.hasLiveActor("Explorer")){
@@ -239,11 +237,8 @@ public class GameController {
 						return;
 					}
 				}
-				
 			}
-			
-			
-	}
+		}
 	}
 
 	private void quitGame() {
@@ -275,7 +270,7 @@ public class GameController {
 		}
 	}
 
-	public Map<String, ActorType[]> getTeamSetup() {
+	public Map<String, UnitType[]> getTeamSetup() {
 		return teamSetup;
 	}
 

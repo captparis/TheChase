@@ -20,7 +20,6 @@ import javax.swing.*;
 import controllers.GameController.State;
 import models.*;
 import models.explorers.Explorer;
-import models.guardians.Guardian;
 import models.items.*;
 import views.BoardView;
 import views.HudView;
@@ -69,8 +68,8 @@ public class BoardController {
 		hudView = new HudView(new HUDActionListener());
 
 		for (Player player : gameController.getPlayers().values()) {
-			for (Actor actor : player.getActors().values()) {
-				setCellUnit(actor.getInitX(), actor.getInitY(), actor);
+			for (Unit unit : player.getUnits().values()) {
+				setCellUnit(unit.getInitX(), unit.getInitY(), unit);
 			}
 		}
 		initItems();
@@ -78,12 +77,14 @@ public class BoardController {
 
 	private void initItems() {
 		gate = new Gate();
-		setItem();
+		setCellDefaultItem(0, 0, gate);
+		setCellDefaultItem(1, 0, gate);
+		setCellDefaultItem(0, 1, gate);
 	}
-	private void setItem() {
-		setCellItem(0, 0, gate);
-		setCellItem(1, 0, gate);
-		setCellItem(0, 1, gate);
+	
+	// Sets the default item for the cell
+	private void setCellDefaultItem(int x, int y, BoardItem defaultItem) {
+		board.getCells()[x][y].setDefaultItem(defaultItem);
 	}
 
 	// Sets the unit for the cell
@@ -91,7 +92,7 @@ public class BoardController {
 		board.getCells()[x][y].setUnit(unit);
 	}
 
-	// Sets the unit for the cell
+	// Sets the item for the cell
 	public void setCellItem(int x, int y, BoardItem item) {
 		board.getCells()[x][y].setItem(item);
 	}
@@ -118,7 +119,7 @@ public class BoardController {
 
 	// assumes origin contains a movable unit and can legally move to target.
 	public int move(Cell origin, Cell target) {
-	     // move the unit from the origin to the target and replace the origin
+	    // move the unit from the origin to the target and replace the origin
         // with ground.
         target.setUnit(origin.getUnit());
         origin.setUnit(null);
@@ -126,15 +127,16 @@ public class BoardController {
 		// if the explorer moving into a gate cell update game controller
 		// winstate
 		
-		if (target.getUnit() instanceof Explorer && target.getItem() instanceof Gate) {
+		if (target.getUnit() instanceof Explorer && target.getDefaultItem() instanceof Gate) {
 			gameController.setWinner(gameController.getPlayers().get("Explorer"));
 		}
         
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
 	}
+	
 	public void kill(Cell target){
-	    ((Actor)target.getUnit()).setStatus(false);
+	    (target.getUnit()).setStatus(false);
 		target.setUnit(null);
 	
 	}
@@ -148,36 +150,37 @@ public class BoardController {
 
 		return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
 	}
-	public List<Cell> attackable(Cell origin) {
-		// TODO need to fix 
-		Guardian unit = (Guardian) origin.getUnit();
-		List<Pos> attackRange = new ArrayList<Pos>(unit.getAttackRange());
-		List<Cell> attackCells = new ArrayList<>();
+	
+	public List<Cell> attackable(Cell origin){
+		List<Cell> attackableCells = new ArrayList<>(36); //TODO:change the magic number
+		
 		int xPos = origin.getXPos();
 		int yPos = origin.getYPos();
-		//temp
-		for (Pos range :attackRange){
-			if (xPos + range.getXPos() < 0 || xPos + range.getXPos() >= board.getColumns()) {
-				continue;
-			}
-			else if (yPos + range.getYPos() < 0 || yPos + range.getYPos() >= board.getRows()) {
-				continue;
-			}
-			else{
-				int attackX = origin.getXPos() + range.getXPos();
-				int attackY = origin.getYPos() + range.getYPos();
 
-					Cell attackCell = board.getCells()[attackX][attackY];
-					
-					attackCells.add(attackCell);
+		for (int x = -2; x <= 2; x++) {
+			if (xPos + x < 0 || xPos + x >= board.getColumns()) {
+				continue;
+			}
+			for (int y = -2; y <= 2; y++) {
+				if (yPos + y < 0 || yPos + y >= board.getRows()) {
+					continue;
+				}
+
+				int attackableX = origin.getXPos() + x;
+				int attackableY = origin.getYPos() + y;
+
+				if (origin.getUnit().attackable(x, y)) {
+					Cell attackableCell = board.getCells()[attackableX][attackableY];
+					if ( attackableCell.getUnit() != null) {
+						continue;
+					}
+					attackableCells.add(attackableCell);
+				}
 			}
 		}
-	
-		return attackCells;
-	
-	
+		return attackableCells;
 	}
-
+	
 	// returns the array of possible coordinates for a unit to move to.
 	// assumes origin contains movable unit and rollCount is a valid dice roll.
 	public List<Cell> movable(Cell origin, int rollCount) {
@@ -213,7 +216,7 @@ public class BoardController {
 
 
 	// Assumes the draw cells passed in are on the board
-	public void drawCells(List<Cell> Cells , GameController.State state) {
+	public void drawActionCells(List<Cell> Cells , GameController.State state) {
 		
 		for (Cell cell : Cells) {
 			if(state == State.MOVE){
@@ -225,10 +228,10 @@ public class BoardController {
 			cell.repaint();
 		}
 	}
-
+	
 	public void resetCells(List<Cell> Cells) {
 		for (Cell Cell : Cells) {
-			Cell.setItem(ground);
+			Cell.setItem(null);
 			Cell.repaint();
 		}
 	}
@@ -239,54 +242,50 @@ public class BoardController {
 		public void mouseClicked(MouseEvent e)
 		{
 			// TODO Auto-generated method stub
-			Cell cell = ((Cell) e.getSource());
-			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
-
-			gameController.cellClicked(cell);
-			
 		}
 
 		@Override
 		public void mousePressed(MouseEvent e)
 		{
 			// TODO Auto-generated method stub
-			
+			Cell cell = ((Cell) e.getSource());
+			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
+
+			gameController.cellClicked(cell);
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e)
 		{
 			// TODO Auto-generated method stub
-			
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent e)
 		{
+			Cell cell = ((Cell) e.getSource());
+			
 			// TODO Auto-generated method stub
 			//0 = item, 1 = ally, 2 = enemy
 			int type = 0;
 
-			
-			if(((Cell) e.getSource()).getUnit() != null) {
-				if (gameController.getCurrentPlayer().hasActor((Actor) ((Cell) e.getSource()).getUnit())) {
+			if(cell.getUnit() != null) {
+				if (gameController.getCurrentPlayer().hasUnit(cell.getUnit())) {
 				    type = 1;
 				}
 				else {
 					type = 2;
 				}
 			}
-			boardView.changeBorder(((Cell) e.getSource()), board.getMouseOverBorder(type));	
+			boardView.changeBorder(cell, board.getMouseOverBorder(type));	
 		}
 
 		@Override
 		public void mouseExited(MouseEvent e)
 		{
 			// TODO Auto-generated method stub
-			boardView.changeBorder(((Cell) e.getSource()), board.getBorder());
-			
+			boardView.changeBorder(((Cell) e.getSource()), board.getBorder());	
 		}
-		
 	}
 
 	class HUDActionListener implements ActionListener {
@@ -297,7 +296,6 @@ public class BoardController {
 	}
 
 	public void repaintBoard() {
-		setItem();
 		boardView.repaintBoard();
 	}
 }

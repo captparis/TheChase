@@ -10,32 +10,30 @@ package models.guardians;
 
 import java.util.ArrayList;
 import java.util.List;
+import models.Cell;
+import models.Unit;
 
-import models.Actor;
-import models.Pos;
-
-public abstract class Guardian extends Actor {
-	private List<Pos> attackRange;
+public abstract class Guardian extends Unit {
+	private List<Cell> attackRange;
 
 	public Guardian() {
 		super();
-		attackRange = new ArrayList<Pos>();
-
-		
+		attackRange = new ArrayList<Cell>();
 	}
-	public Guardian(List<Pos> attackPos){
+	
+	public Guardian(List<Cell> attackPos){
 		super();
 		this.attackRange = attackPos;
 	}
-	protected void setAttackRange(Pos pos){
-		
-
-				this.attackRange.add(pos);
-					
+	
+	protected void setAttackRange(Cell cell){
+				this.attackRange.add(cell);		
 	}
-	public List<Pos> getAttackRange(){
+	
+	public List<Cell> getAttackRange(){
 		return attackRange;
 	}
-
-
+	
+	@Override
+	public abstract boolean attackable(int x, int y);
 }

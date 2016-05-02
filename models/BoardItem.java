@@ -1,12 +1,15 @@
 package models;
 
-public abstract class BoardItem extends Unit {
+import javax.swing.ImageIcon;
 
-	public BoardItem() {
-		super();
+public abstract class BoardItem implements Drawable {
+	
+	public ImageIcon getIcon(){
+		return new ImageIcon("bin/images/" + this.toString() + ".png");
 	}
-
-	public boolean moveable(int x, int y) {
-		return false;
+	
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
 	}
 }

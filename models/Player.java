@@ -13,14 +13,14 @@ public class Player {
 
 	private final String name;
 	private final String team;
-	private Map<String, Actor> actors;
+	private Map<String, Unit> units;
 	private int currentRoll;
 	private int remainingMoves;
 
 	public Player(String name, String team) {
 		this.name = name;
 		this.team = team;
-		this.actors = new HashMap<>();
+		this.units = new HashMap<>();
 	}
 
 	public String getName() {
@@ -31,22 +31,22 @@ public class Player {
 		return team;
 	}
 	
-	public Map<String,Actor> getActors(){
-	    return actors;
+	public Map<String,Unit> getUnits(){
+	    return units;
 	}
 
-	public Unit addActor(String actorType, Actor newActor) throws Exception {
-		Unit existingUnit = actors.put(actorType, newActor);
+	public Unit addUnit(String unitType, Unit newUnit) throws Exception {
+		Unit existingUnit = units.put(unitType, newUnit);
 
 		if (existingUnit == null) {
-			return newActor;
+			return newUnit;
 		} else {
 			throw new Exception("Unit already exists.");
 		}
 	}
 
 	public Unit getUnit(String unitType) throws Exception {
-		Unit unit = actors.get(unitType);
+		Unit unit = units.get(unitType);
 		if (unit == null) {
 			throw new Exception("No such unit type.");
 		} else {
@@ -77,8 +77,8 @@ public class Player {
 		}
 	}
 
-	public boolean hasActor(Actor actor) {
-		return actors.containsValue(actor);
+	public boolean hasUnit(Unit unit) {
+		return units.containsValue(unit);
 	}
 
 }

@@ -11,10 +11,9 @@
 package controllers;
 
 import javax.swing.*;
-
-import models.Actor;
-import models.ActorType;
+import models.UnitType;
 import models.Player;
+import models.Unit;
 
 public class PlayerController {
 
@@ -47,10 +46,10 @@ public class PlayerController {
 
 	private void initUnits(Player player) {
 
-		for (ActorType actorType : gameController.getTeamSetup().get(player.getTeam())) {
+		for (UnitType unitType : gameController.getTeamSetup().get(player.getTeam())) {
 			try {
-				String actorTypeName = actorType.getType();
-				player.addActor(actorTypeName, unitController.newActor(actorType));
+				String unitTypeName = unitType.getType();
+				player.addUnit(unitTypeName, unitController.newUnit(unitType));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -80,8 +79,8 @@ public class PlayerController {
 	public boolean hasLiveActor(String team){
 	    
 	    Player player = gameController.getPlayers().get(team);
-	    for(Actor actor : player.getActors().values()){
-	        if(actor.isAlive()){
+	    for(Unit unit : player.getUnits().values()){
+	        if(unit.isAlive()){
 	            return true;
 	        }
 	    }

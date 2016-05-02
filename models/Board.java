@@ -31,7 +31,7 @@ public class Board {
 		this.mouseOverEnemy = new LineBorder(Color.red, 3);
 		this.mouseOverAlly = new LineBorder(Color.green, 3);
 		
-      cells = new Cell[columns][rows];
+	cells = new Cell[columns][rows];
     System.out.println(rows+" "+columns);
     for (int x = 0; x < columns; x++) {
         for (int y = 0; y < rows; y++) {
