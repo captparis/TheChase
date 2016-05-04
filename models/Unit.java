@@ -10,17 +10,51 @@ package models;
 
 import javax.swing.ImageIcon;
 
-public abstract class Unit {
-	private ImageIcon icon;
+public abstract class Unit implements Drawable {
+	private boolean alive;
+	private int initX;
+	private int initY;
 
 	public Unit() {
-		icon = new ImageIcon("bin/images/" + this.getClass().getSimpleName().toLowerCase() + ".png");
+		this.alive = true;
 	}
 
 	public ImageIcon getIcon() {
-		return icon;
+		return new ImageIcon("bin/images/" + this.toString() + ".png");
 	}
 
 	public abstract boolean moveable(int x, int y);
+	public abstract boolean attackable(int x, int y);
+	public abstract boolean attack();
+	public abstract boolean useAbility();
+
+	public int getInitX() {
+		return initX;
+	}
+
+	public int getInitY() {
+		return initY;
+	}
+
+	public void setInitX(int x) {
+		initX = x;
+	}
+
+	public void setInitY(int y) {
+		initY = y;
+	}
+
+	@Override
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
+
+	public boolean isAlive() {
+		return this.alive;
+	}
+
+	public void setStatus(boolean alive) {
+		this.alive = alive;
+	}
 
 }

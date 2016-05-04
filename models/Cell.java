@@ -8,26 +8,30 @@
 
 package models;
 
+
 import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
+import models.items.Gate;
 
 //An inner class for a cell
 public class Cell extends JButton {
 
 	int xPos;
 	int yPos;
+	
+	public static int CELL_SIZE = 50;
 
-
+	BoardItem defaultItem;
 	BoardItem item;
 	Unit unit;
 
-	public Cell(int x, int y, BoardItem item) {
+	public Cell(int x, int y, BoardItem defaultItem) {
 		this.xPos = x;
 		this.yPos = y;
-		this.item = item;
-
+		this.defaultItem = defaultItem;
 	}
 
 	/**
@@ -36,16 +40,19 @@ public class Cell extends JButton {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		this.setBackground(null); // background color
-
+		this.setSize(CELL_SIZE,CELL_SIZE);
 		ImageIcon icon;
 
-		if (unit == null) {
-			icon = item.getIcon();
-		} else {
+		if (unit != null) {
 			icon = unit.getIcon();
+		}else if (item != null) {
+			icon = item.getIcon();
+		}else{
+			icon = defaultItem.getIcon();
 		}
 
 		g.drawImage(icon.getImage(), 0, 0, getSize().width, getSize().height, this);
+		
 	}
 
 	public Unit getUnit() {
@@ -70,5 +77,13 @@ public class Cell extends JButton {
 
 	public BoardItem getItem() {
 		return item;
+	}
+
+	public void setDefaultItem(BoardItem defaultItem) {
+		this.defaultItem = defaultItem;
+	}
+
+	public BoardItem getDefaultItem() {
+		return this.defaultItem;
 	}
 }

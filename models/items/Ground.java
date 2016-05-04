@@ -4,7 +4,4 @@ import models.BoardItem;
 
 public class Ground extends BoardItem{
 	
-	public Ground(){
-		super();
-	}
 }

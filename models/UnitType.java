@@ -1,13 +1,13 @@
 package models;
 
-public class ActorType {
+public class UnitType {
 
 	private String type;
 	private String pack;
 	private int initX;
 	private int initY;
 
-	public ActorType(String type, String pack, int initX, int initY) {
+	public UnitType(String type, String pack, int initX, int initY) {
 		this.type = type;
 		this.pack = pack;
 		this.initX = initX;

@@ -8,6 +8,7 @@
 package controllers;
 
 import java.awt.CardLayout;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class GameController {
 	private static final int ROWS = 8;
 	private static final int COLUMNS = 8;
 
-	private Map<String, ActorType[]> teamSetup;
+	private Map<String, UnitType[]> teamSetup;
 
 	// models
 	private Game game;
@@ -43,6 +44,7 @@ public class GameController {
 	// views
 	private MainMenuView mainMenuView;
 	private OptionsMenuView optionsMenuView;
+	private JPanel boardView;
 	private JFrame mainWindow;
 	private JPanel cards;
 
@@ -76,15 +78,15 @@ public class GameController {
 		teamSetup = new HashMap<>();
 
 		teamSetup.put("Explorer",
-				new ActorType[] { new ActorType("Hero", "models.explorers", ROWS - 1, COLUMNS - 2),
-						new ActorType("Scout", "models.explorers", ROWS - 2, COLUMNS - 1),
-						new ActorType("Tactician", "models.explorers", ROWS - 1, COLUMNS - 1),
-						new ActorType("TrapMaster", "models.explorers", ROWS - 2, COLUMNS - 2), });
+				new UnitType[] { new UnitType("Hero", "models.explorers", ROWS - 1, COLUMNS - 2),
+						new UnitType("Scout", "models.explorers", ROWS - 2, COLUMNS - 1),
+						new UnitType("Tactician", "models.explorers", ROWS - 1, COLUMNS - 1),
+						new UnitType("TrapMaster", "models.explorers", ROWS - 2, COLUMNS - 2), });
 
 		teamSetup.put("Guardian",
-				new ActorType[] { new ActorType("Behemoth", "models.guardians", 0, 0),
-						new ActorType("Golem", "models.guardians", 0, COLUMNS - 1),
-						new ActorType("Hunter", "models.guardians", ROWS - 1, 0) });
+				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
+						new UnitType("Golem", "models.guardians", 0, COLUMNS - 1),
+						new UnitType("Hunter", "models.guardians", ROWS - 1, 0) });
 	}
 
 	public void startGame() {
@@ -97,7 +99,13 @@ public class GameController {
 			System.out.println(e.getMessage());
 		}
 
-		boardController.showBoard(mainWindow);
+		boardView = boardController.buildBoard();
+		
+		cards.add(boardView, "boardView");
+		
+		CardLayout cardLayout = (CardLayout) cards.getLayout();
+		cardLayout.show(cards, "boardView");
+		
 		// resize the main window to fit the size of the components.
 		mainWindow.pack();
 
@@ -121,6 +129,9 @@ public class GameController {
 		
 		OptionsActionListener optListener = new OptionsActionListener();
 		optionsMenuView = new OptionsMenuView(optListener);
+		
+		
+		
 		
 		cards.setLayout(new CardLayout());
 		cards.add(mainMenuView, "mainMenu");
@@ -148,6 +159,39 @@ public class GameController {
 
 	State getGameState() {
 		return this.gameState;
+	}
+	
+	public void checkWin(){
+        // Reset the dice rolls to 0
+        boardController.setDiceRoll(0);
+        boardController.resetCells(lastCells);
+        boardController.repaintBoard();
+        selectedCell= null;
+	    gameState = GameController.State.CHECK_WIN;
+        if (winner == null) {
+            boardController.setDiceState();
+            // Swap to the next player, this could be changed later to
+            // facilitate more than 2 players
+            boardController.swapPlayer();
+            if (getCurrentPlayer().getTeam() == "Explorer") {
+                try {
+                    setCurrentPlayer(game.getPlayer("Guardian"));
+                } catch (Exception noPlayer) {
+                    System.out.println("Guardian player not found");
+                    noPlayer.printStackTrace();
+                }
+            } else {
+                try {
+                    setCurrentPlayer(game.getPlayer("Explorer"));
+                } catch (Exception noPlayer) {
+                    System.out.println("Explorer player not found");
+                    noPlayer.printStackTrace();
+                }
+            }
+            gameState = GameController.State.DICE_ROLL;
+        } else {
+            boardController.setWinState();
+        }
 	}
 
 	public Player getCurrentPlayer() {
@@ -180,25 +224,27 @@ public class GameController {
 		}
 		if(gameState == State.MOVE) {
 
-		if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-			boardController.resetMovable(lastCells);
-			boardController.repaintBoard();
-			selectedCell = cell;
-			lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
-			boardController.drawCells(lastCells, gameState);
-		} else if (cell.getItem() instanceof MovableGround) {
-			// move the unit in the selected cell to the clicked cell
-			int moveDistance = boardController.move(selectedCell, cell);
-
-			// subtract the current players remaining moves by the distance
-			// moved
-			// (remaining moves go to zero for guardians as they can only move
-			// once)
-			try {
-				if (currentPlayer.getTeam() == "Guardian") {
-					currentPlayer.subtractRemainingMoves(currentPlayer.getRemainingMoves());
-				} else {
-					currentPlayer.subtractRemainingMoves(moveDistance);
+			if (currentPlayer.hasUnit(cell.getUnit())) {
+				boardController.resetCells(lastCells);
+				boardController.repaintBoard();
+				selectedCell = cell;
+				lastCells = boardController.movable(cell, currentPlayer.getRemainingMoves());
+				boardController.drawActionCells(lastCells, gameState);
+			} else if (cell.getItem() instanceof MovableGround) {
+				// move the unit in the selected cell to the clicked cell
+				boardController.resetCells(lastCells);
+				boardController.repaintBoard();
+			    int moveDistance = boardController.move(selectedCell, cell);
+	
+				// subtract the current players remaining moves by the distance
+				// moved
+				// (remaining moves go to zero for guardians as they can only move
+				// once)
+				try {
+					if (currentPlayer.getTeam() == "Guardian") {
+						currentPlayer.subtractRemainingMoves(currentPlayer.getRemainingMoves());
+					} else {
+						currentPlayer.subtractRemainingMoves(moveDistance);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -207,18 +253,18 @@ public class GameController {
 			boardController.setDiceRoll(currentPlayer.getRemainingMoves());
 			// reset the movable squares to ground and repaint the board
 		
-			boardController.resetMovable(lastCells);
+			boardController.resetCells(lastCells);
 			boardController.repaintBoard();
 		}
 		}
 		else {
-			if (currentPlayer.hasActor((Actor) cell.getUnit())) {
-				boardController.resetMovable(lastCells);
+			if (currentPlayer.hasUnit(cell.getUnit())) {
+				boardController.resetCells(lastCells);
 				selectedCell = cell;
 				lastCells = boardController.attackable(cell);
-				boardController.drawCells(lastCells, gameState);
+				boardController.drawActionCells(lastCells, gameState);
 			}
-			else if(!currentPlayer.hasActor((Actor) cell.getUnit())&& cell.getUnit()!=null){
+			else if(!currentPlayer.hasUnit(cell.getUnit())&& cell.getUnit()!=null){
 				for (Cell temp:lastCells)
 				{
 					if(cell.getXPos()==temp.getXPos()&&cell.getYPos()==temp.getYPos())
@@ -226,6 +272,11 @@ public class GameController {
 						
 						System.out.println(selectedCell.getUnit().getClass().getSimpleName()+" is attacking " + cell.getUnit().getClass().getSimpleName());
 						boardController.kill(cell);
+						if(!playerController.hasLiveActor("Explorer")){
+						    this.setWinner(currentPlayer);
+						    
+						}
+						checkWin();
 						return;
 					}
 				}
@@ -259,41 +310,13 @@ public class GameController {
 			boardController.setUnitState();
 		} // Move to check win state, restart if nobody won
 		else if (gameState == GameController.State.MOVE || gameState == GameController.State.ATTACK) {
-			// Reset the dice rolls to 0
-			boardController.setDiceRoll(0);
-			boardController.resetMovable(lastCells);
-			boardController.repaintBoard();
-			selectedCell= null;
+
 			// Check if the player has won
-			gameState = GameController.State.CHECK_WIN;
-			if (winner == null) {
-				boardController.setDiceState();
-				// Swap to the next player, this could be changed later to
-				// facilitate more than 2 players
-				boardController.swapPlayer();
-				if (getCurrentPlayer().getTeam() == "Explorer") {
-					try {
-						setCurrentPlayer(game.getPlayer("Guardian"));
-					} catch (Exception noPlayer) {
-						System.out.println("Guardian player not found");
-						noPlayer.printStackTrace();
-					}
-				} else {
-					try {
-						setCurrentPlayer(game.getPlayer("Explorer"));
-					} catch (Exception noPlayer) {
-						System.out.println("Explorer player not found");
-						noPlayer.printStackTrace();
-					}
-				}
-				gameState = GameController.State.DICE_ROLL;
-			} else {
-				boardController.setWinState();
-			}
+			checkWin();
 		}
 	}
 
-	public Map<String, ActorType[]> getTeamSetup() {
+	public Map<String, UnitType[]> getTeamSetup() {
 		return teamSetup;
 	}
 

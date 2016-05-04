@@ -1,12 +1,11 @@
 package models.guardians;
 
-import models.Pos;
+
 
 public class Behemoth extends Guardian {
 
 	public Behemoth() {
 		super();
-		this.setAttakrange();
 	}
 
 	@Override
@@ -29,14 +28,23 @@ public class Behemoth extends Guardian {
 			return false;
 		}
 	}
-	private void setAttakrange(){
-		for(int i=-1;i<2;i++){
-			for(int j=-1;j<2;j++){
-				Pos pos = new Pos(i,j);
-				super.setAttackRange(pos);
-				
-			}
+	
+	@Override
+	public boolean attackable(int x, int y){
+		if(Math.abs(x)> 1 || Math.abs(y) > 1 ){
+			return false;
 		}
-		
+		return true;
 	}
+	
+//	private void setAttakRange(){
+//		for(int i=-1;i<2;i++){
+//			for(int j=-1;j<2;j++){
+//				Pos pos = new Pos(i,j);
+//				super.setAttackRange(cell);
+//				
+//			}
+//		}
+//		
+//	}
 }

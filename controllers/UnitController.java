@@ -17,18 +17,18 @@ public class UnitController {
 		this.gameController = gameController;
 	}
 
-	public Actor newActor(ActorType actorType) throws Exception {
+	public Unit newUnit(UnitType unitType) throws Exception {
 
 		Class<?> unitClass;
-		Actor actor;
+		Unit unit;
 
-		unitClass = Class.forName(actorType.getQualifiedName());
-		actor = (Actor) unitClass.newInstance();
+		unitClass = Class.forName(unitType.getQualifiedName());
+		unit =  (Unit)unitClass.newInstance();
 
-		actor.setInitX(actorType.getInitX());
-		actor.setInitY(actorType.getInitY());
+		unit.setInitX(unitType.getInitX());
+		unit.setInitY(unitType.getInitY());
 
-		return actor;
+		return unit;
 	}
 
 	public Unit newUnit(String qualifiedUnitType) throws Exception {
