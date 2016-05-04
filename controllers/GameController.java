@@ -323,6 +323,15 @@ public class GameController {
 			}
 		}
 	}
+	
+	//Sets text fields on the option screens to preset sizes when buttons are clicked
+	public void optionsBoardSizeBtn(int size){
+		optionsMenuView.setBoardFields(size);
+	}
+	
+	public void defaultPieces(){
+		optionsMenuView.setToDefault();
+	}
 
 	public Map<String, UnitType[]> getTeamSetup() {
 		return teamSetup;
@@ -367,9 +376,20 @@ public class GameController {
 			case "options":
 				showOptions();
 				break;
-			case "return":
+			case "back":
 				showMainMenu();
 				break;
+			case "small":
+				optionsBoardSizeBtn(15);
+				break;
+			case "medium":
+				optionsBoardSizeBtn(25);
+				break;
+			case "large":
+				optionsBoardSizeBtn(40);
+				break;
+			case "defaultpieces":
+				defaultPieces();
 			default:
 				break;
 			}
