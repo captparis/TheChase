@@ -44,4 +44,12 @@ public class Game {
 	public Map<String, Player> getPlayers() {
 		return this.players;
 	}
+	
+	public void loadGame(String fileName){
+		//TODO: read from file and create game objects
+	}
+	
+	public void saveGame(String fileName){
+		//TODO: save the game objects to the the given file.
+	}
 }

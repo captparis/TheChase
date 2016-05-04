@@ -91,5 +91,7 @@ public class HudView extends JPanel{
 	
 	public void setWinState(){
 		instruction.setText(currentPlayer.getText() + " win!");
+		actionButton.setText("Main Menu");
+		actionButton.setIcon(null);
 	}
 }

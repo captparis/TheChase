@@ -42,7 +42,7 @@ public class BoardController {
 		this.gameController = gameController;
 		ground = new Ground();
 		movableGround = new MovableGround();
-		attackableGround = new AttackGround();
+		attackableGround = new AttackableGround();
 	}
 
 	// this method assumes that the board has been initialized prior to calling.
@@ -170,9 +170,6 @@ public class BoardController {
 
 				if (origin.getUnit().attackable(x, y)) {
 					Cell attackableCell = board.getCells()[attackableX][attackableY];
-					if ( attackableCell.getUnit() != null) {
-						continue;
-					}
 					attackableCells.add(attackableCell);
 				}
 			}
@@ -249,6 +246,7 @@ public class BoardController {
 			// TODO Auto-generated method stub
 			Cell cell = ((Cell) e.getSource());
 			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
+			System.out.println("Unit: " + cell.getUnit() + "Item:" + cell.getItem() + "DefaultItem:" + cell.getDefaultItem());
 
 			gameController.cellClicked(cell);
 		}

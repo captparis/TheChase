@@ -19,27 +19,26 @@ import java.util.Map;
 import javax.swing.*;
 
 import models.*;
+import models.guardians.Guardian;
 import models.items.*;
 import main.*;
 import views.*;
 
 public class GameController {
 
-	// constants
+	//Constants
 	private static DiceUtility dice;
-
 	public static enum State {
 		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
 	};
-
+	
+	//Game Setup Variables
 	private static final int ROWS = 8;
 	private static final int COLUMNS = 8;
-
 	private Map<String, UnitType[]> teamSetup;
 
-	// models
+	//Models
 	private Game game;
-	// private Board board;
 
 	// views
 	private MainMenuView mainMenuView;
@@ -60,6 +59,7 @@ public class GameController {
 	private State gameState;
 	private Player winner;
 
+	//Constructor
 	public GameController(JFrame mainWindow) {
 		this.mainWindow = mainWindow;
 		mainWindow.setResizable(false);
@@ -206,12 +206,16 @@ public class GameController {
 	public int rollDice() {
 		return dice.roll();
 	}
-
+	
+	//This method decides what happens when a cell is clicked. 
 	public void cellClicked(Cell cell) {
-
+		
+		//If the game is in either the DICE_ROLL or CHECK_WIN state there should be no action when a cell is clicked.
 		if (gameState == State.DICE_ROLL || gameState == State.CHECK_WIN) {
 			return;
 		}
+		
+		//If it is the guardians turn and the user clicks on the selected unit, toggle between move and attack 
 		if(cell == selectedCell && currentPlayer.getTeam() == "Guardian"){
 			if( gameState ==State.MOVE){
 				gameState = State.ATTACK;
@@ -219,9 +223,10 @@ public class GameController {
 			else {
 				gameState = State.MOVE;
 			}
-			System.out.println("gameState : "+gameState);
-				
+			System.out.println("gameState : "+gameState);	
 		}
+		
+		//Handles the movement phase
 		if(gameState == State.MOVE) {
 
 			if (currentPlayer.hasUnit(cell.getUnit())) {
@@ -243,6 +248,7 @@ public class GameController {
 				try {
 					if (currentPlayer.getTeam() == "Guardian") {
 						currentPlayer.subtractRemainingMoves(currentPlayer.getRemainingMoves());
+						gameState = State.ATTACK;
 					} else {
 						currentPlayer.subtractRemainingMoves(moveDistance);
 				}
@@ -257,35 +263,31 @@ public class GameController {
 			boardController.repaintBoard();
 		}
 		}
+		//Game state must be ATTACK to reach this point
 		else {
+			//If the selected cell belongs to the current player show its attackable field on the board
 			if (currentPlayer.hasUnit(cell.getUnit())) {
 				boardController.resetCells(lastCells);
 				selectedCell = cell;
 				lastCells = boardController.attackable(cell);
 				boardController.drawActionCells(lastCells, gameState);
 			}
-			else if(!currentPlayer.hasUnit(cell.getUnit())&& cell.getUnit()!=null){
-				for (Cell temp:lastCells)
-				{
-					if(cell.getXPos()==temp.getXPos()&&cell.getYPos()==temp.getYPos())
-					{
+			//if the selected cell contains a unit from the other team, attack it.
+			else if(!currentPlayer.hasUnit(cell.getUnit()) && cell.getUnit()!=null && cell.getItem() instanceof AttackableGround){
 						
-						System.out.println(selectedCell.getUnit().getClass().getSimpleName()+" is attacking " + cell.getUnit().getClass().getSimpleName());
-						boardController.kill(cell);
-						if(!playerController.hasLiveActor("Explorer")){
-						    this.setWinner(currentPlayer);
-						    
-						}
-						checkWin();
-						return;
+					System.out.println(selectedCell.getUnit().getClass().getSimpleName()+" is attacking " + cell.getUnit().getClass().getSimpleName());
+					boardController.kill(cell);
+					if(!playerController.hasLiveActor("Explorer")){
+					    this.setWinner(currentPlayer);
 					}
-				}
-				
+					
+				checkWin();
+				return;
+
 			}
-			
-			
+		}		
 	}
-	}
+
 
 	private void quitGame() {
 		// System.exit(0);
@@ -313,6 +315,12 @@ public class GameController {
 
 			// Check if the player has won
 			checkWin();
+		}
+		//game state must be in CHECK_WIN
+		else{
+			if(winner != null){
+				showMainMenu();
+			}
 		}
 	}
 
