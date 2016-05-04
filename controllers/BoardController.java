@@ -43,8 +43,6 @@ public class BoardController {
 		ground = new Ground();
 		movableGround = new MovableGround();
 		attackableGround = new AttackGround();
-
-
 	}
 
 	// this method assumes that the board has been initialized prior to calling.

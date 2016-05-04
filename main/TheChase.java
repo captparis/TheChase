@@ -25,7 +25,7 @@ public class TheChase {
 		mainWindow.setSize(700, 700);
 		mainWindow.setVisible(true);
 		GameController gameController = new GameController(mainWindow);
-		gameController.showMainMenu();
+		gameController.initialiseMenu();
 		mainWindow.pack();
 	}
 }

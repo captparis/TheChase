@@ -7,6 +7,7 @@
  */
 package controllers;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -41,7 +42,9 @@ public class GameController {
 
 	// views
 	private MainMenuView mainMenuView;
+	private OptionsMenuView optionsMenuView;
 	private JFrame mainWindow;
+	private JPanel cards;
 
 	// controllers
 	private final PlayerController playerController;
@@ -99,6 +102,8 @@ public class GameController {
 		mainWindow.pack();
 
 	}
+	
+	
 
 	public void initGame() throws Exception {
 
@@ -107,11 +112,38 @@ public class GameController {
 		boardController.initBoard(ROWS, COLUMNS);
 	}
 
-	public void showMainMenu() {
+	//Set ups menu JPanel objects before displaying
+	public void initialiseMenu() {
+		cards = new JPanel();
+		
 		MenuActionListener listener = new MenuActionListener();
 		mainMenuView = new MainMenuView(listener);
-		mainWindow.getContentPane().add(mainMenuView);
-		mainMenuView.setVisible(true);
+		
+		OptionsActionListener optListener = new OptionsActionListener();
+		optionsMenuView = new OptionsMenuView(optListener);
+		
+		cards.setLayout(new CardLayout());
+		cards.add(mainMenuView, "mainMenu");
+		cards.add(optionsMenuView, "optionsMenu");
+		
+		mainWindow.getContentPane().add(cards);
+		
+		//mainWindow.getContentPane().add(mainMenuView);
+		showMainMenu();
+	}
+	
+	public void showMainMenu(){
+		CardLayout cardLayout = (CardLayout) cards.getLayout();
+		cardLayout.show(cards, "mainMenu");
+	}
+	
+	public void showOptions(){
+		CardLayout cardLayout = (CardLayout) cards.getLayout();
+		cardLayout.show(cards, "optionsMenu");
+		//optionsMenuView.setVisible(true);
+		//mainWindow.getContentPane().add(optionsMenuView);
+		//mainMenuView.setVisible(false);
+		//optionsMenuView.setVisible(true);
 	}
 
 	State getGameState() {
@@ -277,10 +309,35 @@ public class GameController {
 				startGame();
 				break;
 			case "options":
-				System.out.println("show the options menu here.");
+				showOptions();
 				break;
 			case "quit":
 				quitGame();
+				break;
+			default:
+				break;
+			}
+
+			mainMenuView.setVisible(false); // remove the menu component
+		}
+	}
+	
+	class OptionsActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			String option = ((JButton) e.getSource()).getName();
+
+			switch (option) {
+			case "startGame":
+				startGame();
+				break;
+			case "options":
+				showOptions();
+				break;
+			case "return":
+				showMainMenu();
 				break;
 			default:
 				break;
