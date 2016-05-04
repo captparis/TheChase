@@ -21,6 +21,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
 	private JPanel boardSizeButtons;
 	private JPanel boardSizeFields;
 	private JPanel piecesFields;
+	public JPanel backApply;
 	
 	@Override
 	  protected void paintComponent(Graphics g) {
@@ -33,12 +34,26 @@ public class OptionsMenuView extends javax.swing.JPanel {
     	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     	initComponents();
         try {
-			backgroundImage = ImageIO.read(new File("bin/images/menuBG.jpg"));
+			backgroundImage = ImageIO.read(new File("bin/images/optionsBG.jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
         this.setPreferredSize(new Dimension(919,566));
-        btnReturn.addActionListener(actionListener);
+        btnBack.addActionListener(actionListener);
+        btnSmall.addActionListener(actionListener);
+        btnMedium.addActionListener(actionListener);
+        btnLarge.addActionListener(actionListener);
+        btnDefaultPieces.addActionListener(actionListener);
+    }
+    
+    public void setBoardFields(int size){
+    	txtWidth.setText(Integer.toString(size));
+    	txtHeight.setText(Integer.toString(size));
+    }
+    
+    public void setToDefault(){
+    	txtGuardians.setText("3");
+    	txtExplorers.setText("4");
     }
 
     /**
@@ -49,16 +64,20 @@ public class OptionsMenuView extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+    	
     	boardSizeFields = new JPanel();
         boardSizeButtons = new JPanel();
         piecesFields = new JPanel();
+        backApply = new JPanel();
         
         boardSizeButtons.setLayout(new BoxLayout(boardSizeButtons, BoxLayout.LINE_AXIS));
         boardSizeFields.setLayout(new BoxLayout(boardSizeFields, BoxLayout.LINE_AXIS));
         piecesFields.setLayout(new BoxLayout(piecesFields, BoxLayout.LINE_AXIS));
+        backApply.setLayout(new BoxLayout(backApply, BoxLayout.LINE_AXIS));
+        //Gets rid of backgrounds
         boardSizeFields.setOpaque(false);
         piecesFields.setOpaque(false);
+        backApply.setOpaque(false);
         
     	lblBoardSize = new javax.swing.JLabel();
     	lblNumberPieces = new javax.swing.JLabel();
@@ -67,11 +86,13 @@ public class OptionsMenuView extends javax.swing.JPanel {
     	lblGuardians = new javax.swing.JLabel(); 
     	lblExplorers = new javax.swing.JLabel(); 
     	
-        btnReturn = new javax.swing.JButton();
+    	btnBack = new javax.swing.JButton();
+    	btnApply = new javax.swing.JButton();
         btnSmall = new javax.swing.JButton();
         btnMedium = new javax.swing.JButton();
         btnDefaultPieces = new javax.swing.JButton();
         btnLarge = new javax.swing.JButton();
+        
         
         txtWidth = new javax.swing.JTextField();
         txtHeight = new javax.swing.JTextField();;
@@ -81,7 +102,9 @@ public class OptionsMenuView extends javax.swing.JPanel {
         setBackground(new java.awt.Color(251, 242, 243));
         setBorder(new javax.swing.border.MatteBorder(null));
         
-        this.add(Box.createVerticalStrut(200));
+        this.add(Box.createVerticalStrut(120));
+        
+        //BOARD SIZE SECTION
         
         lblBoardSize.setFont(new java.awt.Font("Ubuntu", 1, 18));
         //lblBoardSize.setMaximumSize(new Dimension(300, 20));
@@ -96,7 +119,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         this.add(Box.createVerticalStrut(20));
         
         btnSmall.setText("Small");
-        btnSmall.setName("smallBoard");
+        btnSmall.setName("small");
         btnSmall.setMinimumSize(new Dimension(70,30));
         btnSmall.setMaximumSize(new Dimension(70,30));
         btnSmall.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -104,7 +127,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         boardSizeButtons.add(btnSmall);
         
         btnMedium.setText("Medium");
-        btnMedium.setName("mediumBoard");
+        btnMedium.setName("medium");
         btnMedium.setMinimumSize(new Dimension(80,30));
         btnMedium.setMaximumSize(new Dimension(80,30));
         btnMedium.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -112,7 +135,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         boardSizeButtons.add(btnMedium);
         
         btnLarge.setText("Large");
-        btnLarge.setName("largeBoard");
+        btnLarge.setName("large");
         btnLarge.setMinimumSize(new Dimension(70,30));
         btnLarge.setMaximumSize(new Dimension(70,30));
         btnLarge.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -132,7 +155,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         boardSizeFields.add(Box.createRigidArea(new Dimension(10,1)));
         
-        txtWidth.setText("10");
+        txtWidth.setText("15");
         txtWidth.setMinimumSize(new Dimension(70,30));
         txtWidth.setMaximumSize(new Dimension(70,30));
         boardSizeFields.add(txtWidth);
@@ -145,7 +168,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         boardSizeFields.add(Box.createRigidArea(new Dimension(10,1)));
         
-        txtHeight.setText("10");
+        txtHeight.setText("15");
         txtHeight.setMinimumSize(new Dimension(70,30));
         txtHeight.setMaximumSize(new Dimension(70,30));
         boardSizeFields.add(txtHeight);
@@ -154,7 +177,9 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         this.add(boardSizeFields);
         
-        this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(40));
+        
+        //NUMBER OF PIECES SECTION
         
         lblNumberPieces.setFont(new java.awt.Font("Ubuntu", 1, 18));
         //lblBoardSize.setMaximumSize(new Dimension(300, 20));
@@ -172,8 +197,8 @@ public class OptionsMenuView extends javax.swing.JPanel {
         btnDefaultPieces.setName("defaultpieces");
         btnDefaultPieces.setMinimumSize(new Dimension(80,30));
         btnDefaultPieces.setMaximumSize(new Dimension(80,30));
-        btnDefaultPieces.setAlignmentX(Component.LEFT_ALIGNMENT);
-        btnDefaultPieces.setAlignmentY(Component.LEFT_ALIGNMENT);
+        btnDefaultPieces.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnDefaultPieces.setAlignmentY(Component.CENTER_ALIGNMENT);
         this.add(btnDefaultPieces);
         
         this.add(Box.createVerticalStrut(20));
@@ -186,7 +211,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         piecesFields.add(Box.createRigidArea(new Dimension(5,1)));
         
-        txtGuardians.setText("10");
+        txtGuardians.setText("3");
         txtGuardians.setMinimumSize(new Dimension(70,30));
         txtGuardians.setMaximumSize(new Dimension(70,30));
         piecesFields.add(txtGuardians);
@@ -199,7 +224,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         piecesFields.add(Box.createRigidArea(new Dimension(5,1)));
         
-        txtExplorers.setText("10");
+        txtExplorers.setText("4");
         txtExplorers.setMinimumSize(new Dimension(70,30));
         txtExplorers.setMaximumSize(new Dimension(70,30));
         piecesFields.add(txtExplorers);
@@ -208,15 +233,27 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         this.add(piecesFields);
         
-        this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(80));
 
-        btnReturn.setText("Return to Menu");
-        btnReturn.setName("return");
-        btnReturn.setMinimumSize(new Dimension(300,50));
-        btnReturn.setMaximumSize(new Dimension(300,50));
-        btnReturn.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnReturn.setAlignmentY(Component.CENTER_ALIGNMENT);
-        this.add(btnReturn);
+        btnBack.setText("Back");
+        btnBack.setName("back");
+        btnBack.setMinimumSize(new Dimension(100,30));
+        btnBack.setMaximumSize(new Dimension(100,30));
+        btnBack.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnBack.setAlignmentY(Component.CENTER_ALIGNMENT);
+        backApply.add(btnBack);
+        
+        backApply.add(Box.createRigidArea(new Dimension(50,1)));
+        
+        btnApply.setText("Apply");
+        btnApply.setName("apply");
+        btnApply.setMinimumSize(new Dimension(100,30));
+        btnApply.setMaximumSize(new Dimension(100,30));
+        btnApply.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnApply.setAlignmentY(Component.CENTER_ALIGNMENT);
+        backApply.add(btnApply);
+        
+        this.add(backApply);
         
     }
 
@@ -224,8 +261,9 @@ public class OptionsMenuView extends javax.swing.JPanel {
     private javax.swing.JButton btnSmall;
     private javax.swing.JButton btnMedium;
     private javax.swing.JButton btnLarge;
-    private javax.swing.JButton btnReturn;
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDefaultPieces;
+    private javax.swing.JButton btnApply;
     
     //TextFields
     private javax.swing.JTextField txtWidth;
