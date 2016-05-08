@@ -7,6 +7,15 @@ import models.Player;
 
 public class GameMemento {
 	
+	/**Example of save game
+	 * GameMemento memento = game.createMemento();
+        Caretaker ct = new Caretaker();
+        ct.setMemento(memento);
+        
+        Example of load game
+        game.restore(ct.getMemento());
+	 */
+	
 	// TODO change player from map to single object
 	private Map<String, Player> players;
 	private Board board;
