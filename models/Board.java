@@ -72,5 +72,15 @@ public class Board {
 	public int getColumns() {
 		return this.columns;
 	}
+	
+	public Board clone(){
+        try {
+            return (Board) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

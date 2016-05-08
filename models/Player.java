@@ -80,5 +80,15 @@ public class Player {
 	public boolean hasUnit(Unit unit) {
 		return units.containsValue(unit);
 	}
+	
+	public Player clone(){
+        try {
+            return (Player) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

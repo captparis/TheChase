@@ -2,6 +2,8 @@ package models;
 
 import java.util.*;
 
+import memento.GameMemento;
+
 public class Game implements Cloneable{
 
 	private Map<String, Player> players;
@@ -52,4 +54,19 @@ public class Game implements Cloneable{
 	public void saveGame(String fileName){
 		//TODO: save the game objects to the the given file.
 	}
+	
+	/*
+	 *  Save the game state
+	 */
+	public GameMemento createMemento(){
+        return new GameMemento(players,board);
+    }
+	
+	/*
+	 *  Load game state
+	 */
+	public void restore(GameMemento memento){
+        this.players = memento.getPlayers();
+        this.board = memento.getBoard();
+    }
 }
