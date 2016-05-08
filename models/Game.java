@@ -2,7 +2,7 @@ package models;
 
 import java.util.*;
 
-public class Game {
+public class Game implements Cloneable{
 
 	private Map<String, Player> players;
 	private Board board;

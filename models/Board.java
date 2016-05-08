@@ -45,6 +45,11 @@ public class Board {
 	public Cell[][] getCells() {
 		return cells;
 	}
+	
+	public void setCells(Cell[][] cells){
+		this.cells = cells;
+	}
+	
 	public LineBorder getBorder() {
 		return border;
 	}
