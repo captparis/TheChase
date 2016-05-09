@@ -11,7 +11,7 @@ public class DefensiveUnitDecorator extends AbstractUnitDecorator{
 
     @Override
     public boolean moveable(int x, int y) {
-        boolean moveable = unit.moveable(x,y);
+        boolean moveable = super.getUnit().moveable(x,y);
         
         if(!moveable){
             return false;
