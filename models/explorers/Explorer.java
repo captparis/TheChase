@@ -8,10 +8,6 @@ public abstract class Explorer extends AbstractUnit {
 		super();
 	}
 
-	public boolean attack(int[] pos) {
-		return false;
-	}
-
 	@Override
 	public boolean moveable(int x, int y) {
 		return true;

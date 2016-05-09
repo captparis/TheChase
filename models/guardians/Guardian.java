@@ -8,32 +8,19 @@
 
 package models.guardians;
 
-import java.util.ArrayList;
-import java.util.List;
-import models.Cell;
 import models.AbstractUnit;
 
 public abstract class Guardian extends AbstractUnit {
-	private List<Cell> attackRange;
 
 	public Guardian() {
 		super();
-		attackRange = new ArrayList<Cell>();
 	}
-	
-	public Guardian(List<Cell> attackPos){
-		super();
-		this.attackRange = attackPos;
-	}
-	
-	protected void setAttackRange(Cell cell){
-				this.attackRange.add(cell);		
-	}
-	
-	public List<Cell> getAttackRange(){
-		return attackRange;
-	}
-	
+        
+                @Override
+        public boolean die(int diceRoll) {
+            return false;
+        }
+
 	@Override
 	public abstract boolean attackable(int x, int y);
 }

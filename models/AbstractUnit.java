@@ -10,7 +10,7 @@ package models;
 
 import javax.swing.ImageIcon;
 
-public abstract class AbstractUnit implements Drawable {
+public abstract class AbstractUnit implements Drawable, Unit {
 	private boolean alive;
 	private int initX;
 	private int initY;
@@ -23,10 +23,9 @@ public abstract class AbstractUnit implements Drawable {
 		return new ImageIcon("bin/images/" + this.toString() + ".png");
 	}
 
+        @Override
 	public abstract boolean moveable(int x, int y);
 	public abstract boolean attackable(int x, int y);
-	public abstract boolean attack();
-	public abstract boolean useAbility();
 
 	public int getInitX() {
 		return initX;
@@ -56,6 +55,11 @@ public abstract class AbstractUnit implements Drawable {
 	public void setStatus(boolean alive) {
 		this.alive = alive;
 	}
+        
+        @Override
+        public boolean die(int diceRoll){
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
 	
 	public AbstractUnit clone(){
         try {
