@@ -17,13 +17,13 @@ public class UnitController {
 		this.gameController = gameController;
 	}
 
-	public Unit newUnit(UnitType unitType) throws Exception {
+	public AbstractUnit newUnit(UnitType unitType) throws Exception {
 
 		Class<?> unitClass;
-		Unit unit;
+		AbstractUnit unit;
 
 		unitClass = Class.forName(unitType.getQualifiedName());
-		unit =  (Unit)unitClass.newInstance();
+		unit =  (AbstractUnit)unitClass.newInstance();
 
 		unit.setInitX(unitType.getInitX());
 		unit.setInitY(unitType.getInitY());
@@ -31,12 +31,12 @@ public class UnitController {
 		return unit;
 	}
 
-	public Unit newUnit(String qualifiedUnitType) throws Exception {
+	public AbstractUnit newUnit(String qualifiedUnitType) throws Exception {
 		Class<?> unitClass;
-		Unit unit;
+		AbstractUnit unit;
 
 		unitClass = Class.forName(qualifiedUnitType);
-		unit = (Unit) unitClass.newInstance();
+		unit = (AbstractUnit) unitClass.newInstance();
 
 		return unit;
 	}

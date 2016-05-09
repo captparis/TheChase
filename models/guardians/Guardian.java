@@ -11,9 +11,9 @@ package models.guardians;
 import java.util.ArrayList;
 import java.util.List;
 import models.Cell;
-import models.Unit;
+import models.AbstractUnit;
 
-public abstract class Guardian extends Unit {
+public abstract class Guardian extends AbstractUnit {
 	private List<Cell> attackRange;
 
 	public Guardian() {
