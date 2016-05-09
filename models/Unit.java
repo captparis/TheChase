@@ -56,5 +56,16 @@ public abstract class Unit implements Drawable {
 	public void setStatus(boolean alive) {
 		this.alive = alive;
 	}
+	
+	public Unit clone(){
+        try {
+            return (Unit) super.clone();
+        } catch (CloneNotSupportedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
 }
