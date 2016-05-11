@@ -1,7 +1,10 @@
 
 package decorators;
 
+import javax.swing.ImageIcon;
+
 import models.AbstractUnit;
+import models.Unit;
 
 public class AgileUnitDecorator extends AbstractUnitDecorator{
 
@@ -21,5 +24,16 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
         }
         return false;
     }
+
+	@Override
+	public ImageIcon getIcon() {
+		return new ImageIcon("bin/images/" + getUnit().toString() + "_agile.png");
+	}
     
+	public Unit clone(){
+		AbstractUnit unitClone = (AbstractUnit) getUnit().clone();
+		AbstractUnitDecorator clone = new AgileUnitDecorator(unitClone);
+		return clone;
+    }
+	
 }

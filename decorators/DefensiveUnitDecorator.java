@@ -1,7 +1,10 @@
 
 package decorators;
 
+import javax.swing.ImageIcon;
+
 import models.AbstractUnit;
+import models.Unit;
 
 public class DefensiveUnitDecorator extends AbstractUnitDecorator{
 
@@ -29,5 +32,17 @@ public class DefensiveUnitDecorator extends AbstractUnitDecorator{
         }
         return false;
     }
+
+	@Override
+	public ImageIcon getIcon() {
+		return new ImageIcon("bin/images/" + getUnit().toString() + "_defense.png");
+	}
     
+	
+	public Unit clone(){
+		AbstractUnit unitClone = (AbstractUnit) getUnit().clone();
+		AbstractUnitDecorator clone = new DefensiveUnitDecorator(unitClone);
+		return clone;
+    }
+
 }

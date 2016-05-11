@@ -23,7 +23,7 @@ public abstract class AbstractUnit implements Drawable, Unit {
 		return new ImageIcon("bin/images/" + this.toString() + ".png");
 	}
 
-        @Override
+    @Override
 	public abstract boolean moveable(int x, int y);
 	public abstract boolean attackable(int x, int y);
 
@@ -61,7 +61,7 @@ public abstract class AbstractUnit implements Drawable, Unit {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 	
-	public AbstractUnit clone(){
+	public Unit clone(){
         try {
             return (AbstractUnit) super.clone();
         } catch (CloneNotSupportedException e) {
