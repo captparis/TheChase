@@ -8,6 +8,7 @@
 package controllers;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -114,10 +115,10 @@ public class GameController {
 	
 
 	public void initGame() throws Exception {
-
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
 		boardController.initBoard(ROWS, COLUMNS);
+		boardController.setPlayerName(currentPlayer);
 	}
 
 	//Set ups menu JPanel objects before displaying
@@ -211,6 +212,11 @@ public class GameController {
 	//This method decides what happens when a cell is clicked. 
 	public void cellClicked(Cell cell) {
 		
+		if (cell.getUnit() == null){
+			boardController.switchSelectedHud(false);
+		}
+		
+		
 		//If the game is in either the DICE_ROLL or CHECK_WIN state there should be no action when a cell is clicked.
 		if (gameState == State.DICE_ROLL || gameState == State.CHECK_WIN) {
 			return;
@@ -231,6 +237,8 @@ public class GameController {
 		if(gameState == State.MOVE) {
 
 			if (currentPlayer.hasUnit(cell.getUnit())) {
+				boardController.switchSelectedHud(true);
+				boardController.setUnitName(cell.getUnit().toString());
 				boardController.resetCells(lastCells);
 				boardController.repaintBoard();
 				selectedCell = cell;

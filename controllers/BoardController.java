@@ -9,6 +9,7 @@ package controllers;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -69,6 +70,7 @@ public class BoardController {
 		//mainWindow.getContentPane().add(contentPanel);
 		//mainWindow.pack();
 		contentPanel.setVisible(true);
+		boardSpace.setBackground(new Color (83, 83, 83));
 		return contentPanel;
 	}
 
@@ -130,9 +132,22 @@ public class BoardController {
 		String playerName = newPlayer.getName();
 		hudView.swapPlayer(playerName);
 	}
+	
+	void setPlayerName(Player newPlayer){
+		String playerName = newPlayer.getName();
+		hudView.setPlayerName(playerName);
+	}
 
 	void setWinState() {
 		hudView.setWinState();
+	}
+	
+	void switchSelectedHud(Boolean isSelected){
+		unitHudView.switchSelectedHud(isSelected);
+	}
+	
+	void setUnitName (String unitName){
+		unitHudView.setUnitName(unitName);
 	}
 
 	// assumes origin contains a movable unit and can legally move to target.
@@ -265,8 +280,7 @@ public class BoardController {
 			// TODO Auto-generated method stub
 			Cell cell = ((Cell) e.getSource());
 			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
-			System.out.println("Unit: " + cell.getUnit() + "Item:" + cell.getItem() + "DefaultItem:" + cell.getDefaultItem());
-
+			System.out.println("Unit: " + cell.getUnit() + " Item: " + cell.getItem() + " DefaultItem: " + cell.getDefaultItem());	
 			gameController.cellClicked(cell);
 		}
 

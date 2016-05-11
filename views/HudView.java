@@ -46,16 +46,17 @@ public class HudView extends JPanel{
         
         menuIcon = new ImageIcon("bin/images/menu.png");
         Image menuImage = menuIcon.getImage() ;  
-        Image newMenuImage = menuImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+        Image newMenuImage = menuImage.getScaledInstance( 10, 10,  java.awt.Image.SCALE_SMOOTH ) ;
         menuIcon.setImage(newMenuImage);
         
         
-        menuButton = new JButton (menuIcon);
+        menuButton = new JButton ("Menu", menuIcon);
         menuButton.setName("menuButton");
         menuButton.setBackground(Color.WHITE);
-        menuButton.setPreferredSize(new Dimension(30, 30));
+        menuButton.setPreferredSize(new Dimension(90, 30));
         menuButton.addActionListener(hudListener);
         menuButton.setFocusPainted(false);
+        menuButton.setIconTextGap(15);
 		
 		
 		diceIcon = new ImageIcon("bin/images/diceIcon.png");
@@ -90,6 +91,10 @@ public class HudView extends JPanel{
 	}
 	
 	//Functions to handle changes to the HUD based on state changes
+	
+	public void setPlayerName(String newName){
+		playerName.setText(newName);
+	}
 	
 	public void swapPlayer(String newName){
 		if (isExplorer){
