@@ -11,6 +11,9 @@
 package controllers;
 
 import javax.swing.*;
+
+import decorators.*;
+import models.Unit;
 import models.UnitType;
 import models.Player;
 import models.AbstractUnit;
@@ -49,7 +52,8 @@ public class PlayerController {
 		for (UnitType unitType : gameController.getTeamSetup().get(player.getTeam())) {
 			try {
 				String unitTypeName = unitType.getType();
-				player.addUnit(unitTypeName, unitController.newUnit(unitType));
+				AbstractUnit unit = unitController.newUnit(unitType);
+				player.addUnit(unitTypeName, new AgileUnitDecorator(unit));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -79,7 +83,7 @@ public class PlayerController {
 	public boolean hasLiveActor(String team){
 	    
 	    Player player = gameController.getPlayers().get(team);
-	    for(AbstractUnit unit : player.getUnits().values()){
+	    for(Unit unit : player.getUnits().values()){
 	        if(unit.isAlive()){
 	            return true;
 	        }

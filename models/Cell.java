@@ -26,7 +26,7 @@ public class Cell extends JButton {
 
 	BoardItem defaultItem;
 	BoardItem item;
-	AbstractUnit unit;
+	Unit unit;
 
 	public Cell(int x, int y, BoardItem defaultItem) {
 		this.xPos = x;
@@ -55,11 +55,11 @@ public class Cell extends JButton {
 		
 	}
 
-	public AbstractUnit getUnit() {
+	public Unit getUnit() {
 		return this.unit;
 	}
 
-	public void setUnit(AbstractUnit unit) {
+	public void setUnit(Unit unit) {
 		this.unit = unit;
 	}
 

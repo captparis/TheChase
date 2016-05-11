@@ -87,7 +87,7 @@ public class BoardController {
 		unitHudView = new UnitHudView(hudListener);
 
 		for (Player player : gameController.getPlayers().values()) {
-			for (AbstractUnit unit : player.getUnits().values()) {
+			for (Unit unit : player.getUnits().values()) {
 				setCellUnit(unit.getInitX(), unit.getInitY(), unit);
 			}
 		}
@@ -107,7 +107,7 @@ public class BoardController {
 	}
 
 	// Sets the unit for the cell
-	public void setCellUnit(int x, int y, AbstractUnit unit) {
+	public void setCellUnit(int x, int y, Unit unit) {
 		board.getCells()[x][y].setUnit(unit);
 	}
 
