@@ -172,7 +172,7 @@ public class GameController {
             boardController.setDiceState();
             // Swap to the next player, this could be changed later to
             // facilitate more than 2 players
-            boardController.swapPlayer();
+            
             if (getCurrentPlayer().getTeam() == "Explorer") {
                 try {
                     setCurrentPlayer(game.getPlayer("Guardian"));
@@ -188,6 +188,7 @@ public class GameController {
                     noPlayer.printStackTrace();
                 }
             }
+            boardController.swapPlayer(currentPlayer);
             gameState = GameController.State.DICE_ROLL;
         } else {
             boardController.setWinState();

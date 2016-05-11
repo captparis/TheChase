@@ -18,10 +18,34 @@ public class OptionsMenuView extends javax.swing.JPanel {
 	
 	private Image backgroundImage;
 	
+	//Panels
 	private JPanel boardSizeButtons;
 	private JPanel boardSizeFields;
 	private JPanel piecesFields;
 	public JPanel backApply;
+	
+	//Buttons
+    private javax.swing.JButton btnSmall;
+    private javax.swing.JButton btnMedium;
+    private javax.swing.JButton btnLarge;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnDefaultPieces;
+    private javax.swing.JButton btnApply;
+    
+    //TextFields
+    private javax.swing.JTextField txtWidth;
+    private javax.swing.JTextField txtHeight;
+    private javax.swing.JTextField txtGuardians;
+    private javax.swing.JTextField txtExplorers;
+    
+    
+    //Labels
+    private javax.swing.JLabel lblBoardSize;
+    private javax.swing.JLabel lblNumberPieces;
+    private javax.swing.JLabel lblWidth;
+    private javax.swing.JLabel lblHeight;
+    private javax.swing.JLabel lblGuardians;
+    private javax.swing.JLabel lblExplorers;
 	
 	@Override
 	  protected void paintComponent(Graphics g) {
@@ -257,27 +281,6 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
     }
 
-    //Buttons
-    private javax.swing.JButton btnSmall;
-    private javax.swing.JButton btnMedium;
-    private javax.swing.JButton btnLarge;
-    private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnDefaultPieces;
-    private javax.swing.JButton btnApply;
     
-    //TextFields
-    private javax.swing.JTextField txtWidth;
-    private javax.swing.JTextField txtHeight;
-    private javax.swing.JTextField txtGuardians;
-    private javax.swing.JTextField txtExplorers;
-    
-    
-    //Labels
-    private javax.swing.JLabel lblBoardSize;
-    private javax.swing.JLabel lblNumberPieces;
-    private javax.swing.JLabel lblWidth;
-    private javax.swing.JLabel lblHeight;
-    private javax.swing.JLabel lblGuardians;
-    private javax.swing.JLabel lblExplorers;
 }
 

@@ -8,6 +8,7 @@
 package controllers;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +24,7 @@ import models.explorers.Explorer;
 import models.items.*;
 import views.BoardView;
 import views.HudView;
+import views.UnitHudView;
 
 public class BoardController {
 
@@ -31,10 +33,16 @@ public class BoardController {
 	private Board board;
 	private BoardView boardView;
 	private HudView hudView;
+	private UnitHudView unitHudView;
 	private BoardItem ground;
 	private BoardItem movableGround;
 	private BoardItem attackableGround;
 	private BoardItem gate;
+	
+	private HUDActionListener hudListener;
+	
+	private JPanel southPanel;
+	private JPanel hudCards;
 
 
 	public BoardController(GameController gameController) {
@@ -49,10 +57,15 @@ public class BoardController {
 	public JPanel buildBoard() {
 		// create a new content panel holding both the grid and the hud
 		JPanel contentPanel = new JPanel(new BorderLayout());
-		JPanel boardSpace = new JPanel(new GridBagLayout());
+		JPanel boardSpace = new JPanel(new GridBagLayout());		
+		southPanel = new JPanel (new BorderLayout());
+		hudCards = new JPanel (new CardLayout());
+		
 		boardSpace.add(boardView);
 		contentPanel.add(boardSpace, BorderLayout.CENTER);
-		contentPanel.add(hudView, BorderLayout.SOUTH);
+		southPanel.add(hudView, BorderLayout.NORTH);
+		southPanel.add(unitHudView, BorderLayout.SOUTH);
+		contentPanel.add(southPanel, BorderLayout.SOUTH);
 		//mainWindow.getContentPane().add(contentPanel);
 		//mainWindow.pack();
 		contentPanel.setVisible(true);
@@ -62,9 +75,14 @@ public class BoardController {
 	public void initBoard(int rows, int columns) {
 		
 		board = new Board(rows, columns, ground);
+		hudListener = new HUDActionListener();
 
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
-		hudView = new HudView(new HUDActionListener());
+		
+		
+		
+		hudView = new HudView(hudListener);
+		unitHudView = new UnitHudView(hudListener);
 
 		for (Player player : gameController.getPlayers().values()) {
 			for (Unit unit : player.getUnits().values()) {
@@ -108,8 +126,9 @@ public class BoardController {
 		hudView.setDiceState();
 	}
 
-	void swapPlayer() {
-		hudView.swapPlayer();
+	void swapPlayer(Player newPlayer) {
+		String playerName = newPlayer.getName();
+		hudView.swapPlayer(playerName);
 	}
 
 	void setWinState() {
@@ -288,7 +307,22 @@ public class BoardController {
 	class HUDActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			gameController.hudButtonClicked();
+			String option = ((JButton) e.getSource()).getName();
+
+			switch (option) {
+			case "actionButton":
+				gameController.hudButtonClicked();
+				break;
+			case "menuButton":
+				//Code to bring up menu goes here
+				//System.println("");
+				break;
+			default:
+				break;
+			}
+			
+			
+			
 		}
 	}
 
