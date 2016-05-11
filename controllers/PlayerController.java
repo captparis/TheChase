@@ -13,7 +13,7 @@ package controllers;
 import javax.swing.*;
 import models.UnitType;
 import models.Player;
-import models.Unit;
+import models.AbstractUnit;
 
 public class PlayerController {
 
@@ -79,7 +79,7 @@ public class PlayerController {
 	public boolean hasLiveActor(String team){
 	    
 	    Player player = gameController.getPlayers().get(team);
-	    for(Unit unit : player.getUnits().values()){
+	    for(AbstractUnit unit : player.getUnits().values()){
 	        if(unit.isAlive()){
 	            return true;
 	        }

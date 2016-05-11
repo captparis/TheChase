@@ -1,15 +1,11 @@
 package models.explorers;
 
-import models.Unit;
+import models.AbstractUnit;
 
-public abstract class Explorer extends Unit {
+public abstract class Explorer extends AbstractUnit {
 
 	public Explorer() {
 		super();
-	}
-
-	public boolean attack(int[] pos) {
-		return false;
 	}
 
 	@Override

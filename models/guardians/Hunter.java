@@ -18,17 +18,6 @@ public class Hunter extends Guardian {
 	}
 
 	@Override
-	public boolean attack() {
-		System.out.println("Hunter attack!!!");
-		return true;
-	}
-
-	@Override
-	public boolean useAbility() {
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
-	@Override
 	public boolean moveable(int x, int y) {
 		// Hunter can only move on the diagonal
 		if (Math.abs(x) == Math.abs(y)) {

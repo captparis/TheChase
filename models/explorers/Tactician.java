@@ -14,16 +14,4 @@ public class Tactician extends Explorer {
 		super();
 	}
 
-	@Override
-	public boolean useAbility() {
-		System.out.println("Tactician use ability");
-		return true;
-	}
-
-	@Override
-	public boolean attack() {
-		// To change body of generated methods, choose Tools | Templates.
-		throw new UnsupportedOperationException("Not supported yet.");
-	}
-
 }

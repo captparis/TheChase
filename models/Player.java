@@ -13,7 +13,7 @@ public class Player {
 
 	private final String name;
 	private final String team;
-	private Map<String, Unit> units;
+	private Map<String, AbstractUnit> units;
 	private int currentRoll;
 	private int remainingMoves;
 
@@ -31,12 +31,12 @@ public class Player {
 		return team;
 	}
 	
-	public Map<String,Unit> getUnits(){
+	public Map<String,AbstractUnit> getUnits(){
 	    return units;
 	}
 
-	public Unit addUnit(String unitType, Unit newUnit) throws Exception {
-		Unit existingUnit = units.put(unitType, newUnit);
+	public AbstractUnit addUnit(String unitType, AbstractUnit newUnit) throws Exception {
+		AbstractUnit existingUnit = units.put(unitType, newUnit);
 
 		if (existingUnit == null) {
 			return newUnit;
@@ -45,8 +45,8 @@ public class Player {
 		}
 	}
 
-	public Unit getUnit(String unitType) throws Exception {
-		Unit unit = units.get(unitType);
+	public AbstractUnit getUnit(String unitType) throws Exception {
+		AbstractUnit unit = units.get(unitType);
 		if (unit == null) {
 			throw new Exception("No such unit type.");
 		} else {
@@ -77,7 +77,7 @@ public class Player {
 		}
 	}
 
-	public boolean hasUnit(Unit unit) {
+	public boolean hasUnit(AbstractUnit unit) {
 		return units.containsValue(unit);
 	}
 	
