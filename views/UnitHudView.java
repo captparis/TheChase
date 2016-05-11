@@ -22,6 +22,7 @@ public class UnitHudView extends JPanel{
 	private JPanel modesPanelGuardians;
 	private JPanel abilitiesPanel;
 	private JPanel modesCards;
+	private JPanel menuPanel;
 	
 	private CardLayout unitHudLayout;
 
@@ -36,6 +37,8 @@ public class UnitHudView extends JPanel{
 	
 	private ButtonGroup modeButtonGroup;
 	
+	private Boolean selectionViewShowing = false;
+	
 	
 	
 	public UnitHudView(ActionListener hudListener){
@@ -49,6 +52,7 @@ public class UnitHudView extends JPanel{
 		unitHudCards = new JPanel(new CardLayout());
 		selectedHud = new JPanel();
 		notSelectedHud = new JPanel();
+		menuPanel = new JPanel();
 		
 		unitName = new JLabel ("Unknown unit");
 		modesTitle = new JLabel ("Modes");
@@ -107,6 +111,7 @@ public class UnitHudView extends JPanel{
 		selectedHud.setOpaque(false);
 		notSelectedHud.setOpaque(false);
 		unitHudCards.setOpaque(false);
+		menuPanel.setOpaque(false);
 		
 
 		//Layout elements across Unit HUD bar
@@ -122,6 +127,7 @@ public class UnitHudView extends JPanel{
 		
 		unitHudCards.add(selectedHud, "selected");
 		unitHudCards.add(notSelectedHud, "notselected");
+		unitHudCards.add(menuPanel, "menu");
 		this.add(unitHudCards);
 		
 		unitHudLayout = (CardLayout) unitHudCards.getLayout();
@@ -154,16 +160,31 @@ public class UnitHudView extends JPanel{
 	//Swaps the HUD to display mode options, unit name and so on when unit has been selected
 	public void switchSelectedHud(Boolean isSelected){
 		System.out.println("Setting selected to " + isSelected);
-		if (isSelected)
+		if (isSelected){
 			unitHudLayout.show(unitHudCards, "selected");
+			selectionViewShowing = true;
+		}
 		else {
 			unitHudLayout.show(unitHudCards, "notselected");
+			selectionViewShowing = false;
 		}
 	}
 	
 	public void setUnitName(String newUnitName){
 		unitName.setText(newUnitName);
 	}
+	
+	public void swapMenuView(Boolean isMenu){
+		if (isMenu)
+			unitHudLayout.show(unitHudCards, "menu");
+		else {
+			if (selectionViewShowing)
+				unitHudLayout.show(unitHudCards, "selected");
+			else 
+				unitHudLayout.show(unitHudCards, "notselected");
+		}
+	}
+	
 	
 
 }
