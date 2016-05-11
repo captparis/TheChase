@@ -6,18 +6,25 @@ import java.awt.event.ActionListener;
 
 public class HudView extends JPanel{
 	
-	public JLabel instruction;
-	public JLabel diceAmount;
-	public JLabel playerName;
+	private JPanel hudCards;
+	private JPanel hud;
+	private JPanel menu;
 	
-	public JButton actionButton;
-	public JButton menuButton;
+	private CardLayout cards;
 	
-	public ImageIcon diceIcon;
-	public ImageIcon endTurnIcon;
-	public ImageIcon menuIcon;
-	public JLabel currentPlayer;
-	public Boolean isExplorer;
+	private JLabel instruction;
+	private JLabel diceAmount;
+	private JLabel playerName;
+	
+	private JButton actionButton;
+	private JButton menuButton;
+	private JButton menuBackButton;
+	
+	private ImageIcon diceIcon;
+	private ImageIcon endTurnIcon;
+	private ImageIcon menuIcon;
+	private JLabel currentPlayer;
+	private Boolean isExplorer;
 	
 	private Image diceImage;
 	private Image endTurnImage;
@@ -30,6 +37,14 @@ public class HudView extends JPanel{
 		this.setPreferredSize(new Dimension(700, 50));
 		
 		isExplorer = true;
+		
+		hudCards = new JPanel(new CardLayout());
+		hud = new JPanel();
+		menu = new JPanel();
+		
+		hudCards.setOpaque(false);
+		hud.setOpaque(false);
+		menu.setOpaque(false);
 		
 		instruction = new JLabel("Please roll dice");
 		instruction.setFont (instruction.getFont ().deriveFont (18.0f));
@@ -57,6 +72,11 @@ public class HudView extends JPanel{
         menuButton.addActionListener(hudListener);
         menuButton.setFocusPainted(false);
         menuButton.setIconTextGap(15);
+        
+        menuBackButton = new JButton ("Back");
+        menuBackButton.setName("backButton");
+        menuBackButton.addActionListener(hudListener);
+        menuBackButton.setFocusPainted(false);
 		
 		
 		diceIcon = new ImageIcon("bin/images/diceIcon.png");
@@ -76,18 +96,26 @@ public class HudView extends JPanel{
 	    actionButton.setFocusPainted(false);
 
 		//Layout elements across HUD bar
-        this.add(Box.createVerticalStrut(40));
-        this.add(menuButton);
-        this.add(Box.createHorizontalStrut(60));
-		this.add(instruction);
-		this.add(Box.createHorizontalStrut(60));
-		this.add(actionButton);
-		this.add(Box.createHorizontalStrut(20));
-		this.add(diceAmount);
-		this.add(Box.createHorizontalStrut(60));
-		this.add(currentPlayer);
-		this.add(Box.createHorizontalStrut(20));
-		this.add(playerName);
+	    hud.add(Box.createVerticalStrut(40));
+	    hud.add(menuButton);
+	    hud.add(Box.createHorizontalStrut(60));
+	    hud.add(instruction);
+	    hud.add(Box.createHorizontalStrut(60));
+	    hud.add(actionButton);
+	    hud.add(Box.createHorizontalStrut(20));
+	    hud.add(diceAmount);
+	    hud.add(Box.createHorizontalStrut(60));
+	    hud.add(currentPlayer);
+	    hud.add(Box.createHorizontalStrut(20));
+	    hud.add(playerName);
+	    
+	    menu.add(menuBackButton);
+	    
+	    hudCards.add(hud, "hud");
+	    hudCards.add(menu, "menu");
+	    this.add(hudCards);
+	    
+	    cards = (CardLayout) hudCards.getLayout();
 	}
 	
 	//Functions to handle changes to the HUD based on state changes
@@ -138,5 +166,12 @@ public class HudView extends JPanel{
 		instruction.setText(currentPlayer.getText() + " win!");
 		actionButton.setText("Main Menu");
 		actionButton.setIcon(null);
+	}
+	
+	public void swapMenuView(Boolean isMenu){
+		if (isMenu)
+			cards.show(hudCards, "menu");
+		else 
+			cards.show(hudCards, "hud");
 	}
 }

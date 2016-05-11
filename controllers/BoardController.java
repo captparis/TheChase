@@ -328,8 +328,12 @@ public class BoardController {
 				gameController.hudButtonClicked();
 				break;
 			case "menuButton":
-				//Code to bring up menu goes here
-				//System.println("");
+				hudView.swapMenuView(true);
+				unitHudView.swapMenuView(true);
+				break;
+			case "backButton":
+				hudView.swapMenuView(false);
+				unitHudView.swapMenuView(false);
 				break;
 			default:
 				break;
