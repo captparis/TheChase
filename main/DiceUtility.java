@@ -11,6 +11,15 @@ import java.util.Random;
 
 // the dice can return a random number from 1-6
 public class DiceUtility {
+
+	// create an object of SingleObject
+	private static DiceUtility instance = new DiceUtility();
+
+	// Get the only object available
+	public static DiceUtility getInstance() {
+		return instance;
+	}
+	
 	public int roll() {
 		int number = 0;
 
@@ -20,4 +29,5 @@ public class DiceUtility {
 
 		return number;
 	}
+
 }

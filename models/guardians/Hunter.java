@@ -12,9 +12,16 @@ package models.guardians;
 
 public class Hunter extends Guardian {
 
-	public Hunter() {
+	// create an object of SingleObject
+	private static Hunter instance = new Hunter();
+
+	private Hunter() {
 		super();
-//		this.setAttakrange();
+	}
+
+	// Get the only object available
+	public static Hunter getInstance() {
+		return instance;
 	}
 
 	@Override
@@ -26,9 +33,9 @@ public class Hunter extends Guardian {
 			return false;
 		}
 	}
-	
+
 	public boolean attackable(int x, int y) {
-		if(Math.abs(x)> 2 || Math.abs(y) > 2 || x == 0 || y == 0 ){
+		if (Math.abs(x) > 2 || Math.abs(y) > 2 || x == 0 || y == 0) {
 			return true;
 		}
 		return false;

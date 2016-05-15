@@ -4,13 +4,21 @@ import java.util.*;
 
 import memento.GameMemento;
 
-public class Game implements Cloneable{
+public class Game implements Cloneable {
 
 	private Map<String, Player> players;
 	private Board board;
 
-	public Game() {
+	// create an object of SingleObject
+	private static Game instance = new Game();
+
+	private Game() {
 		this.players = new HashMap<>();
+	}
+
+	// Get the only object available
+	public static Game getInstance() {
+		return instance;
 	}
 
 	public Player addPlayer(String playerTeam, Player newPlayer) throws Exception {
@@ -46,27 +54,27 @@ public class Game implements Cloneable{
 	public Map<String, Player> getPlayers() {
 		return this.players;
 	}
-	
-	public void loadGame(String fileName){
-		//TODO: read from file and create game objects
+
+	public void loadGame(String fileName) {
+		// TODO: read from file and create game objects
 	}
-	
-	public void saveGame(String fileName){
-		//TODO: save the game objects to the the given file.
+
+	public void saveGame(String fileName) {
+		// TODO: save the game objects to the the given file.
 	}
-	
+
 	/*
-	 *  Save the game state
+	 * Save the game state
 	 */
-	public GameMemento createMemento(){
-        return new GameMemento(players,board);
-    }
-	
+	public GameMemento createMemento() {
+		return new GameMemento(players, board);
+	}
+
 	/*
-	 *  Load game state
+	 * Load game state
 	 */
-	public void restore(GameMemento memento){
-        this.players = memento.getPlayers();
-        this.board = memento.getBoard();
-    }
+	public void restore(GameMemento memento) {
+		// this.players = memento.getPlayers();
+		this.board = memento.getBoard();
+	}
 }

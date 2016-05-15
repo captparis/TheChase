@@ -10,8 +10,16 @@ package models.explorers;
 
 public class Tactician extends Explorer {
 
-	public Tactician() {
+	// create an object of SingleObject
+	private static Tactician instance = new Tactician();
+
+	private Tactician() {
 		super();
+	}
+
+	// Get the only object available
+	public static Tactician getInstance() {
+		return instance;
 	}
 
 }

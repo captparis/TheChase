@@ -30,39 +30,40 @@ public class Board {
 		this.mouseOverItem = new LineBorder(Color.blue, 3);
 		this.mouseOverEnemy = new LineBorder(Color.red, 3);
 		this.mouseOverAlly = new LineBorder(Color.green, 3);
-		
-	cells = new Cell[columns][rows];
-    System.out.println(rows+" "+columns);
-    for (int x = 0; x < columns; x++) {
-        for (int y = 0; y < rows; y++) {
-            cells[x][y] = new Cell(x, y, item);
-            System.out.println("X: "+x+"y : "+y);
-        }
-    }
+
+		cells = new Cell[columns][rows];
+		System.out.println(rows + " " + columns);
+		for (int x = 0; x < columns; x++) {
+			for (int y = 0; y < rows; y++) {
+				cells[x][y] = new Cell(x, y, item);
+				System.out.println("X: " + x + "y : " + y);
+			}
+		}
 
 	}
 
 	public Cell[][] getCells() {
 		return cells;
 	}
-	
-	public void setCells(Cell[][] cells){
+
+	public void setCells(Cell[][] cells) {
 		this.cells = cells;
 	}
-	
+
 	public LineBorder getBorder() {
 		return border;
 	}
+
 	public LineBorder getMouseOverBorder(int type) {
-		switch(type) {
+		switch (type) {
 		case 1:
 			return mouseOverAlly;
 		case 2:
 			return mouseOverEnemy;
-		default :
+		default:
 			return mouseOverItem;
 		}
-		
+
 	}
 
 	public int getRows() {
@@ -72,15 +73,15 @@ public class Board {
 	public int getColumns() {
 		return this.columns;
 	}
-	
-	public Board clone(){
-        try {
-            return (Board) super.clone();
-        } catch (CloneNotSupportedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
+
+	public Board clone() {
+		try {
+			return (Board) super.clone();
+		} catch (CloneNotSupportedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }

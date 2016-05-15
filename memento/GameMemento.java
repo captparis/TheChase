@@ -24,10 +24,10 @@ public class GameMemento {
 	private Board board;
 
 	public GameMemento(Map<String, Player> players, Board board) {
-		for (Entry<String, Player> entry : players.entrySet()){
-			Player player = entry.getValue().clone();
-			this.players.put(entry.getKey(), player);
-		}
+//		for (Entry<String, Player> entry : players.entrySet()){
+//			Player player = entry.getValue().clone();
+//			this.players.put(entry.getKey(), player);
+//		}
 		this.board = board.clone();
 	}
 	

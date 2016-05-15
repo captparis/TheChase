@@ -1,10 +1,17 @@
 package models.guardians;
 
-
 public class Golem extends Guardian {
 
-	public Golem() {
+	// create an object of SingleObject
+	private static Golem instance = new Golem();
+
+	private Golem() {
 		super();
+	}
+
+	// Get the only object available
+	public static Golem getInstance() {
+		return instance;
 	}
 
 	@Override
@@ -17,13 +24,13 @@ public class Golem extends Guardian {
 		}
 
 	}
-	
+
 	@Override
-	public boolean attackable(int x, int y){
-		if((Math.abs(x) == 2 || Math.abs(y) == 2) && Math.abs(x) != Math.abs(y)){
+	public boolean attackable(int x, int y) {
+		if ((Math.abs(x) == 2 || Math.abs(y) == 2) && Math.abs(x) != Math.abs(y)) {
 			return true;
 		}
 		return false;
 	}
-	
+
 }

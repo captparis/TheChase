@@ -10,7 +10,7 @@ package models;
 
 import javax.swing.ImageIcon;
 
-public abstract class AbstractUnit implements Drawable, Unit {
+public abstract class AbstractUnit implements Drawable, Unit, Cloneable {
 	private boolean alive;
 	private int initX;
 	private int initY;

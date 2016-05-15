@@ -27,5 +27,6 @@ public class TheChase {
 		GameController gameController = new GameController(mainWindow);
 		gameController.initialiseMenu();
 		mainWindow.pack();
+//		TempUI temp = new TempUI();
 	}
 }
