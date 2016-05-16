@@ -43,6 +43,7 @@ public class GameController {
 
 	// Models
 	private Game game;
+	private Settings settings;
 
 	// views
 	private MainMenuView mainMenuView;
@@ -74,7 +75,7 @@ public class GameController {
 		lastCells = new ArrayList<Cell>();
 		dice = DiceUtility.getInstance();
 		gameState = State.DICE_ROLL;
-		setupTeams();
+		settings = Settings.getInstance();
 	}
 
 	private void setupTeams() {
@@ -82,20 +83,21 @@ public class GameController {
 		teamSetup = new HashMap<>();
 
 		teamSetup.put("Explorer",
-				new UnitType[] { new UnitType("Hero", "models.explorers", ROWS - 1, COLUMNS - 2),
-						new UnitType("Scout", "models.explorers", ROWS - 2, COLUMNS - 1),
-						new UnitType("Tactician", "models.explorers", ROWS - 1, COLUMNS - 1),
-						new UnitType("TrapMaster", "models.explorers", ROWS - 2, COLUMNS - 2), });
+				new UnitType[] { new UnitType("Hero", "models.explorers", settings.rows - 1, settings.columns - 2),
+						new UnitType("Scout", "models.explorers", settings.rows - 2, settings.columns - 1),
+						new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1),
+						new UnitType("TrapMaster", "models.explorers", settings.rows - 2, settings.columns - 2), });
 
 		teamSetup.put("Guardian",
 				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
-						new UnitType("Golem", "models.guardians", 0, COLUMNS - 1),
-						new UnitType("Hunter", "models.guardians", ROWS - 1, 0) });
+						new UnitType("Golem", "models.guardians", 0, settings.columns - 1),
+						new UnitType("Hunter", "models.guardians", settings.rows - 1, 0) });
 	}
 
 	public void startGame() {
 		System.out.println("Start Game");
 		try {
+			setupTeams();
 			initGame();
 			System.out.println("Explorer: " + game.getPlayer("Explorer").getName());
 			System.out.println("Guardian: " + game.getPlayer("Guardian").getName());
@@ -136,7 +138,7 @@ public class GameController {
 
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
-		boardController.initBoard(ROWS, COLUMNS);
+		boardController.initBoard(settings.rows, settings.columns);
 		boardController.setPlayerName(currentPlayer);
 	}
 
@@ -363,7 +365,14 @@ public class GameController {
 	public void defaultPieces() {
 		optionsMenuView.setToDefault();
 	}
-
+	
+	public void applySettings(){
+		int newColumns = optionsMenuView.getColumns();
+		int newRows = optionsMenuView.getRows();
+		settings.setBoardSize(newRows, newColumns);
+		System.out.println("Applied new settings");
+	}
+	
 	public Map<String, UnitType[]> getTeamSetup() {
 		return teamSetup;
 	}
@@ -421,6 +430,10 @@ public class GameController {
 				break;
 			case "defaultpieces":
 				defaultPieces();
+				break;
+			case "apply":
+				applySettings();
+				break;
 			default:
 				break;
 			}

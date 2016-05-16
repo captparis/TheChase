@@ -76,8 +76,14 @@ public class BoardController {
 
 	public void initBoard(int rows, int columns) {
 		
-		board = new Board(rows, columns, ground);
+		try {
+			board = Board.getInstance(rows, columns, ground);
+		} catch (Exception e) {
+			 System.err.println(e);
+		}
 		hudListener = new HUDActionListener();
+		
+		System.out.println("Creating boardView");
 
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
 		
@@ -334,6 +340,10 @@ public class BoardController {
 			case "backButton":
 				hudView.swapMenuView(false);
 				unitHudView.swapMenuView(false);
+				break;
+			case "modeAgile":
+				break;
+			case "modeDefense":
 				break;
 			default:
 				break;

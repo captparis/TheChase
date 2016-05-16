@@ -60,12 +60,17 @@ public class UnitHudView extends JPanel{
 		noSelection = new JLabel ("No unit selected");
 		
 		agileStance = new JToggleButton ("Agile");
+		agileStance.setName("modeAgile");
 		defenseStance = new JToggleButton ("Defense");
+		defenseStance.setName("modeDefense");
 		ability = new JButton ("Ability");
 		
 		agileStance.setFocusPainted(false);
 		defenseStance.setFocusPainted(false);
 		ability.setFocusPainted(false);
+		
+		agileStance.addActionListener(hudListener);
+		defenseStance.addActionListener(hudListener);
 		
 		modeButtonGroup = new ButtonGroup();
 		modeButtonGroup.add(agileStance);

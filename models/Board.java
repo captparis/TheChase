@@ -11,6 +11,8 @@ import java.awt.Color;
 
 import javax.swing.border.LineBorder;
 
+import main.DiceUtility;
+
 public class Board {
 	private int rows;
 	private int columns;
@@ -23,6 +25,22 @@ public class Board {
 	/*
 	 * add item on each cell
 	 */
+	
+	// Singleton object
+	private static Board instance;
+
+	// Get instance of board or create an instance
+	public static Board getInstance(int rows, int columns, BoardItem item) throws Exception {
+		if (instance == null){
+			instance = new Board(rows, columns, item);
+		}
+		if (instance.rows != rows || instance.columns != columns){
+			throw new Exception("Cannot change board dimensions after board has been created");
+		}
+		return instance;
+	}
+	
+	
 	public Board(int rows, int columns, BoardItem item) {
 		this.rows = rows;
 		this.columns = columns;
@@ -40,6 +58,13 @@ public class Board {
 			}
 		}
 
+	}
+	
+	//Called from options menu to customise board size
+	public void setBoardSize(int rows, int columns){
+		this.rows = rows;
+		this.columns = columns;
+		
 	}
 
 	public Cell[][] getCells() {

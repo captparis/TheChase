@@ -70,6 +70,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         btnMedium.addActionListener(actionListener);
         btnLarge.addActionListener(actionListener);
         btnDefaultPieces.addActionListener(actionListener);
+        btnApply.addActionListener(actionListener);
     }
     
     public void setBoardFields(int size){
@@ -281,6 +282,20 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         this.add(backApply);
         
+    }
+    
+    //Function
+    
+    public int getColumns (){
+    	String tempString = txtWidth.getText();
+    	int newColumns = Integer.parseInt(tempString);
+    	return newColumns;
+    }
+    
+    public int getRows(){
+    	String tempString = txtHeight.getText();
+    	int newRows = Integer.parseInt(tempString);
+    	return newRows;
     }
 
     
