@@ -5,7 +5,7 @@ public class TrapMaster extends Explorer {
 	// create an object of SingleObject
 	private static TrapMaster instance = new TrapMaster();
 
-	private TrapMaster() {
+	public TrapMaster() {
 		super();
 	}
 

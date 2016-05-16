@@ -13,7 +13,7 @@ public class Tactician extends Explorer {
 	// create an object of SingleObject
 	private static Tactician instance = new Tactician();
 
-	private Tactician() {
+	public Tactician() {
 		super();
 	}
 

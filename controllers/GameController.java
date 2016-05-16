@@ -125,7 +125,7 @@ public class GameController {
 		// tempWindow.pack();
 		JPanel panel = new JPanel();
 		tempWindow.add(panel);
-		JButton button = new JButton("a");
+		JButton button = new JButton("save");
 		panel.add(button);
 		button.addActionListener(new Save(game));
 
