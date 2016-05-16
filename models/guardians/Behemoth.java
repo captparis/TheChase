@@ -5,7 +5,7 @@ public class Behemoth extends Guardian {
 	// create an object of SingleObject
 	private static Behemoth instance = new Behemoth();
 
-	private Behemoth() {
+	public Behemoth() {
 		super();
 	}
 

@@ -15,7 +15,7 @@ public class Hunter extends Guardian {
 	// create an object of SingleObject
 	private static Hunter instance = new Hunter();
 
-	private Hunter() {
+	public Hunter() {
 		super();
 	}
 

@@ -5,7 +5,7 @@ public class Scout extends Explorer {
 	// create an object of SingleObject
 	private static Scout instance = new Scout();
 
-	private Scout() {
+	public Scout() {
 		super();
 	}
 

@@ -5,7 +5,7 @@ public class Golem extends Guardian {
 	// create an object of SingleObject
 	private static Golem instance = new Golem();
 
-	private Golem() {
+	public Golem() {
 		super();
 	}
 
