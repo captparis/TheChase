@@ -371,6 +371,13 @@ public class GameController {
 		int newRows = optionsMenuView.getRows();
 		settings.setBoardSize(newRows, newColumns);
 		System.out.println("Applied new settings");
+		
+		ArrayList<String> inactiveUnits = optionsMenuView.getInactiveUnits();
+		if (inactiveUnits != null){
+			for (String t : inactiveUnits){
+				settings.activeUnits.put(t, false);
+			}
+		}
 	}
 	
 	public Map<String, UnitType[]> getTeamSetup() {
