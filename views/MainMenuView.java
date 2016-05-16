@@ -16,6 +16,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 
 public class MainMenuView extends javax.swing.JPanel {
 
@@ -37,7 +38,9 @@ public class MainMenuView extends javax.swing.JPanel {
     	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     	initComponents();
         try {
-			backgroundImage = ImageIO.read(new File("bin/images/menuBG.jpg"));
+			backgroundImage = ImageIO.read(new File("bin/images/menuBG-high.jpg")); 
+	        Image scaledBG = backgroundImage.getScaledInstance( 940, 570,  java.awt.Image.SCALE_SMOOTH ) ;
+	        backgroundImage = scaledBG;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

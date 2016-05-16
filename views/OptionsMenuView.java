@@ -58,7 +58,9 @@ public class OptionsMenuView extends javax.swing.JPanel {
     	this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     	initComponents();
         try {
-			backgroundImage = ImageIO.read(new File("bin/images/optionsBG.jpg"));
+			backgroundImage = ImageIO.read(new File("bin/images/optionsBG-high.jpg"));
+			Image scaledBG = backgroundImage.getScaledInstance( 940, 570,  java.awt.Image.SCALE_SMOOTH ) ;
+			backgroundImage = scaledBG;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
