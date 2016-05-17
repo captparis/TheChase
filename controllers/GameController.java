@@ -63,6 +63,9 @@ public class GameController {
 	private List<Cell> lastCells;
 	private State gameState;
 	private Player winner;
+	
+	// Memento
+	Caretaker ct = new Caretaker();
 
 	// Constructor
 	public GameController(JFrame mainWindow) {
@@ -83,10 +86,12 @@ public class GameController {
 		teamSetup = new HashMap<>();
 
 		teamSetup.put("Explorer",
-				new UnitType[] { new UnitType("Hero", "models.explorers", settings.rows - 1, settings.columns - 2),
+				new UnitType[] { new UnitType("Hero", "models.explorers", 
+						settings.rows - 1, settings.columns - 2),
 						new UnitType("Scout", "models.explorers", settings.rows - 2, settings.columns - 1),
 						new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1),
-						new UnitType("TrapMaster", "models.explorers", settings.rows - 2, settings.columns - 2), });
+						new UnitType("TrapMaster", "models.explorers", 
+								settings.rows - 2, settings.columns - 2), });
 
 		teamSetup.put("Guardian",
 				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
@@ -129,11 +134,11 @@ public class GameController {
 		tempWindow.add(panel);
 		JButton button = new JButton("save");
 		panel.add(button);
-		button.addActionListener(new Save(game));
+		button.addActionListener(new Save(ct, game));
 
 		JButton button2 = new JButton("Load");
 		panel.add(button2);
-//		button.addActionListener(new Load(game));
+		button2.addActionListener(new Load());
 		// END for test save and load function
 
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
@@ -456,31 +461,36 @@ public class GameController {
 	public void setWinner(Player winner) {
 		this.winner = winner;
 	}
-
 }
 
 // just for test save and load function
 class Save implements ActionListener {
 	Game game;
-	public Save(Game game){
-		this.game = game;
+	Board board;
+	Caretaker ct;	
+	public Save(Caretaker ct, Game game){
+		this.ct = ct;
+		this.board = game.getBoard();
 	}
 	public void actionPerformed(ActionEvent e) {
 		System.out.println("save");
-		GameMemento memento = game.createMemento();
-		Caretaker ct = new Caretaker();
+		GameMemento memento = new GameMemento(board);
 		ct.setMemento(memento);
+		System.out.println("Board is: "+memento.getBoard());
 	}
 }
 
-//class Load implements ActionListener {
-//	Game game;
-//	public Load(Game game){
-//		this.game = game;
+class Load implements ActionListener {
+	Game game;
+	Board board;
+	Caretaker ct = new Caretaker();
+//	public Load(Caretaker ct){
+//		this.ct = ct;
 //	}
-//	public void actionPerformed(ActionEvent e) {
-//		Caretaker ct = new Caretaker();
-//		game.restore(ct.getMemento());
-//	}
-//}
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("load");
+		board = ct.getMemento().getBoard();
+		System.out.println(ct.getMemento().getBoard());
+	}
+}
 // END for test save and load function

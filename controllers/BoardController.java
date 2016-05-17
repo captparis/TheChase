@@ -347,10 +347,7 @@ public class BoardController {
 				break;
 			default:
 				break;
-			}
-			
-			
-			
+			}	
 		}
 	}
 

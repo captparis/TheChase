@@ -10,6 +10,7 @@ package models;
 
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,7 +18,7 @@ import javax.swing.JButton;
 import models.items.Gate;
 
 //An inner class for a cell
-public class Cell extends JButton implements Cloneable {
+public class Cell extends JButton implements Serializable {
 
 	int xPos;
 	int yPos;
@@ -86,17 +87,5 @@ public class Cell extends JButton implements Cloneable {
 	public BoardItem getDefaultItem() {
 		return this.defaultItem;
 	}
-	
-public Cell clone(){
-        
-		return new Cell(this.xPos, this.yPos, this.defaultItem.clone());
-		
-//		try {
-//            return (Cell) super.clone();
-//        } catch (CloneNotSupportedException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        return null;
-    }
+
 }

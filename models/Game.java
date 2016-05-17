@@ -1,10 +1,11 @@
 package models;
 
+import java.io.Serializable;
 import java.util.*;
 
 import memento.GameMemento;
 
-public class Game implements Cloneable {
+public class Game implements Serializable {
 
 	private Map<String, Player> players;
 	private Board board;
@@ -53,28 +54,5 @@ public class Game implements Cloneable {
 
 	public Map<String, Player> getPlayers() {
 		return this.players;
-	}
-
-	public void loadGame(String fileName) {
-		// TODO: read from file and create game objects
-	}
-
-	public void saveGame(String fileName) {
-		// TODO: save the game objects to the the given file.
-	}
-
-	/*
-	 * Save the game state
-	 */
-	public GameMemento createMemento() {
-		return new GameMemento(players, board);
-	}
-
-	/*
-	 * Load game state
-	 */
-	public void restore(GameMemento memento) {
-		// this.players = memento.getPlayers();
-		this.board = memento.getBoard();
 	}
 }

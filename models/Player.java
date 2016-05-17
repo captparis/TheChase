@@ -7,9 +7,10 @@
  */
 package models;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Player {
+public class Player implements Serializable{
 
 	private final String name;
 	private final String team;
@@ -80,15 +81,4 @@ public class Player {
 	public boolean hasUnit(Unit unit) {
 		return units.containsValue(unit);
 	}
-	
-	public Player clone(){
-        try {
-            return (Player) super.clone();
-        } catch (CloneNotSupportedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 }

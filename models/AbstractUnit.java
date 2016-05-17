@@ -8,9 +8,11 @@
 
 package models;
 
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
-public abstract class AbstractUnit implements Drawable, Unit, Cloneable {
+public abstract class AbstractUnit implements Drawable, Unit, Serializable {
 	private boolean alive;
 	private int initX;
 	private int initY;

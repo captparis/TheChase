@@ -8,12 +8,13 @@
 package models;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 import javax.swing.border.LineBorder;
 
 import main.DiceUtility;
 
-public class Board {
+public class Board implements Serializable{
 	private int rows;
 	private int columns;
 	private Cell[][] cells;
@@ -98,15 +99,4 @@ public class Board {
 	public int getColumns() {
 		return this.columns;
 	}
-
-	public Board clone() {
-		try {
-			return (Board) super.clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 }
