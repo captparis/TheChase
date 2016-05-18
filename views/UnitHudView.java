@@ -147,11 +147,11 @@ public class UnitHudView extends JPanel{
 	
 	//Used to update the mode buttons to show which mode is currently active upon selecting a unit
 	public void setMode(String mode){
-		if (mode == "agile"){
+		if (mode.equals("agile")){
 			agileStance.setSelected(true);
 			defenseStance.setSelected(false);
 		}
-		else if (mode == "defense"){
+		else if (mode.equals("defense")){
 			agileStance.setSelected(false);
 			defenseStance.setSelected(true);
 		}

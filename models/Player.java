@@ -54,6 +54,9 @@ public class Player implements Serializable{
 			return unit;
 		}
 	}
+	public void setUnit(String type,Unit unit) throws Exception {
+	    units.put(type, unit);
+	}
 
 	public int getCurrentRoll() {
 		return currentRoll;

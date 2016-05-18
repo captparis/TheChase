@@ -7,13 +7,13 @@ import models.AbstractUnit;
 import models.Unit;
 
 public abstract class AbstractUnitDecorator implements Unit{
-    private AbstractUnit unit;
+    private Unit unit;
 
-    public AbstractUnitDecorator(AbstractUnit unit){
+    public AbstractUnitDecorator(Unit unit){
         this.unit = unit;
     }
     
-    public AbstractUnit getUnit() {
+    public Unit getUnit() {
         return unit;
     }
     

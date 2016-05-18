@@ -8,7 +8,7 @@ import models.Unit;
 
 public class DefensiveUnitDecorator extends AbstractUnitDecorator{
 
-    public DefensiveUnitDecorator(AbstractUnit unit) {
+    public DefensiveUnitDecorator(Unit unit) {
         super(unit);
     }
 
@@ -44,5 +44,6 @@ public class DefensiveUnitDecorator extends AbstractUnitDecorator{
 		AbstractUnitDecorator clone = new DefensiveUnitDecorator(unitClone);
 		return clone;
     }
+
 
 }

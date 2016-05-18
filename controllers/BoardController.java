@@ -288,6 +288,17 @@ public class BoardController {
 			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
 			System.out.println("Unit: " + cell.getUnit() + " Item: " + cell.getItem() + " DefaultItem: " + cell.getDefaultItem());	
 			gameController.cellClicked(cell);
+			if(cell.getUnit()!=null){
+			if(cell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator"))
+			{
+			    unitHudView.setMode("agile"); 
+			}
+			else
+			{
+			    unitHudView.setMode("defense");
+			}
+			}
+			
 		}
 
 		@Override
@@ -327,7 +338,16 @@ public class BoardController {
 	class HUDActionListener implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
-			String option = ((JButton) e.getSource()).getName();
+		    String option ;
+		    if(e.getSource().getClass().getSimpleName().equals("JButton"))
+		    {
+			 option = ((JButton) e.getSource()).getName();
+		    }
+		    else
+		    {
+		         option = "mode";
+		    }
+			
 
 			switch (option) {
 			case "actionButton":
@@ -341,9 +361,8 @@ public class BoardController {
 				hudView.swapMenuView(false);
 				unitHudView.swapMenuView(false);
 				break;
-			case "modeAgile":
-				break;
-			case "modeDefense":
+			case "mode":
+			    gameController.swapMode(((JToggleButton) e.getSource()).getName());
 				break;
 			default:
 				break;

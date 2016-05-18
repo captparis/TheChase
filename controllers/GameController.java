@@ -19,6 +19,7 @@ import java.util.Map;
 
 import javax.swing.*;
 
+import decorators.*;
 import models.*;
 import models.guardians.Guardian;
 import models.items.*;
@@ -26,6 +27,7 @@ import main.*;
 import memento.Caretaker;
 import memento.GameMemento;
 import views.*;
+
 
 public class GameController {
 
@@ -231,6 +233,41 @@ public class GameController {
 	public int rollDice() {
 		return dice.roll();
 	}
+	public void swapMode(String mode){
+	    System.out.println(selectedCell.getUnit().toString());
+	    System.out.print("Unit mode before: "+selectedCell.getUnit().getClass()+" Click mode: "+mode);
+	    
+	    if(selectedCell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && mode.equals("modeDefense"))
+	    {
+	        try{
+	        selectedCell.setUnit(new DefensiveUnitDecorator(currentPlayer.getUnit(selectedCell.getUnit().toString())));
+	        currentPlayer.setUnit(selectedCell.getUnit().toString(), selectedCell.getUnit());
+	        }
+	        catch(Exception e) {
+                e.printStackTrace();
+            }
+	        
+	        
+	        
+	    }
+	    else if (selectedCell.getUnit().getClass().getSimpleName().equals("DefensiveUnitDecorator") && mode.equals("modeAgile") )
+	    {
+
+	           try{
+	               selectedCell.setUnit(new AgileUnitDecorator(currentPlayer.getUnit(selectedCell.getUnit().toString())));
+	               currentPlayer.setUnit(selectedCell.getUnit().toString(), selectedCell.getUnit());    
+	           }
+	               catch(Exception e) {
+	                   e.printStackTrace();
+	               }
+	    }
+	    System.out.println(" Unit mode after: "+selectedCell.getUnit().getClass());
+	    boardController.resetCells(lastCells);
+	    boardController.repaintBoard();
+        lastCells = boardController.movable(selectedCell, currentPlayer.getRemainingMoves());
+        boardController.drawActionCells(lastCells, gameState);
+	    
+	}
 
 	// This method decides what happens when a cell is clicked.
 	public void cellClicked(Cell cell) {
@@ -285,6 +322,7 @@ public class GameController {
 						gameState = State.ATTACK;
 					} else {
 						currentPlayer.subtractRemainingMoves(moveDistance);
+						
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

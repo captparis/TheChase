@@ -8,6 +8,8 @@
 
 package models.guardians;
 
+import models.Unit;
+
 // import models.Pos;
 
 public class Hunter extends Guardian {

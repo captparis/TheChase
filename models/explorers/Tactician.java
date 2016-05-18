@@ -8,6 +8,8 @@
 
 package models.explorers;
 
+import models.Unit;
+
 public class Tactician extends Explorer {
 
 	// create an object of SingleObject
@@ -21,5 +23,6 @@ public class Tactician extends Explorer {
 	public static Tactician getInstance() {
 		return instance;
 	}
+
 
 }

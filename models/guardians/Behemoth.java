@@ -1,5 +1,7 @@
 package models.guardians;
 
+import models.Unit;
+
 public class Behemoth extends Guardian {
 
 	// create an object of SingleObject
@@ -31,5 +33,6 @@ public class Behemoth extends Guardian {
 		}
 		return true;
 	}
+
 
 }

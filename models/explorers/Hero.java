@@ -1,5 +1,7 @@
 package models.explorers;
 
+import models.Unit;
+
 public class Hero extends Explorer {
 
 	// create an object of SingleObject
@@ -10,8 +12,13 @@ public class Hero extends Explorer {
 	}
 
 	// Get the only object available
+	
 	public static Hero getInstance() {
 		return instance;
 	}
+
+
+
+
 
 }

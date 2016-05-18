@@ -15,6 +15,7 @@ import java.io.Serializable;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
+import decorators.AbstractUnitDecorator;
 import models.items.Gate;
 
 //An inner class for a cell
@@ -59,6 +60,10 @@ public class Cell extends JButton implements Serializable {
 	public Unit getUnit() {
 		return this.unit;
 	}
+//	public AbstractUnit getAbsUnit(){
+//        return this.getUnit();
+//	    
+//	}
 
 	public void setUnit(Unit unit) {
 		this.unit = unit;

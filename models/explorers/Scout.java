@@ -1,5 +1,7 @@
 package models.explorers;
 
+import models.Unit;
+
 public class Scout extends Explorer {
 
 	// create an object of SingleObject
@@ -13,5 +15,6 @@ public class Scout extends Explorer {
 	public static Scout getInstance() {
 		return instance;
 	}
+
 
 }

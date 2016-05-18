@@ -8,13 +8,13 @@ import models.Unit;
 
 public class AgileUnitDecorator extends AbstractUnitDecorator{
 
-    public AgileUnitDecorator(AbstractUnit unit) {
+    public AgileUnitDecorator(Unit unit) {
         super(unit);
     }
 
     @Override
     public boolean moveable(int x, int y) {
-        return super.getUnit().moveable(x,y);
+        return true;
     }
 
     @Override
@@ -35,5 +35,6 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
 		AbstractUnitDecorator clone = new AgileUnitDecorator(unitClone);
 		return clone;
     }
+
 	
 }

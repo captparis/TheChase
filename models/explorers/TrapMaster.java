@@ -1,5 +1,7 @@
 package models.explorers;
 
+import models.Unit;
+
 public class TrapMaster extends Explorer {
 
 	// create an object of SingleObject
@@ -13,4 +15,5 @@ public class TrapMaster extends Explorer {
 	public static TrapMaster getInstance() {
 		return instance;
 	}
+
 }

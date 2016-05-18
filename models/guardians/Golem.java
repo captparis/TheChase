@@ -1,5 +1,7 @@
 package models.guardians;
 
+import models.Unit;
+
 public class Golem extends Guardian {
 
 	// create an object of SingleObject
