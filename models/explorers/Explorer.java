@@ -9,7 +9,7 @@ public abstract class Explorer extends AbstractUnit {
 	}
 
 	@Override
-	public boolean moveable(int x, int y) {
+	public boolean initMoveable(int x, int y) {
 		return true;
 	}
 	
@@ -17,5 +17,10 @@ public abstract class Explorer extends AbstractUnit {
 	public boolean attackable(int x, int y){
 		return false;
 	}
+	@Override
+    public boolean moveable(int x, int y) {
+
+        return initMoveable(x,y);
+    }
 
 }

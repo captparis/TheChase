@@ -14,7 +14,7 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
 
     @Override
     public boolean moveable(int x, int y) {
-        return true;
+        return super.initMoveable(x, y);
     }
 
     @Override
@@ -27,14 +27,19 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
 
 	@Override
 	public ImageIcon getIcon() {
-		return new ImageIcon("bin/images/" + getUnit().toString() + "_agile.png");
+		return new ImageIcon("bin/images/" + getInnerUnit().toString() + "_agile.png");
 	}
     
 	public Unit clone(){
-		AbstractUnit unitClone = (AbstractUnit) getUnit().clone();
+		AbstractUnit unitClone = (AbstractUnit) getInnerUnit().clone();
 		AbstractUnitDecorator clone = new AgileUnitDecorator(unitClone);
 		return clone;
     }
+
+ 
+
+    
+
 
 	
 }

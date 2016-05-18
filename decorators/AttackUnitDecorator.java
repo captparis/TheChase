@@ -6,15 +6,15 @@ import javax.swing.ImageIcon;
 import models.AbstractUnit;
 import models.Unit;
 
-public class DefensiveUnitDecorator extends AbstractUnitDecorator{
+public class AttackUnitDecorator extends AbstractUnitDecorator{
 
-    public DefensiveUnitDecorator(Unit unit) {
+    public AttackUnitDecorator(Unit unit) {
         super(unit);
     }
 
     @Override
     public boolean moveable(int x, int y) {
-        boolean moveable = super.getInnerUnit().moveable(x,y);
+        boolean moveable = super.getInnerUnit().initMoveable(x,y);
         
         if(!moveable){
             return false;
@@ -33,16 +33,16 @@ public class DefensiveUnitDecorator extends AbstractUnitDecorator{
         return false;
     }
 
-	@Override
-	public ImageIcon getIcon() {
-		return new ImageIcon("bin/images/" + getInnerUnit().toString() + "_defense.png");
-	}
+    @Override
+    public ImageIcon getIcon() {
+        return new ImageIcon("bin/images/" + getInnerUnit().toString() + "_attack.png");
+    }
     
-	
-	public Unit clone(){
-		AbstractUnit unitClone = (AbstractUnit) getInnerUnit().clone();
-		AbstractUnitDecorator clone = new DefensiveUnitDecorator(unitClone);
-		return clone;
+    
+    public Unit clone(){
+        AbstractUnit unitClone = (AbstractUnit) getInnerUnit().clone();
+        AbstractUnitDecorator clone = new DefensiveUnitDecorator(unitClone);
+        return clone;
     }
 
 

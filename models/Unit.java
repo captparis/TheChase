@@ -28,5 +28,6 @@ public interface Unit {
 	public abstract void setStatus(boolean alive);
         
 	public abstract Unit clone();
+	public abstract boolean initMoveable(int x, int y);
     
 }

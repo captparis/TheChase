@@ -17,7 +17,7 @@ public class Golem extends Guardian {
 	}
 
 	@Override
-	public boolean moveable(int x, int y) {
+	public boolean initMoveable(int x, int y) {
 
 		if (Math.abs(x) > 2 || Math.abs(y) > 2) {
 			return false;

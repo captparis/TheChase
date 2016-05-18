@@ -226,6 +226,7 @@ public class GameController {
 		} else {
 			boardController.setWinState();
 		}
+		boardController.switchSelectedHud(false);
 	}
 
 	public Player getCurrentPlayer() {
@@ -244,24 +245,30 @@ public class GameController {
 	    System.out.println(selectedCell.getUnit().toString());
 	    System.out.print("Unit mode before: "+selectedCell.getUnit().getClass()+" Click mode: "+mode);
 	    
-	    if(selectedCell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && mode.equals("modeDefense"))
+	    if(selectedCell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && !mode.equals("modeAgile"))
 	    {
 	        try{
-	        selectedCell.setUnit(new DefensiveUnitDecorator(currentPlayer.getUnit(selectedCell.getUnit().toString())));
+	            if(currentPlayer.getTeam()=="Explorer")
+	            {
+	                
+	                selectedCell.setUnit(new DefensiveUnitDecorator(((AbstractUnitDecorator)selectedCell.getUnit()).getInnerUnit()));
+	            }
+	            else
+	            {
+	                selectedCell.setUnit(new AttackUnitDecorator(((AbstractUnitDecorator)selectedCell.getUnit()).getInnerUnit()));
+
+	            }
 	        currentPlayer.setUnit(selectedCell.getUnit().toString(), selectedCell.getUnit());
 	        }
 	        catch(Exception e) {
                 e.printStackTrace();
             }
-	        
-	        
-	        
 	    }
-	    else if (selectedCell.getUnit().getClass().getSimpleName().equals("DefensiveUnitDecorator") && mode.equals("modeAgile") )
+	    else if (!selectedCell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && mode.equals("modeAgile") )
 	    {
 
 	           try{
-	               selectedCell.setUnit(new AgileUnitDecorator(currentPlayer.getUnit(selectedCell.getUnit().toString())));
+	               selectedCell.setUnit(new AgileUnitDecorator(((AbstractUnitDecorator)selectedCell.getUnit()).getInnerUnit()));
 	               currentPlayer.setUnit(selectedCell.getUnit().toString(), selectedCell.getUnit());    
 	           }
 	               catch(Exception e) {
@@ -365,6 +372,7 @@ public class GameController {
 				}
 
 				checkWin();
+				
 				return;
 
 			}
@@ -390,6 +398,7 @@ public class GameController {
 
 			// update the hud view with the new dice amount
 			boardController.setDiceRoll(currentPlayer.getRemainingMoves());
+			boardController.swapTeam(currentPlayer.getTeam());
 			gameState = GameController.State.MOVE;
 			boardController.setUnitState();
 		} // Move to check win state, restart if nobody won

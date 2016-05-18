@@ -15,7 +15,7 @@ public abstract class AbstractUnitDecorator implements Unit, Serializable{
         this.unit = unit;
     }
     
-    public Unit getUnit() {
+    public Unit getInnerUnit() {
         return unit;
     }
     
@@ -57,6 +57,9 @@ public abstract class AbstractUnitDecorator implements Unit, Serializable{
 	
 	public boolean attackable(int x, int y){
 		return unit.attackable(x, y);
+	}
+	public boolean initMoveable(int x, int y){
+	    return unit.initMoveable(x, y);
 	}
     
 }

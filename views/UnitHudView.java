@@ -11,9 +11,11 @@ public class UnitHudView extends JPanel{
 	
 	public ImageIcon agileIcon;
 	public ImageIcon defenseIcon;
+	public ImageIcon attackIcon;
 	
 	private Image agileImage;
 	private Image defenseImage;
+	private Image attackImage;
 	
 	private JPanel unitHudCards;
 	private JPanel selectedHud;
@@ -32,7 +34,7 @@ public class UnitHudView extends JPanel{
 	private JLabel abilitiesTitle;
 	
 	private JToggleButton agileStance;
-	private JToggleButton defenseStance;
+	private JToggleButton specialStance;
 	private JButton ability;
 	
 	private ButtonGroup modeButtonGroup;
@@ -61,21 +63,26 @@ public class UnitHudView extends JPanel{
 		
 		agileStance = new JToggleButton ("Agile");
 		agileStance.setName("modeAgile");
-		defenseStance = new JToggleButton ("Defense");
-		defenseStance.setName("modeDefense");
+		specialStance = new JToggleButton ("Defense");
+		specialStance.setName("modeDefense");
 		ability = new JButton ("Ability");
 		
 		agileStance.setFocusPainted(false);
-		defenseStance.setFocusPainted(false);
+		specialStance.setFocusPainted(false);
 		ability.setFocusPainted(false);
 		
 		agileStance.addActionListener(hudListener);
-		defenseStance.addActionListener(hudListener);
+		specialStance.addActionListener(hudListener);
 		
 		modeButtonGroup = new ButtonGroup();
 		modeButtonGroup.add(agileStance);
-		modeButtonGroup.add(defenseStance);
+		modeButtonGroup.add(specialStance);
 		
+		attackIcon = new ImageIcon("bin/images/attack.png");
+        attackImage = attackIcon.getImage();
+        attackImage = attackImage.getScaledInstance( 15, 15,  java.awt.Image.SCALE_SMOOTH ) ;
+        attackIcon.setImage(attackImage);
+        
 		agileIcon = new ImageIcon("bin/images/agile.png");
 		agileImage = agileIcon.getImage();
 		agileImage = agileImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
@@ -87,8 +94,8 @@ public class UnitHudView extends JPanel{
 		defenseImage = defenseIcon.getImage();
 		defenseImage = defenseImage.getScaledInstance( 15, 15,  java.awt.Image.SCALE_SMOOTH ) ;
 		defenseIcon.setImage(defenseImage);
-		defenseStance.setIcon(defenseIcon);
-		defenseStance.setToolTipText("Defense mode reduces movement but decreases the chance of the explorer being killed during an attack");
+		specialStance.setIcon(defenseIcon);
+		specialStance.setToolTipText("Defense mode reduces movement but decreases the chance of the explorer being killed during an attack");
 		
 		//Set up modes panel
 		modesPanelExplorers.setLayout(new BoxLayout(modesPanelExplorers, BoxLayout.LINE_AXIS));
@@ -99,7 +106,7 @@ public class UnitHudView extends JPanel{
 		modesPanelExplorers.add(Box.createRigidArea(new Dimension(30,0)));
 		modesPanelExplorers.add(agileStance);
 		modesPanelExplorers.add(Box.createRigidArea(new Dimension(30, 0)));
-		modesPanelExplorers.add(defenseStance);
+		modesPanelExplorers.add(specialStance);
 		modesPanelExplorers.add(Box.createRigidArea(new Dimension(30,0)));
 		
 		
@@ -147,19 +154,28 @@ public class UnitHudView extends JPanel{
 	
 	//Used to update the mode buttons to show which mode is currently active upon selecting a unit
 	public void setMode(String mode){
-		if (mode.equals("agile")){
+		if (mode.equals("Agile")){
 			agileStance.setSelected(true);
-			defenseStance.setSelected(false);
+			specialStance.setSelected(false);
 		}
-		else if (mode.equals("defense")){
+		else{
 			agileStance.setSelected(false);
-			defenseStance.setSelected(true);
+			specialStance.setSelected(true);
 		}
 		
 	}
 		
 	//Swaps what modes are displayed depending on if Guardian or Explorers are active
-	public void swapModes(){
+	public void swapTeam(String mod){
+	    this.specialStance.setText(mod);
+	    if(mod.equals("Attack"))
+	    {
+	        this.specialStance.setIcon(attackIcon);
+	    }
+	    else
+	    {
+	        this.specialStance.setIcon(defenseIcon);
+	    }
 	}
 	
 	//Swaps the HUD to display mode options, unit name and so on when unit has been selected

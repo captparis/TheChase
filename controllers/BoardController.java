@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.*;
 
 import controllers.GameController.State;
+import decorators.AbstractUnitDecorator;
 import models.*;
 import models.explorers.Explorer;
 import models.items.*;
@@ -149,6 +150,7 @@ public class BoardController {
 		hudView.setWinState();
 	}
 	
+	
 	void switchSelectedHud(Boolean isSelected){
 		unitHudView.switchSelectedHud(isSelected);
 	}
@@ -164,12 +166,7 @@ public class BoardController {
         target.setUnit(origin.getUnit());
         origin.setUnit(null);
 
-		// if the explorer moving into a gate cell update game controller
-		// winstate
-		
-		if (target.getUnit() instanceof Explorer && target.getDefaultItem() instanceof Gate) {
-			gameController.setWinner(gameController.getPlayers().get("Explorer"));
-		}
+
         
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
@@ -189,6 +186,16 @@ public class BoardController {
 		int y2 = target.getYPos();
 
 		return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
+	}
+	public void swapTeam(String team){
+	    if(team.equals("Guardian")){
+	        unitHudView.swapTeam("Attack");
+	    }
+	    else{
+	        unitHudView.swapTeam("Defense");
+	    }
+	    
+	   
 	}
 	
 	public List<Cell> attackable(Cell origin){
@@ -290,14 +297,15 @@ public class BoardController {
 			System.out.println("Unit: " + cell.getUnit() + " Item: " + cell.getItem() + " DefaultItem: " + cell.getDefaultItem());	
 			gameController.cellClicked(cell);
 			if(cell.getUnit()!=null){
-			if(cell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator"))
-			{
-			    unitHudView.setMode("agile"); 
-			}
-			else
-			{
-			    unitHudView.setMode("defense");
-			}
+			    unitHudView.setMode(cell.getUnit().getClass().getSimpleName().replace("UnitDecorator", "")); 
+//			if(cell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator"))
+//			{
+//			    unitHudView.setMode("agile"); 
+//			}
+//			else 
+//			{
+//			    unitHudView.setMode("defense");
+//			}
 			}
 			
 		}
@@ -318,6 +326,7 @@ public class BoardController {
 			int type = 0;
 
 			if(cell.getUnit() != null) {
+			    
 				if (gameController.getCurrentPlayer().hasUnit(cell.getUnit())) {
 				    type = 1;
 				}
