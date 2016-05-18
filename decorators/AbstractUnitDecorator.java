@@ -1,12 +1,14 @@
 
 package decorators;
 
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
 import models.AbstractUnit;
 import models.Unit;
 
-public abstract class AbstractUnitDecorator implements Unit{
+public abstract class AbstractUnitDecorator implements Unit, Serializable{
     private Unit unit;
 
     public AbstractUnitDecorator(Unit unit){

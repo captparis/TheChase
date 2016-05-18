@@ -61,6 +61,10 @@ public class Board implements Serializable{
 
 	}
 	
+	public static void clearInstance(){
+		instance = null;
+	}
+	
 	//Called from options menu to customise board size
 	public void setBoardSize(int rows, int columns){
 		this.rows = rows;

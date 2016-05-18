@@ -17,20 +17,20 @@ import models.Player;
 public class GameMemento implements Serializable{
 	
 	// TODO change player from map to single object
-//	private Game game;
-	private Board board;
+	private Game game;
+//	private Board board;
 
-	public GameMemento(Board board) {
-//		this.game = game;
-		this.board = board;
+	public GameMemento(Game game) {
+		this.game = game;
+//		this.board = board;
 	}
 	
-//	public Game getGame(){
-//		return game;
+	public Game getGame(){
+		return game;
+	}
+	
+//	public Board getBoard(){
+//		return board;
 //	}
-	
-	public Board getBoard(){
-		return board;
-	}
 	
 }

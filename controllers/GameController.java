@@ -145,8 +145,15 @@ public class GameController {
 
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
-		boardController.initBoard(settings.rows, settings.columns);
+		boardController.initBoard(settings.rows, settings.columns, game);
 		boardController.setPlayerName(currentPlayer);
+	}
+	
+	public void loadGame(Game game){
+		Board.clearInstance();
+		this.game = game;
+		System.out.println("Load game!!!");
+		boardController.initBoard(game.getBoard().getRows(), game.getBoard().getColumns(), game);
 	}
 
 	// Set ups menu JPanel objects before displaying
@@ -499,36 +506,39 @@ public class GameController {
 	public void setWinner(Player winner) {
 		this.winner = winner;
 	}
+	
+	// just for test save and load function
+	class Save implements ActionListener {
+		Game game;
+		Board board;
+		Caretaker ct;	
+		public Save(Caretaker ct, Game game){
+			this.ct = ct;
+			this.game = game;
+		}
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("save");
+			GameMemento memento = new GameMemento(game);
+			ct.setMemento(memento);
+			System.out.println("Board is: "+memento.getGame().getBoard().getCells().length);
+		}
+	}
+
+	class Load implements ActionListener {
+		Game game;
+		Board board;
+		Caretaker ct = new Caretaker();
+//		public Load(Caretaker ct){
+//			this.ct = ct;
+//		}
+		public void actionPerformed(ActionEvent e) {
+			System.out.println("load");
+			board = ct.getMemento().getGame().getBoard();
+			System.out.println(ct.getMemento().getGame().getBoard().getCells().length);
+			loadGame(ct.getMemento().getGame());
+		}
+	}
+	// END for test save and load function
 }
 
-// just for test save and load function
-class Save implements ActionListener {
-	Game game;
-	Board board;
-	Caretaker ct;	
-	public Save(Caretaker ct, Game game){
-		this.ct = ct;
-		this.board = game.getBoard();
-	}
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("save");
-		GameMemento memento = new GameMemento(board);
-		ct.setMemento(memento);
-		System.out.println("Board is: "+memento.getBoard());
-	}
-}
 
-class Load implements ActionListener {
-	Game game;
-	Board board;
-	Caretaker ct = new Caretaker();
-//	public Load(Caretaker ct){
-//		this.ct = ct;
-//	}
-	public void actionPerformed(ActionEvent e) {
-		System.out.println("load");
-		board = ct.getMemento().getBoard();
-		System.out.println(ct.getMemento().getBoard());
-	}
-}
-// END for test save and load function

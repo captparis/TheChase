@@ -74,10 +74,11 @@ public class BoardController {
 		return contentPanel;
 	}
 
-	public void initBoard(int rows, int columns) {
+	public void initBoard(int rows, int columns, Game game) {
 		
 		try {
 			board = Board.getInstance(rows, columns, ground);
+			game.setBoard(board);
 		} catch (Exception e) {
 			 System.err.println(e);
 		}
