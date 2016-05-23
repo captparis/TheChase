@@ -41,6 +41,19 @@ public class Board implements Serializable{
 		return instance;
 	}
 	
+	public static Board getInstance() throws Exception {
+		if (instance == null){
+			throw new Exception("Tried to create a board without parameters");
+		}
+
+		return instance;
+	}
+	
+	
+	public static void setInstance(Board board){
+		instance = board;
+	}
+	
 	
 	public Board(int rows, int columns, BoardItem item) {
 		this.rows = rows;

@@ -102,6 +102,22 @@ public class BoardController {
 		initItems();
 	}
 
+	public void refreshBoard(int rows, int columns, Game game) {
+		
+		try {
+			Board.setInstance(game.getBoard());
+			board = Board.getInstance();
+		} catch (Exception e) {
+			 System.err.println(e);
+		}
+		hudListener = new HUDActionListener();
+		
+		System.out.println("refreshing boardView");
+
+		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
+
+	}
+	
 	private void initItems() {
 		gate = new Gate();
 		setCellDefaultItem(0, 0, gate);
