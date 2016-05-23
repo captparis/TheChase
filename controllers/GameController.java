@@ -8,21 +8,16 @@
 package controllers;
 
 import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.*;
 
-import controllers.BoardController.MouseActionListener;
 import decorators.*;
 import models.*;
-import models.guardians.Guardian;
 import models.items.*;
 import main.*;
 import memento.Caretaker;
@@ -40,8 +35,6 @@ public class GameController {
 	};
 
 	// Game Setup Variables
-	private static final int ROWS = 8;
-	private static final int COLUMNS = 8;
 	private Map<String, UnitType[]> teamSetup;
 
 	// Models
@@ -65,6 +58,7 @@ public class GameController {
 
 	// Constructor
 	public GameController(JFrame mainWindow) {
+	    
 		this.mainWindow = mainWindow;
 		mainWindow.setResizable(false);
 		this.game = Game.getInstance();
@@ -202,6 +196,9 @@ public class GameController {
 	}
 
 	public void checkWin() {
+	    if (!playerController.hasLiveActor("Explorer")) {
+            this.setWinner(game.getCurrentPlayer());
+        }
 		// Reset the dice rolls to 0
 		boardController.setDiceRoll(0);
 		boardController.resetCells(game.getLastCells());
@@ -251,51 +248,42 @@ public class GameController {
 	public void swapMode(String mode){
 	    System.out.println(game.getSelectedCell().getUnit().toString());
 	    System.out.print("Unit mode before: "+game.getSelectedCell().getUnit().getClass()+" Click mode: "+mode);
-	    
+	    try{
 	    if(game.getSelectedCell().getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && !mode.equals("modeAgile"))
-	    {
-	        try{
-	            if(game.getCurrentPlayer().getTeam()=="Explorer")
-	            {
-	                
+	    {	        
+	            if(game.getCurrentPlayer().getTeam()=="Explorer"){	                
 	            	game.getSelectedCell().setUnit(new DefensiveUnitDecorator(((AbstractUnitDecorator)game.getSelectedCell().getUnit()).getInnerUnit()));
 	            }
-	            else
-	            {
+	            else{
 	            	game.getSelectedCell().setUnit(new AttackUnitDecorator(((AbstractUnitDecorator)game.getSelectedCell().getUnit()).getInnerUnit()));
-
 	            }
-	            game.getCurrentPlayer().setUnit(game.getSelectedCell().getUnit().toString(), game.getSelectedCell().getUnit());
-	        }
-	        catch(Exception e) {
-                e.printStackTrace();
-            }
 	    }
 	    else if (!game.getSelectedCell().getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && mode.equals("modeAgile") )
-	    {
-
-	           try{
+	    {     
 	        	   game.getSelectedCell().setUnit(new AgileUnitDecorator(((AbstractUnitDecorator)game.getSelectedCell().getUnit()).getInnerUnit()));
 	               game.getCurrentPlayer().setUnit(game.getSelectedCell().getUnit().toString(), game.getSelectedCell().getUnit());    
-	           }
-	               catch(Exception e) {
-	                   e.printStackTrace();
-	               }
 	    }
+        game.getCurrentPlayer().setUnit(game.getSelectedCell().getUnit().toString(), game.getSelectedCell().getUnit());    
+
+	    }
+	    catch(Exception e) {
+            e.printStackTrace();
+        }
 	    System.out.println(" Unit mode after: "+game.getSelectedCell().getUnit().getClass());
-	    boardController.resetCells(game.getLastCells());
-	    boardController.repaintBoard();
-        game.setLastCells(boardController.movable(game.getSelectedCell(), game.getCurrentPlayer().getRemainingMoves()));
-        boardController.drawActionCells(game.getLastCells(), game.getGameState());
-	    
+	    if (game.getGameState() == State.MOVE) {
+
+            this.move(game.getSelectedCell());
+        }
+        // Game state must be ATTACK to reach this point
+        if (game.getGameState() == State.ATTACK){
+            this.attack(game.getSelectedCell());
+        }
 	}
 
 	// This method decides what happens when a cell is clicked.
 	public void cellClicked(Cell cell) {
 
-		if (cell.getUnit() == null) {
-			boardController.switchSelectedHud(false);
-		}
+		
 
 		// If the game is in either the DICE_ROLL or CHECK_WIN state there
 		// should
@@ -303,88 +291,102 @@ public class GameController {
 		if (game.getGameState() == State.DICE_ROLL || game.getGameState() == State.CHECK_WIN) {
 			return;
 		}
+		//If the selected cell don't have unit
+		if (cell.getUnit() == null) {
+            boardController.switchSelectedHud(false);
+        }
+		else{
+		    boardController.switchSelectedHud(true);
+		    boardController.setUnitName(cell.getUnit().toString());
+		}
 
 		// If it is the guardians turn and the user clicks on the selected unit,
 		// toggle between move and attack
 		if (cell == game.getSelectedCell() && game.getCurrentPlayer().getTeam() == "Guardian") {
-			if (game.getGameState() == State.MOVE) {
-				game.setGameState(State.ATTACK);
-			} else {
-				game.setGameState(State.MOVE);
-			}
-			System.out.println("gameState : " + game.getGameState());
+			this.swapAtkMov();
 		}
 
 		// Handles the movement phase
 		if (game.getGameState() == State.MOVE) {
 
-			if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
-				boardController.switchSelectedHud(true);
-				boardController.setUnitName(cell.getUnit().toString());
-				boardController.resetCells(game.getLastCells());
-				boardController.repaintBoard();
-				game.setSelectedCell(cell);
-				game.setLastCells(boardController.movable(cell, game.getCurrentPlayer().getRemainingMoves()));
-				boardController.drawActionCells(game.getLastCells(), game.getGameState());
-			} else if (cell.getItem() instanceof MovableGround) {
-				// move the unit in the selected cell to the clicked cell
-				boardController.resetCells(game.getLastCells());
-				boardController.repaintBoard();
-				int moveDistance = boardController.move(game.getSelectedCell(), cell);
-
-				// subtract the current players remaining moves by the distance
-				// moved
-				// (remaining moves go to zero for guardians as they can only
-				// move
-				// once)
-				try {
-					if (game.getCurrentPlayer().getTeam() == "Guardian") {
-						game.getCurrentPlayer().subtractRemainingMoves(game.getCurrentPlayer().getRemainingMoves());
-						game.setGameState(State.ATTACK);
-					} else {
-						game.getCurrentPlayer().subtractRemainingMoves(moveDistance);
-						
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				// update the hudview with the number of remaining moves
-				boardController.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
-				// reset the movable squares to ground and repaint the board
-
-				boardController.resetCells(game.getLastCells());
-				boardController.repaintBoard();
-			}
+			this.move(cell);
 		}
 		// Game state must be ATTACK to reach this point
-		else {
-			// If the selected cell belongs to the current player show its
-			// attackable field on the board
-			if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
-				boardController.resetCells(game.getLastCells());
-				game.setSelectedCell(cell);
-				game.setLastCells(boardController.attackable(cell));
-				boardController.drawActionCells(game.getLastCells(), game.getGameState());
-			}
-			// if the selected cell contains a unit from the other team, attack
-			// it.
-			else if (!game.getCurrentPlayer().hasUnit(cell.getUnit()) && cell.getUnit() != null
-					&& cell.getItem() instanceof AttackableGround) {
-
-				System.out.println(game.getSelectedCell().getUnit().getClass().getSimpleName() + " is attacking "
-						+ cell.getUnit().getClass().getSimpleName());
-				boardController.kill(cell);
-				if (!playerController.hasLiveActor("Explorer")) {
-					this.setWinner(game.getCurrentPlayer());
-				}
-
-				checkWin();
-				
-				return;
-
-			}
+		if (game.getGameState() == State.ATTACK){
+			this.attack(cell);
 		}
+		game.setSelectedCell(cell);
 	}
+	private void swapAtkMov()
+	{
+	    if (game.getGameState() == State.MOVE) {
+            game.setGameState(State.ATTACK);
+        } else if(this.getCurrentPlayer().getRemainingMoves() !=0){
+            game.setGameState(State.MOVE);
+        }
+        System.out.println("gameState : " + game.getGameState());
+	}
+	private void move(Cell cell)
+	{
+	    if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
+            boardController.resetCells(game.getLastCells());
+            game.setLastCells(boardController.getAbleList(cell, this.getGameState()));
+            boardController.drawActionCells(game.getLastCells(), game.getGameState());
+        } else if (cell.getItem() instanceof MovableGround) {
+            // move the unit in the selected cell to the clicked cell
+            boardController.resetCells(game.getLastCells());
+            int moveDistance = boardController.move(game.getSelectedCell(), cell);
+
+            // subtract the current players remaining moves by the distance
+            // moved
+            // (remaining moves go to zero for guardians as they can only
+            // move
+            // once)
+            try {
+                if (game.getCurrentPlayer().getTeam() == "Guardian") {
+                    game.getCurrentPlayer().subtractRemainingMoves(game.getCurrentPlayer().getRemainingMoves());
+                    this.swapAtkMov();
+                } else {
+                    game.getCurrentPlayer().subtractRemainingMoves(moveDistance);
+                    
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            // update the hudview with the number of remaining moves
+            boardController.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
+            // reset the movable squares to ground and repaint the board
+            boardController.resetCells(game.getLastCells());
+        }  
+	}
+	private void attack(Cell cell){
+	 // If the selected cell belongs to the current player show its
+        // attackable field on the board
+        if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
+            boardController.resetCells(game.getLastCells());
+            if(!cell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator"))
+            {
+            game.setLastCells(boardController.getAbleList(cell, this.getGameState()));
+            boardController.drawActionCells(game.getLastCells(), game.getGameState());
+            }
+        }
+        // if the selected cell contains a unit from the other team, attack
+        // it.
+        else if (!game.getCurrentPlayer().hasUnit(cell.getUnit()) && cell.getUnit() != null
+                && cell.getItem() instanceof AttackableGround) {
+
+            System.out.println(game.getSelectedCell().getUnit().getClass().getSimpleName() + " is attacking "
+                    + cell.getUnit().getClass().getSimpleName());
+            boardController.kill(cell); 
+            this.endTurn();
+        
+        }
+	}
+	private void endTurn(){
+	    checkWin();
+	    
+	}
+	
 
 	private void quitGame() {
 		// System.exit(0);
@@ -411,8 +413,7 @@ public class GameController {
 		} // Move to check win state, restart if nobody won
 		else if (game.getGameState() == GameController.State.MOVE || game.getGameState() == GameController.State.ATTACK) {
 
-			// Check if the player has won
-			checkWin();
+			this.endTurn();
 		}
 		// game state must be in CHECK_WIN
 		else {

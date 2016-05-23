@@ -181,9 +181,6 @@ public class BoardController {
         // with ground.
         target.setUnit(origin.getUnit());
         origin.setUnit(null);
-
-
-        
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
 	}
@@ -213,70 +210,52 @@ public class BoardController {
 	    
 	   
 	}
-	
-	public List<Cell> attackable(Cell origin){
-		List<Cell> attackableCells = new ArrayList<>(36); //TODO:change the magic number
-		
-		int xPos = origin.getXPos();
-		int yPos = origin.getYPos();
-
-		for (int x = -2; x <= 2; x++) {
-			if (xPos + x < 0 || xPos + x >= board.getColumns()) {
-				continue;
-			}
-			for (int y = -2; y <= 2; y++) {
-				if (yPos + y < 0 || yPos + y >= board.getRows()) {
-					continue;
-				}
-
-				int attackableX = origin.getXPos() + x;
-				int attackableY = origin.getYPos() + y;
-
-				if (origin.getUnit().attackable(x, y)) {
-					Cell attackableCell = board.getCells()[attackableX][attackableY];
-					attackableCells.add(attackableCell);
-				}
-			}
-		}
-		return attackableCells;
+	 // returns the array of possible coordinates for a unit to move or attack to.
+	public List<Cell> getAbleList(Cell origin,State type)
+	{
+	    
+	    List<Cell> cells = new ArrayList<>();
+	    int xPos = origin.getXPos();
+        int yPos = origin.getYPos();
+        int size ;
+        if(type == State.ATTACK){       
+            size = 2;
+        }
+        else{
+            size = gameController.getCurrentPlayer().getRemainingMoves();
+        }
+        
+        for (int x = -size; x <= size; x++) {
+            if (xPos + x < 0 || xPos + x >= board.getColumns()) {
+                continue;
+            }
+            for (int y = -size; y <= size; y++) {
+                if (yPos + y < 0 || yPos + y >= board.getRows()) {
+                    continue;
+                }
+                int tempX = origin.getXPos() + x;
+                int tempY = origin.getYPos() + y;
+                
+                if (origin.getUnit().moveable(x, y) && type == State.MOVE) {
+                    Cell cell = board.getCells()[tempX][tempY];
+                    if ( cell.getUnit() != null) {
+                        continue;
+                    }
+                    cells.add(cell);
+                }
+                else if(origin.getUnit().attackable(x, y) && type == State.ATTACK){
+                    Cell cell = board.getCells()[tempX][tempY];
+                    cells.add(cell);
+                }
+            }
+        }       
+	    return cells;
 	}
-	
-	// returns the array of possible coordinates for a unit to move to.
-	// assumes origin contains movable unit and rollCount is a valid dice roll.
-	public List<Cell> movable(Cell origin, int rollCount) {
 
-		List<Cell> movableCells = new ArrayList<>(rollCount * 2 + 1);
-		int xPos = origin.getXPos();
-		int yPos = origin.getYPos();
-
-		for (int x = -rollCount; x <= rollCount; x++) {
-			if (xPos + x < 0 || xPos + x >= board.getColumns()) {
-				continue;
-			}
-			for (int y = -rollCount; y <= rollCount; y++) {
-				if (yPos + y < 0 || yPos + y >= board.getRows()) {
-					continue;
-				}
-
-				int movableX = origin.getXPos() + x;
-				int movableY = origin.getYPos() + y;
-
-				if (origin.getUnit().moveable(x, y)) {
-					Cell movableCell = board.getCells()[movableX][movableY];
-					if ( movableCell.getUnit() != null) {
-						continue;
-					}
-					movableCells.add(movableCell);
-				}
-			}
-		}
-
-		return movableCells;
-	}
 
 
 	// Assumes the draw cells passed in are on the board
-	public void drawActionCells(List<Cell> Cells , GameController.State state) {
+	public void drawActionCells(List<Cell> Cells , State state) {
 		
 		for (Cell cell : Cells) {
 			if(state == State.MOVE){
@@ -294,6 +273,7 @@ public class BoardController {
 			Cell.setItem(null);
 			Cell.repaint();
 		}
+		this.repaintBoard();
 	}
 
 	class MouseActionListener implements MouseListener{
@@ -314,14 +294,6 @@ public class BoardController {
 			gameController.cellClicked(cell);
 			if(cell.getUnit()!=null){
 			    unitHudView.setMode(cell.getUnit().getClass().getSimpleName().replace("UnitDecorator", "")); 
-//			if(cell.getUnit().getClass().getSimpleName().equals("AgileUnitDecorator"))
-//			{
-//			    unitHudView.setMode("agile"); 
-//			}
-//			else 
-//			{
-//			    unitHudView.setMode("defense");
-//			}
 			}
 			
 		}

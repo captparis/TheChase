@@ -180,7 +180,7 @@ public class UnitHudView extends JPanel{
 	
 	//Swaps the HUD to display mode options, unit name and so on when unit has been selected
 	public void switchSelectedHud(Boolean isSelected){
-		System.out.println("Setting selected to " + isSelected);
+		System.out.println("Unit Setting selected to " + isSelected);
 		if (isSelected){
 			unitHudLayout.show(unitHudCards, "selected");
 			selectionViewShowing = true;
