@@ -30,6 +30,8 @@ public class GameController {
 
 	// Constants
 	private static DiceUtility dice;
+	
+	private Mediator mediator = Mediator.getInstance();
 
 	public static enum State {
 		DICE_ROLL, MOVE, ATTACK, CHECK_WIN
@@ -53,8 +55,6 @@ public class GameController {
 	private final PlayerController playerController;
 	private final UnitController unitController;
 	private BoardController boardController;
-	
-	private Mediator mediator;
 
 	// Memento
 	Caretaker ct = new Caretaker();
@@ -72,15 +72,11 @@ public class GameController {
 		dice = DiceUtility.getInstance();
 		game.setGameState(State.DICE_ROLL);
 		settings = Settings.getInstance();
-		mediator = Mediator.getInstance();
 	}
 
 	private void setupTeams() {
 
 		teamSetup = new HashMap<>();
-		
-		//UnitType[] explorerUnits = new UnitType[];
-		
 
 		teamSetup.put("Explorer",
 				new UnitType[] { new UnitType("Hero", "models.explorers", 
@@ -89,7 +85,6 @@ public class GameController {
 						new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1),
 						new UnitType("TrapMaster", "models.explorers", 
 								settings.rows - 2, settings.columns - 2), });
-
 
 		teamSetup.put("Guardian",
 				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
@@ -142,9 +137,7 @@ public class GameController {
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
 		boardController.initBoard(settings.rows, settings.columns, game);
-		
-		String playerName = game.getCurrentPlayer().getName();
-		mediator.setPlayerName(playerName);
+		mediator.setPlayerName(game.getCurrentPlayer().getName());
 	}
 	
 	public void loadGame(Game game){
@@ -235,8 +228,7 @@ public class GameController {
 					noPlayer.printStackTrace();
 				}
 			}
-			String playerName = game.getCurrentPlayer().getName();
-			mediator.swapPlayer(playerName);
+			mediator.swapPlayer(game.getCurrentPlayer().getName());
 			game.setGameState(GameController.State.DICE_ROLL);
 		} else {
 			mediator.setWinState();
@@ -320,44 +312,6 @@ public class GameController {
 		// Handles the movement phase
 		if (game.getGameState() == State.MOVE) {
 
-			if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
-				boardController.switchSelectedHud(true);
-				boardController.setUnitName(cell.getUnit().toString());
-				boardController.resetCells(game.getLastCells());
-				boardController.repaintBoard();
-				game.setSelectedCell(cell);
-				game.setLastCells(boardController.movable(cell, game.getCurrentPlayer().getRemainingMoves()));
-				boardController.drawActionCells(game.getLastCells(), game.getGameState());
-			} else if (cell.getItem() instanceof MovableGround) {
-				// move the unit in the selected cell to the clicked cell
-				boardController.resetCells(game.getLastCells());
-				boardController.repaintBoard();
-				int moveDistance = boardController.move(game.getSelectedCell(), cell);
-
-				// subtract the current players remaining moves by the distance
-				// moved
-				// (remaining moves go to zero for guardians as they can only
-				// move
-				// once)
-				try {
-					if (game.getCurrentPlayer().getTeam() == "Guardian") {
-						game.getCurrentPlayer().subtractRemainingMoves(game.getCurrentPlayer().getRemainingMoves());
-						game.setGameState(State.ATTACK);
-					} else {
-						game.getCurrentPlayer().subtractRemainingMoves(moveDistance);
-						
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				// update the hudview with the number of remaining moves
-				mediator.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
-				// reset the movable squares to ground and repaint the board
-
-				boardController.resetCells(game.getLastCells());
-				boardController.repaintBoard();
-			}
-			this.move(cell);
 			this.move(cell);
 		}
 		// Game state must be ATTACK to reach this point
@@ -403,7 +357,7 @@ public class GameController {
                 e.printStackTrace();
             }
             // update the hudview with the number of remaining moves
-            boardController.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
+            mediator.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
             // reset the movable squares to ground and repaint the board
             boardController.resetCells(game.getLastCells());
         }  
@@ -606,5 +560,4 @@ public class GameController {
 	}
 	// END for test save and load function
 }
-
 
