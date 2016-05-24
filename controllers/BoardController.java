@@ -21,6 +21,7 @@ import javax.swing.*;
 
 import controllers.GameController.State;
 import decorators.AbstractUnitDecorator;
+import mediator.Mediator;
 import models.*;
 import models.explorers.Explorer;
 import models.items.*;
@@ -45,6 +46,8 @@ public class BoardController {
 	
 	private JPanel southPanel;
 	private JPanel hudCards;
+	
+	private Mediator mediator;
 
 
 	public BoardController(GameController gameController) {
@@ -53,6 +56,8 @@ public class BoardController {
 		ground = new Ground();
 		movableGround = new MovableGround();
 		attackableGround = new AttackableGround();
+		
+		mediator = Mediator.getInstance();
 	}
 
 	// this method assumes that the board has been initialized prior to calling.
@@ -140,31 +145,7 @@ public class BoardController {
 		board.getCells()[x][y].setItem(item);
 	}
 
-	void setDiceRoll(int diceAmount) {
-		hudView.setDiceRoll(diceAmount);
-	}
 
-	void setUnitState() {
-		hudView.setUnitState();
-	}
-
-	void setDiceState() {
-		hudView.setDiceState();
-	}
-
-	void swapPlayer(Player newPlayer) {
-		String playerName = newPlayer.getName();
-		hudView.swapPlayer(playerName);
-	}
-	
-	void setPlayerName(Player newPlayer){
-		String playerName = newPlayer.getName();
-		hudView.setPlayerName(playerName);
-	}
-
-	void setWinState() {
-		hudView.setWinState();
-	}
 	
 	
 	void switchSelectedHud(Boolean isSelected){
@@ -380,11 +361,11 @@ public class BoardController {
 				gameController.hudButtonClicked();
 				break;
 			case "menuButton":
-				hudView.swapMenuView(true);
+				mediator.swapMenuView(true);
 				unitHudView.swapMenuView(true);
 				break;
 			case "backButton":
-				hudView.swapMenuView(false);
+				mediator.swapMenuView(false);
 				unitHudView.swapMenuView(false);
 				break;
 			case "mode":

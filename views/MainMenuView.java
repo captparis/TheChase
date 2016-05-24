@@ -18,6 +18,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 
+import mediator.Mediator;
+
 public class MainMenuView extends javax.swing.JPanel {
 
     /**
@@ -26,6 +28,11 @@ public class MainMenuView extends javax.swing.JPanel {
      */
 	
 	private Image backgroundImage;
+	
+	private javax.swing.JButton btnOptions;
+    private javax.swing.JButton btnQuit;
+    private javax.swing.JButton btnStart;
+    private javax.swing.JLabel lblMainMenu;
 	
 	@Override
 	  protected void paintComponent(Graphics g) {
@@ -102,39 +109,7 @@ public class MainMenuView extends javax.swing.JPanel {
         btnQuit.setAlignmentY(Component.CENTER_ALIGNMENT);
         this.add(btnQuit);
         
-        /*
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lblMainMenu, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnOptions, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQuit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(lblMainMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnStart)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnOptions)
-                .addGap(18, 18, 18)
-                .addComponent(btnQuit)
-                .addContainerGap(16, Short.MAX_VALUE))
-        );*/
-    }// </editor-fold>//GEN-END:initComponents
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnOptions;
-    private javax.swing.JButton btnQuit;
-    private javax.swing.JButton btnStart;
-    private javax.swing.JLabel lblMainMenu;
-    // End of variables declaration//GEN-END:variables
+       
+    }
 }
 

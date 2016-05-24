@@ -25,6 +25,7 @@ import models.*;
 import models.guardians.Guardian;
 import models.items.*;
 import main.*;
+import mediator.Mediator;
 import memento.Caretaker;
 import memento.GameMemento;
 import views.*;
@@ -59,6 +60,8 @@ public class GameController {
 	private final PlayerController playerController;
 	private final UnitController unitController;
 	private BoardController boardController;
+	
+	private Mediator mediator;
 
 	// Memento
 	Caretaker ct = new Caretaker();
@@ -75,11 +78,15 @@ public class GameController {
 		dice = DiceUtility.getInstance();
 		game.setGameState(State.DICE_ROLL);
 		settings = Settings.getInstance();
+		mediator = Mediator.getInstance();
 	}
 
 	private void setupTeams() {
 
 		teamSetup = new HashMap<>();
+		
+		//UnitType[] explorerUnits = new UnitType[];
+		
 
 		teamSetup.put("Explorer",
 				new UnitType[] { new UnitType("Hero", "models.explorers", 
@@ -88,6 +95,7 @@ public class GameController {
 						new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1),
 						new UnitType("TrapMaster", "models.explorers", 
 								settings.rows - 2, settings.columns - 2), });
+
 
 		teamSetup.put("Guardian",
 				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
@@ -140,7 +148,9 @@ public class GameController {
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
 		boardController.initBoard(settings.rows, settings.columns, game);
-		boardController.setPlayerName(game.getCurrentPlayer());
+		
+		String playerName = game.getCurrentPlayer().getName();
+		mediator.setPlayerName(playerName);
 	}
 	
 	public void loadGame(Game game){
@@ -203,13 +213,13 @@ public class GameController {
 
 	public void checkWin() {
 		// Reset the dice rolls to 0
-		boardController.setDiceRoll(0);
+		mediator.setDiceRoll(0);
 		boardController.resetCells(game.getLastCells());
 		boardController.repaintBoard();
 		game.setSelectedCell(null);
 		game.setGameState(GameController.State.CHECK_WIN);
 		if (game.getWinner() == null) {
-			boardController.setDiceState();
+			mediator.setDiceState();
 			// Swap to the next player, this could be changed later to
 			// facilitate more than 2 players
 
@@ -228,10 +238,11 @@ public class GameController {
 					noPlayer.printStackTrace();
 				}
 			}
-			boardController.swapPlayer(game.getCurrentPlayer());
+			String playerName = game.getCurrentPlayer().getName();
+			mediator.swapPlayer(playerName);
 			game.setGameState(GameController.State.DICE_ROLL);
 		} else {
-			boardController.setWinState();
+			mediator.setWinState();
 		}
 		boardController.switchSelectedHud(false);
 	}
@@ -349,7 +360,7 @@ public class GameController {
 					e.printStackTrace();
 				}
 				// update the hudview with the number of remaining moves
-				boardController.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
+				mediator.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
 				// reset the movable squares to ground and repaint the board
 
 				boardController.resetCells(game.getLastCells());
@@ -404,10 +415,10 @@ public class GameController {
 			playerController.newDiceRoll(game.getCurrentPlayer(), rollDice());
 
 			// update the hud view with the new dice amount
-			boardController.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
+			mediator.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
 			boardController.swapTeam(game.getCurrentPlayer().getTeam());
 			game.setGameState(GameController.State.MOVE);
-			boardController.setUnitState();
+			mediator.setUnitState();
 		} // Move to check win state, restart if nobody won
 		else if (game.getGameState() == GameController.State.MOVE || game.getGameState() == GameController.State.ATTACK) {
 

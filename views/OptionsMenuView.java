@@ -21,6 +21,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import mediator.Mediator;
+
 public class OptionsMenuView extends javax.swing.JPanel {
 	
 	private Image backgroundImage;
@@ -494,6 +496,8 @@ public class OptionsMenuView extends javax.swing.JPanel {
         backApply.add(btnApply);
         
         this.add(backApply);
+        
+        Mediator.getInstance().registerOptionsColleagues();
         
     }
     

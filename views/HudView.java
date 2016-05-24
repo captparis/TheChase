@@ -1,6 +1,9 @@
 package views;
 
 import javax.swing.*;
+
+import mediator.Mediator;
+
 import java.awt.*;
 import java.awt.event.ActionListener;
 
@@ -116,62 +119,8 @@ public class HudView extends JPanel{
 	    this.add(hudCards);
 	    
 	    cards = (CardLayout) hudCards.getLayout();
-	}
-	
-	//Functions to handle changes to the HUD based on state changes
-	
-	public void setPlayerName(String newName){
-		playerName.setText(newName);
-	}
-	
-	public void swapPlayer(String newName){
-		if (isExplorer){
-			currentPlayer.setText("GUARDIANS");
-			currentPlayer.setForeground(Color.red);
-			isExplorer = false;
-		}
-		else {
-			currentPlayer.setText("EXPLORERS");
-			currentPlayer.setForeground(Color.blue);
-			isExplorer = true;
-		}
-		playerName.setText(newName);
-	}
-	
-	public void setDiceRoll(int diceNum){
-		diceAmount.setText(String.valueOf(diceNum));
-	}
-	
-	public void setDiceState(){
-		instruction.setText("Please roll dice");
-		actionButton.setText("Roll dice");
-		actionButton.setIcon(diceIcon);
-	}
-	
-	public void setUnitState(){
-		instruction.setText("Please select unit");
-		actionButton.setText("End turn");
-		actionButton.setIcon(endTurnIcon);	
-	}
-	
-	public void setMoveState(){
-		instruction.setText("Please choose movement position");
-	}
-	
-	public void setAttackState(){
-		instruction.setText("Would you like to attack?");
-	}
-	
-	public void setWinState(){
-		instruction.setText(currentPlayer.getText() + " win!");
-		actionButton.setText("Main Menu");
-		actionButton.setIcon(null);
-	}
-	
-	public void swapMenuView(Boolean isMenu){
-		if (isMenu)
-			cards.show(hudCards, "menu");
-		else 
-			cards.show(hudCards, "hud");
+	    
+	    Mediator.getInstance().registerHudColleagues(hudCards, playerName, currentPlayer, diceAmount, instruction, actionButton, cards);
+	    Mediator.getInstance().registerHudVariables(diceIcon, endTurnIcon);
 	}
 }
