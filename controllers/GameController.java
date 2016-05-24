@@ -320,7 +320,6 @@ public class GameController {
 		// Handles the movement phase
 		if (game.getGameState() == State.MOVE) {
 
-<<<<<<< HEAD
 			if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
 				boardController.switchSelectedHud(true);
 				boardController.setUnitName(cell.getUnit().toString());
@@ -358,9 +357,8 @@ public class GameController {
 				boardController.resetCells(game.getLastCells());
 				boardController.repaintBoard();
 			}
-=======
 			this.move(cell);
->>>>>>> branch 'master' of https://github.com/captparis/TheChase.git
+			this.move(cell);
 		}
 		// Game state must be ATTACK to reach this point
 		if (game.getGameState() == State.ATTACK){
