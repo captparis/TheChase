@@ -5,6 +5,7 @@
  *  Chen Liu- S3481556
  *  Taison Eady - S3282633
  */
+
 package controllers;
 
 import java.awt.CardLayout;
@@ -422,6 +423,7 @@ public class GameController {
 		else {
 			if (game.getWinner() != null) {
 				showMainMenu();
+				mediator.changeBoardScreen(false, false);
 			}
 		}
 	}

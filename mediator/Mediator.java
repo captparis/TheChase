@@ -2,6 +2,7 @@ package mediator;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -12,6 +13,10 @@ import javax.swing.JPanel;
 public class Mediator {
 	
 	//board colleagues
+	private JPanel boardCards;
+	private JLabel background;
+	private Image explorersWinImage;
+	private Image guardiansWinImage;
 	
 	//menu colleagues
 	
@@ -71,6 +76,13 @@ public class Mediator {
 	   
    }
    
+   public void registerBoardColleagues(JPanel boardCards, JLabel background, Image explorersWinImage, Image guardiansWinImage){
+	   this.boardCards = boardCards;
+	   this.guardiansWinImage = guardiansWinImage;
+	   this.explorersWinImage = explorersWinImage;
+	   this.background = background;
+   }
+   
    
    
    public void startGame(){
@@ -91,6 +103,25 @@ public class Mediator {
    
    public void hudUndo(){
 	   
+   }
+   
+   //Board methods
+   public void changeBoardScreen(Boolean showWin, Boolean isExplorers){
+	   CardLayout boardLayout = (CardLayout) boardCards.getLayout();
+	   if (showWin){
+		   boardCards.setPreferredSize(new Dimension(940, 570));
+		   boardLayout.show(boardCards, "win");
+		   if (isExplorers){
+			   background.setIcon(new ImageIcon(explorersWinImage));
+		   }
+		   else {
+			   background.setIcon(new ImageIcon(guardiansWinImage));
+		   }
+	   }
+	   else {
+		   //boardCards.setPreferredSize(new Dimension(940, 570));
+		   boardLayout.show(boardCards, "board");
+	   }
    }
    
    //HUD methods
@@ -138,6 +169,12 @@ public class Mediator {
 	
 	public void setWinState(){
 		instruction.setText(currentPlayer.getText() + " win!");
+		if (currentPlayer.getText() == "Explorers"){
+			changeBoardScreen(true, true);
+		}
+		else{
+			changeBoardScreen(true, false);
+		}
 		actionButton.setText("Main Menu");
 		actionButton.setIcon(null);
 	}

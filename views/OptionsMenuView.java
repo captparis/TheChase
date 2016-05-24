@@ -46,7 +46,6 @@ public class OptionsMenuView extends javax.swing.JPanel {
     private JButton btnMedium;
     private JButton btnLarge;
     private JButton btnBack;
-    private JButton btnDefaultPieces;
     private JButton btnApply;
     
     
@@ -96,7 +95,6 @@ public class OptionsMenuView extends javax.swing.JPanel {
         btnSmall.addActionListener(actionListener);
         btnMedium.addActionListener(actionListener);
         btnLarge.addActionListener(actionListener);
-        btnDefaultPieces.addActionListener(actionListener);
         btnApply.addActionListener(actionListener);
     }
     
@@ -174,7 +172,6 @@ public class OptionsMenuView extends javax.swing.JPanel {
     	btnApply = new JButton();
         btnSmall = new JButton();
         btnMedium = new JButton();
-        btnDefaultPieces = new JButton();
         btnLarge = new JButton();
         
         btnBehemoth = new JToggleButton();
@@ -286,16 +283,6 @@ public class OptionsMenuView extends javax.swing.JPanel {
         lblNumberPieces.setInheritsPopupMenu(false);
         lblNumberPieces.setForeground(Color.WHITE);
         this.add(lblNumberPieces);
-        
-        this.add(Box.createVerticalStrut(15));
-        
-        btnDefaultPieces.setText("Default");
-        btnDefaultPieces.setName("defaultpieces");
-        btnDefaultPieces.setMinimumSize(new Dimension(80,30));
-        btnDefaultPieces.setMaximumSize(new Dimension(80,30));
-        btnDefaultPieces.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnDefaultPieces.setAlignmentY(Component.CENTER_ALIGNMENT);
-        this.add(btnDefaultPieces);
         
         this.add(Box.createVerticalStrut(20));
         
