@@ -112,9 +112,11 @@ public class Mediator {
 		   boardCards.setPreferredSize(new Dimension(940, 570));
 		   boardLayout.show(boardCards, "win");
 		   if (isExplorers){
+			   System.out.println("EXPLORERS WIN!");
 			   background.setIcon(new ImageIcon(explorersWinImage));
 		   }
 		   else {
+			   System.out.println("GUARDIANS WIN!");
 			   background.setIcon(new ImageIcon(guardiansWinImage));
 		   }
 	   }
@@ -167,9 +169,10 @@ public class Mediator {
 		instruction.setText("Would you like to attack?");
 	}
 	
-	public void setWinState(){
+	public void setWinState(String winner){
 		instruction.setText(currentPlayer.getText() + " win!");
-		if (currentPlayer.getText() == "Explorers"){
+		if (winner == "Explorer"){
+			
 			changeBoardScreen(true, true);
 		}
 		else{

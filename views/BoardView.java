@@ -45,7 +45,7 @@ public class BoardView extends JPanel {
 			Image scaledBG = guardiansWinImage.getScaledInstance( 940, 570,  java.awt.Image.SCALE_SMOOTH ) ;
 			guardiansWinImage = scaledBG;
 			
-			explorersWinImage = ImageIO.read(new File("bin/images/GuardiansWin.jpg"));
+			explorersWinImage = ImageIO.read(new File("bin/images/ExplorersWin.jpg"));
 			scaledBG = explorersWinImage.getScaledInstance( 940, 570,  java.awt.Image.SCALE_SMOOTH ) ;
 			explorersWinImage = scaledBG;
 			

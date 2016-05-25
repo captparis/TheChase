@@ -136,6 +136,11 @@ public class GameController {
 
 	public void initGame() throws Exception {
 		
+		game.getPlayers().clear();
+		game.setWinner(null);
+		game.setGameState(State.DICE_ROLL);
+		Board.clearInstance();
+		
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
 		boardController.initBoard(settings.rows, settings.columns, game);
