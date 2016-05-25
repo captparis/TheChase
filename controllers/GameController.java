@@ -200,44 +200,50 @@ public class GameController {
 	State getGameState() {
 		return game.getGameState();
 	}
+	
+	 public void swapPlayer()
+	 {
+	     if (getCurrentPlayer().getTeam().equals("Explorer")) {
+            try {
+                setCurrentPlayer(game.getPlayer("Guardian"));
+            } catch (Exception noPlayer) {
+                System.out.println("Guardian player not found");
+                noPlayer.printStackTrace();
+            }
+        } else {
+            try {
+                setCurrentPlayer(game.getPlayer("Explorer"));
+            } catch (Exception noPlayer) {
+                System.out.println("Explorer player not found");
+                noPlayer.printStackTrace();
+            }
+        }
+	     mediator.swapPlayer(game.getCurrentPlayer().getName());
+	 }
+
 
 	public void checkWin() {
-	    if (!playerController.hasLiveActor("Explorer")) {
-            this.setWinner(game.getCurrentPlayer());
-        }
-		// Reset the dice rolls to 0
-		mediator.setDiceRoll(0);
-		boardController.resetCells(game.getLastCells());
-		boardController.repaintBoard();
-		game.setSelectedCell(null);
-		game.setGameState(GameController.State.CHECK_WIN);
-		if (game.getWinner() == null) {
-			mediator.setDiceState();
-			// Swap to the next player, this could be changed later to
-			// facilitate more than 2 players
+		   if(this.getCurrentPlayer().getTeam().equals("Guardian"))
+		   {
+		    if (!playerController.hasLiveActor("Explorer")) {
+	            this.setWinner(game.getCurrentPlayer());
+		    }
+	        }
 
-			if (getCurrentPlayer().getTeam().equals("Explorer")) {
-				try {
-					setCurrentPlayer(game.getPlayer("Guardian"));
-				} catch (Exception noPlayer) {
-					System.out.println("Guardian player not found");
-					noPlayer.printStackTrace();
-				}
-			} else {
-				try {
-					setCurrentPlayer(game.getPlayer("Explorer"));
-				} catch (Exception noPlayer) {
-					System.out.println("Explorer player not found");
-					noPlayer.printStackTrace();
-				}
-			}
-			mediator.swapPlayer(game.getCurrentPlayer().getName());
-			game.setGameState(GameController.State.DICE_ROLL);
-		} else {
-			mediator.setWinState();
+		   else
+		   {
+		       for(Pos gate : boardController.getGate())
+		       {
+		           System.out.println("x: "+ gate.getXPos() +"y: "+gate.getYPos());
+		           if(this.getCurrentPlayer().hasUnit(boardController.getCell(gate.getXPos(), gate.getYPos()).getUnit()))
+		           {
+		               this.setWinner(game.getCurrentPlayer());
+		               return;
+		           }
+		       }
+		   }
+
 		}
-		boardController.switchSelectedHud(false);
-	}
 
 	public Player getCurrentPlayer() {
 		return game.getCurrentPlayer();
@@ -308,7 +314,7 @@ public class GameController {
 
 		// If it is the guardians turn and the user clicks on the selected unit,
 		// toggle between move and attack
-		if (cell == game.getSelectedCell() && game.getCurrentPlayer().getTeam() == "Guardian") {
+		if (cell == game.getSelectedCell() && game.getCurrentPlayer().getTeam().equals("Guardian")) {
 			this.swapAtkMov();
 		}
 
@@ -349,7 +355,7 @@ public class GameController {
             // move
             // once)
             try {
-                if (game.getCurrentPlayer().getTeam() == "Guardian") {
+                if (game.getCurrentPlayer().getTeam().equals("Guardian")) {
                     game.getCurrentPlayer().subtractRemainingMoves(game.getCurrentPlayer().getRemainingMoves());
                     this.swapAtkMov();
                 } else {
@@ -389,9 +395,27 @@ public class GameController {
         }
 	}
 	private void endTurn(){
+	    game.setGameState(GameController.State.CHECK_WIN);
 	    checkWin();
-	    
+	 // Reset the dice rolls to 0
+        mediator.setDiceRoll(0);
+        boardController.resetCells(game.getLastCells());
+        boardController.switchSelectedHud(false);
+        game.setSelectedCell(null);
+        
+        
+        if (game.getWinner() == null) {
+            mediator.setDiceState();
+            // Swap to the next player, this could be changed later to
+            // facilitate more than 2 players
+            this.swapPlayer(); 
+            game.setGameState(GameController.State.DICE_ROLL);
+        } else {
+            mediator.setWinState(game.getWinner().getTeam());
+        }
 	}
+	
+
 	
 
 	private void quitGame() {
