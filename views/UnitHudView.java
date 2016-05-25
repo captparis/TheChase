@@ -36,6 +36,8 @@ public class UnitHudView extends JPanel{
 	private JToggleButton agileStance;
 	private JToggleButton specialStance;
 	private JButton ability;
+	private JButton save;
+	private JButton load;
 	
 	private ButtonGroup modeButtonGroup;
 	
@@ -66,6 +68,10 @@ public class UnitHudView extends JPanel{
 		specialStance = new JToggleButton ("Defense");
 		specialStance.setName("modeDefense");
 		ability = new JButton ("Ability");
+		save = new JButton("Save");
+		save.setName("save");
+		load = new JButton("Load");
+		load.setName("load");
 		
 		agileStance.setFocusPainted(false);
 		specialStance.setFocusPainted(false);
@@ -73,6 +79,8 @@ public class UnitHudView extends JPanel{
 		
 		agileStance.addActionListener(hudListener);
 		specialStance.addActionListener(hudListener);
+		save.addActionListener(hudListener);
+		load.addActionListener(hudListener);
 		
 		modeButtonGroup = new ButtonGroup();
 		modeButtonGroup.add(agileStance);
@@ -125,6 +133,11 @@ public class UnitHudView extends JPanel{
 		unitHudCards.setOpaque(false);
 		menuPanel.setOpaque(false);
 		
+		//Setup menu panel
+		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.LINE_AXIS));
+		menuPanel.add(save);
+	    menuPanel.add(load);
+		
 
 		//Layout elements across Unit HUD bar
         selectedHud.add(Box.createVerticalStrut(40));
@@ -136,6 +149,7 @@ public class UnitHudView extends JPanel{
         notSelectedHud.add(noSelection);
         
         
+       
 		
 		unitHudCards.add(selectedHud, "selected");
 		unitHudCards.add(notSelectedHud, "notselected");

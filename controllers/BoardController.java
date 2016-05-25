@@ -344,6 +344,12 @@ public class BoardController {
 			case "mode":
 			    gameController.swapMode(((JToggleButton) e.getSource()).getName());
 				break;
+			case "save":
+				gameController.save();
+				break;
+			case "load":
+				gameController.load();
+				break;
 			default:
 				break;
 			}	

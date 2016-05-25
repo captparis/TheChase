@@ -250,7 +250,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         boardSizeFields.add(Box.createRigidArea(new Dimension(10,1)));
         
-        txtWidth.setText("15");
+        txtWidth.setText("12");
         txtWidth.setMinimumSize(new Dimension(70,30));
         txtWidth.setMaximumSize(new Dimension(70,30));
         boardSizeFields.add(txtWidth);
@@ -263,7 +263,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         
         boardSizeFields.add(Box.createRigidArea(new Dimension(10,1)));
         
-        txtHeight.setText("15");
+        txtHeight.setText("12");
         txtHeight.setMinimumSize(new Dimension(70,30));
         txtHeight.setMaximumSize(new Dimension(70,30));
         boardSizeFields.add(txtHeight);

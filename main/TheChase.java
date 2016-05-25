@@ -25,7 +25,7 @@ public class TheChase {
 
 		JFrame mainWindow = new JFrame();
 		SoundManager sm = new SoundManager("bin/sound/Thunderbird.mp3");
-		//sm.loop();
+		sm.loop();
 		mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		//mainWindow.setSize(700, 700);
 		mainWindow.setVisible(true);
