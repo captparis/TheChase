@@ -9,6 +9,7 @@
 package controllers;
 
 import java.awt.CardLayout;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class GameController {
 	};
 
 	// Game Setup Variables
-	private Map<String, UnitType[]> teamSetup;
+	private Map<String, List<UnitType>> teamSetup;
 
 	// Models
 	public Game game;
@@ -78,19 +79,36 @@ public class GameController {
 	private void setupTeams() {
 
 		teamSetup = new HashMap<>();
-
-		teamSetup.put("Explorer",
-				new UnitType[] { new UnitType("Hero", "models.explorers", 
-						settings.rows - 1, settings.columns - 2),
-						new UnitType("Scout", "models.explorers", settings.rows - 2, settings.columns - 1),
-						new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1),
-						new UnitType("TrapMaster", "models.explorers", 
-								settings.rows - 2, settings.columns - 2), });
-
-		teamSetup.put("Guardian",
-				new UnitType[] { new UnitType("Behemoth", "models.guardians", 0, 0),
-						new UnitType("Golem", "models.guardians", 0, settings.columns - 1),
-						new UnitType("Hunter", "models.guardians", settings.rows - 1, 0) });
+		
+		List<UnitType> explorerUnitTypes = new ArrayList<UnitType>();
+		if (settings.activeUnits.get("hero") == true){
+			explorerUnitTypes.add(new UnitType("Hero", "models.explorers", 
+					settings.rows - 1, settings.columns - 2));
+		}
+		if (settings.activeUnits.get("trapmaster") == true){
+			explorerUnitTypes.add(new UnitType("TrapMaster", "models.explorers", 
+					settings.rows - 2, settings.columns - 2));
+		}
+		if (settings.activeUnits.get("tactician") == true){
+			explorerUnitTypes.add(new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1));
+		}
+		if (settings.activeUnits.get("scout") == true){
+			explorerUnitTypes.add(new UnitType("Scout", "models.explorers", settings.rows - 2, settings.columns - 1));
+		}
+		
+		List<UnitType> guardianUnitTypes = new ArrayList<UnitType>();;
+		if (settings.activeUnits.get("golem") == true){
+			guardianUnitTypes.add(new UnitType("Golem", "models.guardians", 0, settings.columns - 1));
+		}
+		if (settings.activeUnits.get("hunter") == true){
+			guardianUnitTypes.add(new UnitType("Hunter", "models.guardians", settings.rows - 1, 0));
+		}
+		if (settings.activeUnits.get("behemoth") == true){
+			guardianUnitTypes.add(new UnitType("Behemoth", "models.guardians", 0, 0));
+		}
+		
+		teamSetup.put("Explorer", explorerUnitTypes);
+		teamSetup.put("Guardian", guardianUnitTypes);
 	}
 
 	public void startGame() {
@@ -198,7 +216,7 @@ public class GameController {
 			// Swap to the next player, this could be changed later to
 			// facilitate more than 2 players
 
-			if (getCurrentPlayer().getTeam() == "Explorer") {
+			if (getCurrentPlayer().getTeam().equals("Explorer")) {
 				try {
 					setCurrentPlayer(game.getPlayer("Guardian"));
 				} catch (Exception noPlayer) {
@@ -239,7 +257,7 @@ public class GameController {
 	    try{
 	    if(game.getSelectedCell().getUnit().getClass().getSimpleName().equals("AgileUnitDecorator") && !mode.equals("modeAgile"))
 	    {	        
-	            if(game.getCurrentPlayer().getTeam()=="Explorer"){	                
+	            if(game.getCurrentPlayer().getTeam().equals("Explorer")){	                
 	            	game.getSelectedCell().setUnit(new DefensiveUnitDecorator(((AbstractUnitDecorator)game.getSelectedCell().getUnit()).getInnerUnit()));
 	            }
 	            else{
@@ -436,7 +454,7 @@ public class GameController {
 		}
 	}
 	
-	public Map<String, UnitType[]> getTeamSetup() {
+	public Map<String, List<UnitType>> getTeamSetup() {
 		return teamSetup;
 	}
 
