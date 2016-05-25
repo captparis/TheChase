@@ -42,6 +42,7 @@ public class BoardController {
 	private BoardItem movableGround;
 	private BoardItem attackableGround;
 	private BoardItem gate;
+	private List<Pos> gatePos;
 	
 	private HUDActionListener hudListener;
 	
@@ -57,8 +58,14 @@ public class BoardController {
 		ground = new Ground();
 		movableGround = new MovableGround();
 		attackableGround = new AttackableGround();
-		
+
 		mediator = Mediator.getInstance();
+
+		gatePos = new ArrayList<Pos>();
+		gatePos.add(new Pos(0,0));
+		gatePos.add(new Pos(0,1));
+		gatePos.add(new Pos(1,0));
+
 	}
 
 	// this method assumes that the board has been initialized prior to calling.
@@ -126,9 +133,10 @@ public class BoardController {
 	
 	private void initItems() {
 		gate = new Gate();
-		setCellDefaultItem(0, 0, gate);
-		setCellDefaultItem(1, 0, gate);
-		setCellDefaultItem(0, 1, gate);
+		for(Pos pos : gatePos)
+		{
+		    setCellDefaultItem(pos.getXPos(), pos.getYPos(), gate);
+		}
 	}
 	
 	// Sets the default item for the cell
@@ -139,6 +147,14 @@ public class BoardController {
 	// Sets the unit for the cell
 	public void setCellUnit(int x, int y, Unit unit) {
 		board.getCells()[x][y].setUnit(unit);
+	}
+	public Cell getCell(int x, int y)
+	{
+	    return board.getCells()[x][y];
+	}
+	public List<Pos> getGate()
+	{
+	    return gatePos;
 	}
 
 	// Sets the item for the cell
