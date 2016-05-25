@@ -19,7 +19,7 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
 
     @Override
     public boolean die(int diceRoll) {
-        if(diceRoll > 3){
+        if(diceRoll > 2){
             return true;
         }
         return false;

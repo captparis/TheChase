@@ -394,7 +394,14 @@ public class GameController {
 
             System.out.println(game.getSelectedCell().getUnit().getClass().getSimpleName() + " is attacking "
                     + cell.getUnit().getClass().getSimpleName());
-            boardController.kill(cell); 
+            if (cell.getUnit().die(this.rollDice())){
+            	boardController.kill(cell); 
+            	mediator.alertHit(true);
+            }
+            else {
+            	mediator.alertHit(false);
+            }
+            
             this.endTurn();
         
         }

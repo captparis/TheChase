@@ -128,7 +128,7 @@ public class BoardController {
 		System.out.println("refreshing boardView");
 
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
-
+		mediator.setTeam(game.getCurrentPlayer().getTeam());
 	}
 	
 	private void initItems() {

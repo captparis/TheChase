@@ -27,7 +27,7 @@ public class DefensiveUnitDecorator extends AbstractUnitDecorator{
 
     @Override
     public boolean die(int diceRoll) {
-        if(diceRoll == 6){
+        if(diceRoll == 6 || diceRoll == 5){
             return true;
         }
         return false;

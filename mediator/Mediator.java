@@ -8,6 +8,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class Mediator {
@@ -135,6 +136,10 @@ public class Mediator {
 		playerName.setText(newName);
 	}
    
+   public void setTeam(String team){
+	   currentPlayer.setText(team);
+   }
+   
    public void swapPlayer(String newName){
 		if (isExplorer){
 			currentPlayer.setText("GUARDIANS");
@@ -180,6 +185,17 @@ public class Mediator {
 		}
 		actionButton.setText("Main Menu");
 		actionButton.setIcon(null);
+	}
+	
+	public void alertHit(Boolean didHit){
+		System.out.println("Triggering alertHit");
+		if (didHit){
+			instruction.setText("Guardian strikes!");
+			JOptionPane.showMessageDialog(null, "Guardian strikes!");
+		} else {
+			instruction.setText("Guardian misses!");
+			JOptionPane.showMessageDialog(null, "Guardian misses!");
+		} 
 	}
 	
 	public void swapMenuView(Boolean isMenu){
