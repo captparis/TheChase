@@ -12,6 +12,7 @@ public class HudView extends JPanel{
 	private JPanel hudCards;
 	private JPanel hud;
 	private JPanel menu;
+	private JPanel undoScreen;
 	
 	private CardLayout cards;
 	
@@ -45,10 +46,12 @@ public class HudView extends JPanel{
 		hudCards = new JPanel(new CardLayout());
 		hud = new JPanel();
 		menu = new JPanel();
+		undoScreen = new JPanel();
 		
 		hudCards.setOpaque(false);
 		hud.setOpaque(false);
 		menu.setOpaque(false);
+		undoScreen.setOpaque(false);
 		
 		instruction = new JLabel("Please roll dice");
 		instruction.setFont (instruction.getFont ().deriveFont (18.0f));
@@ -133,7 +136,7 @@ public class HudView extends JPanel{
 	    
 	    cards = (CardLayout) hudCards.getLayout();
 	    
-	    Mediator.getInstance().registerHudColleagues(hudCards, playerName, currentPlayer, diceAmount, instruction, actionButton, cards);
+	    Mediator.getInstance().registerHudColleagues(hudCards, playerName, currentPlayer, diceAmount, instruction, actionButton, cards, undo);
 	    Mediator.getInstance().registerHudVariables(diceIcon, endTurnIcon);
 	}
 }

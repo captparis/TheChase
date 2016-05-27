@@ -34,7 +34,7 @@ public class GameController {
 	private Mediator mediator = Mediator.getInstance();
 
 	public static enum State {
-		DICE_ROLL, MOVE, ATTACK, MODE_CHANGE, CHECK_WIN
+		DICE_ROLL, MOVE, ATTACK, CHECK_WIN, SET_GATE
 	};
 
 	// Game Setup Variables
@@ -132,17 +132,17 @@ public class GameController {
 
 		// resize the main window to fit the size of the components.
 		mainWindow.pack();
+	       System.out.println("set Gate!!!");
+	            game.setGameState(State.SET_GATE);
 
 	}
 
 	public void initGame() throws Exception {
 		
-		game.getPlayers().clear();
-		game.setWinner(null);
-		game.setGameState(State.DICE_ROLL);
-		
+	
 		Board.clearInstance();
 		//create the players and add them to the players list (the explorers start)
+
 		setCurrentPlayer(game.addPlayer("Explorer", playerController.newPlayer("Explorer")));
 		game.setCurrentTurn(new Turn(getCurrentPlayer()));
 		game.addPlayer("Guardian", playerController.newPlayer("Guardian"));
@@ -152,9 +152,16 @@ public class GameController {
 		mediator.setPlayerName(game.getCurrentPlayer().getName());
 		
 	}
+	public void clearGame()
+	{
+	    game.getPlayers().clear();
+        game.setWinner(null);
+        Board.clearInstance();
+	}
 	
 	public void loadGame(Game game){
-		Board.clearInstance();
+		this.clearGame();
+		
 		this.game = game;
 		System.out.println("Load game!!!");
 		System.out.println(game.getBoard());
@@ -232,7 +239,9 @@ public class GameController {
 	 }
 
 
+
 	public void checkWin() {
+
 		// If it is the guardians turn, check if they have killed all the explorers  
 		if(this.getCurrentPlayer().getTeam().equals("Guardian")){
 			    if (!playerController.hasLiveActor("Explorer")) {
@@ -241,7 +250,8 @@ public class GameController {
 	       }
 		// If it is the explorers turn, check if any units have landed on a gate.
 		   else{			   
-		       for(Pos gate : boardController.getGate()){
+		       for(Pos gate : this.getGate()){
+
 		           System.out.println("x: "+ gate.getXPos() +"y: "+gate.getYPos());
 		           if(this.getCurrentPlayer().hasUnit(boardController.getCell(gate.getXPos(), gate.getYPos()).getUnit())){
 		               this.setWinner(game.getCurrentPlayer());
@@ -312,7 +322,12 @@ public class GameController {
 		// If the game is in either the DICE_ROLL or CHECK_WIN state there
 		// should
 		// be no action when a cell is clicked.
-		if (game.getGameState() == State.DICE_ROLL || game.getGameState() == State.CHECK_WIN) {
+	    if(game.getGameState() == State.SET_GATE)
+	    {
+	        boardController.setGate(cell);
+	        return;
+	    }
+	    else if (game.getGameState() == State.DICE_ROLL || game.getGameState() == State.CHECK_WIN) {
 			return;
 		}
 		//If the selected cell doesn't have a unit
@@ -458,7 +473,14 @@ public class GameController {
 	public void hudButtonClicked() {
 		// Determines what actions should be completed when HUD button is
 		// pressed and instigates them
-		if (game.getGameState() == GameController.State.DICE_ROLL) {
+	    if(game.getGameState() == State.SET_GATE)
+	    {
+	        boardController.storeGate();
+	        boardController.initUnit();
+	        game.setGameState(GameController.State.DICE_ROLL);
+	        
+	    }
+	    else if (game.getGameState() == GameController.State.DICE_ROLL) {
 			// player rolls dice
 			playerController.newDiceRoll(game.getCurrentPlayer(), rollDice());
 
@@ -477,6 +499,7 @@ public class GameController {
 			if (game.getWinner() != null) {
 				showMainMenu();
 				mediator.changeBoardScreen(false, false);
+				this.clearGame();
 			}
 		}
 	}
@@ -523,7 +546,8 @@ public class GameController {
 			case "options":
 				showOptions();
 				break;
-			case "quit":
+			case "quitGame":
+			    System.out.println("quit");
 				quitGame();
 				break;
 			default:
@@ -580,6 +604,12 @@ public class GameController {
 
 	public void setWinner(Player winner) {
 		game.setWinner(winner);
+	}
+	public List<Pos> getGate(){
+	    return this.settings.getGate();
+	}
+	public void saveGate(List<Pos> pos){
+	    this.settings.setGate(pos);
 	}
 	
 	

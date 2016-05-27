@@ -41,7 +41,6 @@ public class BoardController {
 	private BoardItem movableGround;
 	private BoardItem attackableGround;
 	private BoardItem gate;
-	private List<Pos> gatePos;
 	
 	private HUDActionListener hudListener;
 	
@@ -66,10 +65,6 @@ public class BoardController {
 
 		mediator = Mediator.getInstance();
 
-		gatePos = new ArrayList<Pos>();
-		gatePos.add(new Pos(0,0));
-		gatePos.add(new Pos(0,1));
-		gatePos.add(new Pos(1,0));
 
 	}
 
@@ -111,13 +106,8 @@ public class BoardController {
 		
 		hudView = new HudView(hudListener);
 		unitHudView = new UnitHudView(hudListener);
+		this.initItems();
 
-		for (Player player : gameController.getPlayers().values()) {
-			for (Unit unit : player.getUnits().values()) {
-				setCellUnit(unit.getInitX(), unit.getInitY(), new AgileUnitDecorator(unit));
-			}
-		}
-		initItems();
 	}
 
 	public void refreshBoard(int rows, int columns, Game game) {
@@ -135,13 +125,21 @@ public class BoardController {
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
 		mediator.setTeam(game.getCurrentPlayer().getTeam());
 	}
-	
+	public void initUnit(){
+	    for (Player player : gameController.getPlayers().values()) {
+            for (Unit unit : player.getUnits().values()) {
+                setCellUnit(unit.getInitX(), unit.getInitY(), unit);
+            }
+        }
+	    
+	}
 	private void initItems() {
+
 		try {
 			
 			gate = ItemFactory.getItem("Gate");
 			
-			for(Pos pos : gatePos){
+			for(Pos pos : gameController.getGate()){
 			    setCellDefaultItem(pos.getXPos(), pos.getYPos(), gate);
 			}
 			
@@ -165,21 +163,47 @@ public class BoardController {
 	{
 	    return board.getCells()[x][y];
 	}
-	public List<Pos> getGate()
-	{
-	    return gatePos;
-	}
+
 
 	// Sets the item for the cell
 	public void setCellItem(int x, int y, BoardItem item) {
 		board.getCells()[x][y].setItem(item);
 	}
+	public void setGate(Cell cell)
+	{
+	    if(cell.getDefaultItem() == gate)
+	    {
+	        cell.setDefaultItem(ground);
+	    }
+	    else
+	    {
+	        cell.setDefaultItem(gate);
+	    }
+	}
+	public void storeGate()
+	{
+	     List<Pos> gatePos = new ArrayList<Pos>();
+	    for (int x = 0; x < board.getColumns(); x++) {
+            for (int y = 0; y < board.getRows(); y++) {
+                if(this.getCell(x, y).getDefaultItem() == gate)
+                {
+                    gatePos.add(new Pos(x,y));
+                }
 
+            }
+        }
+	    gameController.saveGate(gatePos);
+	}
 
 	
 	
 	void switchSelectedHud(Boolean isSelected){
-		unitHudView.switchSelectedHud(isSelected);
+		if (isSelected)
+			mediator.swapScreens("selected");
+		else 
+			mediator.swapScreens("notSelected");
+		
+		
 	}
 	
 	void setUnitName (String unitName){
@@ -355,11 +379,11 @@ public class BoardController {
 				break;
 			case "menuButton":
 				mediator.swapMenuView(true);
-				unitHudView.swapMenuView(true);
+				mediator.swapScreens("menu");
 				break;
 			case "backButton":
 				mediator.swapMenuView(false);
-				unitHudView.swapMenuView(false);
+				mediator.swapScreens("selectionScreen");
 				break;
 			case "mode":
 			    gameController.swapMode(((JToggleButton) e.getSource()).getName());
@@ -373,6 +397,17 @@ public class BoardController {
 			case "exit":
 				gameController.showMainMenu();
 				mediator.changeBoardScreen(false, false);
+				break;
+			case "undo":
+				mediator.swapScreens("undo");
+				break;
+			case "undoturn":
+				break;
+			case "undomove":
+				break;
+			case "redoturn":
+				break;
+			case "redomove":
 				break;
 			default:
 				break;

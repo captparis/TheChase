@@ -1,9 +1,11 @@
 
 package commands;
 
+import java.io.Serializable;
+
 import models.Cell;
 
-public class MoveCommand implements ActionCommand{
+public class MoveCommand implements ActionCommand, Serializable{
     private Cell origin;
     private Cell target;
     
