@@ -81,38 +81,38 @@ public class GameController {
 
 	private void setupTeams() {
 
-		teamSetup = new HashMap<>();
-		
-		List<UnitType> explorerUnitTypes = new ArrayList<UnitType>();
-		if (settings.activeUnits.get("hero") == true){
-			explorerUnitTypes.add(new UnitType("Hero", "models.explorers", 
-					settings.rows - 1, settings.columns - 2));
-		}
-		if (settings.activeUnits.get("trapmaster") == true){
-			explorerUnitTypes.add(new UnitType("TrapMaster", "models.explorers", 
-					settings.rows - 2, settings.columns - 2));
-		}
-		if (settings.activeUnits.get("tactician") == true){
-			explorerUnitTypes.add(new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1));
-		}
-		if (settings.activeUnits.get("scout") == true){
-			explorerUnitTypes.add(new UnitType("Scout", "models.explorers", settings.rows - 2, settings.columns - 1));
-		}
-		
-		List<UnitType> guardianUnitTypes = new ArrayList<UnitType>();;
-		if (settings.activeUnits.get("golem") == true){
-			guardianUnitTypes.add(new UnitType("Golem", "models.guardians", 0, settings.columns - 1));
-		}
-		if (settings.activeUnits.get("hunter") == true){
-			guardianUnitTypes.add(new UnitType("Hunter", "models.guardians", settings.rows - 1, 0));
-		}
-		if (settings.activeUnits.get("behemoth") == true){
-			guardianUnitTypes.add(new UnitType("Behemoth", "models.guardians", 0, 0));
-		}
-		
-		teamSetup.put("Explorer", explorerUnitTypes);
-		teamSetup.put("Guardian", guardianUnitTypes);
-	}
+        teamSetup = new HashMap<>();
+        
+        List<UnitType> explorerUnitTypes = new ArrayList<UnitType>();
+        if (settings.activeUnits.get("hero") == true){
+            explorerUnitTypes.add(new UnitType("Hero", "models.explorers", 
+                    settings.columns - 2, settings.rows - 1));
+        }
+        if (settings.activeUnits.get("trapmaster") == true){
+            explorerUnitTypes.add(new UnitType("TrapMaster", "models.explorers", 
+                    settings.columns - 2, settings.rows - 2));
+        }
+        if (settings.activeUnits.get("tactician") == true){
+            explorerUnitTypes.add(new UnitType("Tactician", "models.explorers", settings.columns - 1, settings.rows - 1));
+        }
+        if (settings.activeUnits.get("scout") == true){
+            explorerUnitTypes.add(new UnitType("Scout", "models.explorers", settings.columns - 1, settings.rows - 2));
+        }
+        
+        List<UnitType> guardianUnitTypes = new ArrayList<UnitType>();;
+        if (settings.activeUnits.get("golem") == true){
+            guardianUnitTypes.add(new UnitType("Golem", "models.guardians", settings.columns - 1, 0));
+        }
+        if (settings.activeUnits.get("hunter") == true){
+            guardianUnitTypes.add(new UnitType("Hunter", "models.guardians", 0, settings.rows - 1));
+        }
+        if (settings.activeUnits.get("behemoth") == true){
+            guardianUnitTypes.add(new UnitType("Behemoth", "models.guardians", 0, 0));
+        }
+        
+        teamSetup.put("Explorer", explorerUnitTypes);
+        teamSetup.put("Guardian", guardianUnitTypes);
+    }
 
 	public void startGame() {
 		this.clearGame();
@@ -472,7 +472,7 @@ public class GameController {
 	}
 
 	private void quitGame() {
-		// System.exit(0);
+		 System.exit(0);
 		return;
 	}
 
