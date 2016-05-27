@@ -2,12 +2,14 @@
 package models;
 
 import commands.*;
+
+import java.io.Serializable;
 import java.util.EmptyStackException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-public class Turn {
+public class Turn implements  Serializable {
     private Player player;
     private Stack<ActionCommand> actions;
     private List<ModeChangeCommand> modeChanges;

@@ -22,6 +22,7 @@ public class Board implements Serializable{
 	private LineBorder mouseOverItem;
 	private LineBorder mouseOverEnemy;
 	private LineBorder mouseOverAlly;
+	
 
 	/*
 	 * add item on each cell
