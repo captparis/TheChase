@@ -496,9 +496,22 @@ public class GameController {
 		System.out.println("Applied new settings");
 		
 		ArrayList<String> inactiveUnits = optionsMenuView.getInactiveUnits();
-		if (inactiveUnits != null){
+		for (Map.Entry<String, Boolean> entry : settings.activeUnits.entrySet()){
 			for (String t : inactiveUnits){
-				settings.activeUnits.put(t, false);
+				if (inactiveUnits != null){
+					if (entry.getKey() == t){
+						settings.activeUnits.put(t, false);
+						System.out.println(entry.getKey() + " is disabled");
+					}
+					else {
+						System.out.println("there are inactive units but " + entry.getKey() + " is enabled");
+						entry.setValue(true);
+					}
+				}
+				else {
+					System.out.println(entry.getKey() + " is enabled");
+					entry.setValue(true);
+				}
 			}
 		}
 	}
