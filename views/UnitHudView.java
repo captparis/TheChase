@@ -38,6 +38,7 @@ public class UnitHudView extends JPanel{
 	private JButton ability;
 	private JButton save;
 	private JButton load;
+	private JButton exit;
 	
 	private ButtonGroup modeButtonGroup;
 	
@@ -47,8 +48,8 @@ public class UnitHudView extends JPanel{
 	
 	public UnitHudView(ActionListener hudListener){
 		
-		Color tan = new Color(255, 217, 102);
-		this.setBackground(tan);
+		Color grey = new Color(194, 194, 194);
+		this.setBackground(grey);
 		this.setPreferredSize(new Dimension(700, 50));
 		
 		modesPanelExplorers = new JPanel();
@@ -56,7 +57,8 @@ public class UnitHudView extends JPanel{
 		unitHudCards = new JPanel(new CardLayout());
 		selectedHud = new JPanel();
 		notSelectedHud = new JPanel();
-		menuPanel = new JPanel();
+		menuPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		menuPanel.setPreferredSize(new Dimension(700, 50));
 		
 		unitName = new JLabel ("Unknown unit");
 		modesTitle = new JLabel ("Modes");
@@ -72,6 +74,8 @@ public class UnitHudView extends JPanel{
 		save.setName("save");
 		load = new JButton("Load");
 		load.setName("load");
+		exit = new JButton("Exit");
+		exit.setName("exit");
 		
 		agileStance.setFocusPainted(false);
 		specialStance.setFocusPainted(false);
@@ -81,6 +85,7 @@ public class UnitHudView extends JPanel{
 		specialStance.addActionListener(hudListener);
 		save.addActionListener(hudListener);
 		load.addActionListener(hudListener);
+		exit.addActionListener(hudListener);
 		
 		modeButtonGroup = new ButtonGroup();
 		modeButtonGroup.add(agileStance);
@@ -135,8 +140,12 @@ public class UnitHudView extends JPanel{
 		
 		//Setup menu panel
 		menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.LINE_AXIS));
+		menuPanel.add(Box.createRigidArea(new Dimension(60,0)));
 		menuPanel.add(save);
+		menuPanel.add(Box.createRigidArea(new Dimension(30,0)));
 	    menuPanel.add(load);
+	    menuPanel.add(Box.createRigidArea(new Dimension(30,0)));
+	    menuPanel.add(exit);
 		
 
 		//Layout elements across Unit HUD bar

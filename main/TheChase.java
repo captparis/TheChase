@@ -12,13 +12,28 @@ import controllers.GameController;
 import sound.SoundManager;
 
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.WindowConstants;
 
 public class TheChase {
 
 	
 	public static void main(String[] args) {
-
+		
+		/*
+		try {
+		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+		        if ("Nimbus".equals(info.getName())) {
+		            UIManager.setLookAndFeel(info.getClassName());
+		            break;
+		        }
+		    }
+		} catch (Exception e) {
+		    // If Nimbus is not available, you can set the GUI to another look and feel.
+		}
+		*/
+		
 		JFrame mainWindow = new JFrame();
 		//SoundManager sm = new SoundManager("bin/sound/Thunderbird.mp3");
 		//sm.loop();
