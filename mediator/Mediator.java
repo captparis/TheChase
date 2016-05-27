@@ -31,11 +31,19 @@ public class Mediator {
 	private CardLayout cards;
 	
 	private JButton actionButton;
+	private JButton undo;
 	
 	//hud variables
 	private ImageIcon diceIcon;
 	private ImageIcon endTurnIcon;
 	private Boolean isExplorer;
+	
+	//unit hud colleagues
+	private CardLayout unitHudLayout;
+	private JPanel unitHudCards;
+	
+	//unit hud variables
+	private Boolean selectionViewShowing = false;
 	
 	// singleton
 	private static Mediator instance;
@@ -58,7 +66,7 @@ public class Mediator {
 	   
    }
    
-   public void registerHudColleagues(JPanel hudCards, JLabel playerName, JLabel currentPlayer, JLabel diceAmount, JLabel instruction, JButton actionButton, CardLayout cards){
+   public void registerHudColleagues(JPanel hudCards, JLabel playerName, JLabel currentPlayer, JLabel diceAmount, JLabel instruction, JButton actionButton, CardLayout cards, JButton undo){
 	   this.hudCards = hudCards;
 	   this.playerName = playerName;
 	   this.currentPlayer = currentPlayer;
@@ -66,11 +74,17 @@ public class Mediator {
 	   this.instruction = instruction;
 	   this.actionButton = actionButton;
 	   this.cards = cards;
+	   this.undo = undo;
    }
    
    public void registerHudVariables(ImageIcon diceIcon, ImageIcon endTurnIcon){
 	   this.diceIcon = diceIcon;
 	   this.endTurnIcon = endTurnIcon;
+   }
+   
+   public void registerUnitHudColleagues(CardLayout unitHudLayout, JPanel unitHudCards){
+	   this.unitHudLayout = unitHudLayout;
+	   this.unitHudCards = unitHudCards;
    }
    
    public void registerBoardColleagues(){
@@ -203,6 +217,39 @@ public class Mediator {
 			cards.show(hudCards, "menu");
 		else 
 			cards.show(hudCards, "hud");
+	}
+	
+	public void setUndoButton(Boolean isEnabled){
+		if (isEnabled)
+			undo.setEnabled(true);
+		else 
+			undo.setEnabled(false);
+	}
+	
+	
+	//Unit HUD methods
+	
+	public void swapScreens(String toSwap){
+		if (toSwap == "menu"){
+			unitHudLayout.show(unitHudCards, "menu");
+		}
+		else if (toSwap == "selectionScreen"){
+			if (selectionViewShowing)
+				unitHudLayout.show(unitHudCards, "selected");
+			else 
+				unitHudLayout.show(unitHudCards, "notselected");
+		}
+		else if (toSwap == "selected"){
+			unitHudLayout.show(unitHudCards, "selected");
+			selectionViewShowing = true;
+		}
+		else if (toSwap == "notSelected"){
+			unitHudLayout.show(unitHudCards, "notselected");
+			selectionViewShowing = false;
+		}
+		else if (toSwap == "undo"){
+			unitHudLayout.show(unitHudCards,  "undo");
+		}
 	}
 
 }

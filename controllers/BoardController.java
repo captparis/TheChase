@@ -167,7 +167,12 @@ public class BoardController {
 	
 	
 	void switchSelectedHud(Boolean isSelected){
-		unitHudView.switchSelectedHud(isSelected);
+		if (isSelected)
+			mediator.swapScreens("selected");
+		else 
+			mediator.swapScreens("notSelected");
+		
+		
 	}
 	
 	void setUnitName (String unitName){
@@ -343,11 +348,11 @@ public class BoardController {
 				break;
 			case "menuButton":
 				mediator.swapMenuView(true);
-				unitHudView.swapMenuView(true);
+				mediator.swapScreens("menu");
 				break;
 			case "backButton":
 				mediator.swapMenuView(false);
-				unitHudView.swapMenuView(false);
+				mediator.swapScreens("selectionScreen");
 				break;
 			case "mode":
 			    gameController.swapMode(((JToggleButton) e.getSource()).getName());
@@ -361,6 +366,17 @@ public class BoardController {
 			case "exit":
 				gameController.showMainMenu();
 				mediator.changeBoardScreen(false, false);
+				break;
+			case "undo":
+				mediator.swapScreens("undo");
+				break;
+			case "undoturn":
+				break;
+			case "undomove":
+				break;
+			case "redoturn":
+				break;
+			case "redomove":
 				break;
 			default:
 				break;
