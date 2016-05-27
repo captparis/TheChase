@@ -43,9 +43,7 @@ public class UnitHudView extends JPanel{
 	private JButton load;
 	private JButton exit;
 	private JButton undoTurn;
-	private JButton redoTurn;
 	private JButton undoMove;
-	private JButton redoMove;
 	
 	private ButtonGroup modeButtonGroup;
 	
@@ -82,20 +80,11 @@ public class UnitHudView extends JPanel{
         undoMoveImage = undoMoveImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
 		undoMoveIcon.setImage(undoMoveImage);
 		
-		ImageIcon redoMoveIcon = new ImageIcon("bin/images/redo.png");
-        Image redoMoveImage = redoMoveIcon.getImage();
-        redoMoveImage = redoMoveImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
-        redoMoveIcon.setImage(redoMoveImage);
-        
     	ImageIcon undoTurnIcon = new ImageIcon("bin/images/undoTurn.png");
         Image undoTurnImage = undoTurnIcon.getImage();
         undoTurnImage = undoTurnImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
 		undoTurnIcon.setImage(undoTurnImage);
 		
-		ImageIcon redoTurnIcon = new ImageIcon("bin/images/redoTurn.png");
-        Image redoTurnImage = redoTurnIcon.getImage();
-        redoTurnImage = redoTurnImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
-		redoTurnIcon.setImage(redoTurnImage);
 		
 		agileStance = new JToggleButton ("Agile");
 		agileStance.setName("modeAgile");
@@ -110,12 +99,8 @@ public class UnitHudView extends JPanel{
 		exit.setName("exit");
 		undoMove = new JButton(undoMoveIcon);
 		undoMove.setName("undomove");
-		redoMove = new JButton(redoMoveIcon);
-		redoMove.setName("redomove");
 		undoTurn = new JButton(undoTurnIcon);
 		undoTurn.setName("undoturn");
-		redoTurn = new JButton (redoTurnIcon);
-		redoTurn.setName("redoturn");
 		
 		
 		agileStance.setFocusPainted(false);
@@ -127,6 +112,8 @@ public class UnitHudView extends JPanel{
 		save.addActionListener(hudListener);
 		load.addActionListener(hudListener);
 		exit.addActionListener(hudListener);
+		undoMove.addActionListener(hudListener);
+		undoTurn.addActionListener(hudListener);
 		
 		modeButtonGroup = new ButtonGroup();
 		modeButtonGroup.add(agileStance);
@@ -199,8 +186,6 @@ public class UnitHudView extends JPanel{
         undoScreen.add(undoTurn);
         undoScreen.add(undoMove);
         undoScreen.add(undoLabel);
-        undoScreen.add(redoMove);
-        undoScreen.add(redoTurn);
         
         notSelectedHud.add(noSelection);
         
@@ -216,90 +201,7 @@ public class UnitHudView extends JPanel{
 		unitHudLayout = (CardLayout) unitHudCards.getLayout();
 		unitHudLayout.show(unitHudCards, "notselected");
 		
-		Mediator.getInstance().registerUnitHudColleagues(unitHudLayout, unitHudCards);
+		Mediator.getInstance().registerUnitHudColleagues(unitHudLayout, unitHudCards, agileStance, specialStance, agileIcon, defenseIcon, attackIcon, unitName);
 		
 	}
-	
-	//Functions to handle changes to the Unit HUD based on state changes
-	public void changeUnitName(String selectedUnit){
-		unitName.setText(selectedUnit);
-	}
-	
-	//Used to update the mode buttons to show which mode is currently active upon selecting a unit
-	public void setMode(String mode){
-		if (mode.equals("Agile")){
-			agileStance.setSelected(true);
-			specialStance.setSelected(false);
-		}
-		else{
-			agileStance.setSelected(false);
-			specialStance.setSelected(true);
-		}
-		
-	}
-		
-	//Swaps what modes are displayed depending on if Guardian or Explorers are active
-	public void swapTeam(String mod){
-	    this.specialStance.setText(mod);
-	    if(mod.equals("Attack"))
-	    {
-	        this.specialStance.setIcon(attackIcon);
-	    }
-	    else
-	    {
-	        this.specialStance.setIcon(defenseIcon);
-	    }
-	}
-	
-	//Swaps the HUD to display mode options, unit name and so on when unit has been selected
-	public void switchSelectedHud(Boolean isSelected){
-		System.out.println("Unit Setting selected to " + isSelected);
-		if (isSelected){
-			unitHudLayout.show(unitHudCards, "selected");
-			selectionViewShowing = true;
-		}
-		else {
-			unitHudLayout.show(unitHudCards, "notselected");
-			selectionViewShowing = false;
-		}
-	}
-	
-	public void setUnitName(String newUnitName){
-		unitName.setText(newUnitName);
-	}
-	
-	public void swapMenuView(Boolean isMenu){
-		if (isMenu)
-			unitHudLayout.show(unitHudCards, "menu");
-		else {
-			if (selectionViewShowing)
-				unitHudLayout.show(unitHudCards, "selected");
-			else 
-				unitHudLayout.show(unitHudCards, "notselected");
-		}
-	}
-	
-	public void swapScreens(String toSwap){
-		if (toSwap == "menu"){
-			unitHudLayout.show(unitHudCards, "menu");
-		}
-		else if (toSwap == "selectionScreen"){
-			if (selectionViewShowing)
-				unitHudLayout.show(unitHudCards, "selected");
-			else 
-				unitHudLayout.show(unitHudCards, "notselected");
-		}
-		else if (toSwap == "selected"){
-			unitHudLayout.show(unitHudCards, "selected");
-			selectionViewShowing = true;
-		}
-		else if (toSwap == "notSelected"){
-			unitHudLayout.show(unitHudCards, "notselected");
-			selectionViewShowing = false;
-		}
-		else if (toSwap == "undo"){
-			unitHudLayout.show(unitHudCards,  "undo");
-		}
-	}
-
 }

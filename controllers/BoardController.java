@@ -205,7 +205,7 @@ public class BoardController {
 	}
 	
 	void setUnitName (String unitName){
-		unitHudView.setUnitName(unitName);
+		mediator.setUnitName(unitName);
 	}
 
 	// assumes origin contains a movable unit and can legally move to target.
@@ -226,10 +226,10 @@ public class BoardController {
 	}
 	public void swapTeam(String team){
 	    if(team.equals("Guardian")){
-	        unitHudView.swapTeam("Attack");
+	    	mediator.swapTeam("Attack");
 	    }
 	    else{
-	        unitHudView.swapTeam("Defense");
+	    	mediator.swapTeam("Defense");
 	    }
 	    
 	   
@@ -317,7 +317,7 @@ public class BoardController {
 			System.out.println("Unit: " + cell.getUnit() + " Item: " + cell.getItem() + " DefaultItem: " + cell.getDefaultItem());	
 			gameController.cellClicked(cell);
 			if(cell.getUnit()!=null){
-			    unitHudView.setMode(cell.getUnit().getClass().getSimpleName().replace("UnitDecorator", "")); 
+				mediator.setMode(cell.getUnit().getClass().getSimpleName().replace("UnitDecorator", "")); 
 			}
 			
 		}

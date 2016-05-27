@@ -21,6 +21,7 @@ import commands.ActionInvoker;
 import decorators.*;
 import models.*;
 import models.items.*;
+import sound.SoundManager;
 import main.*;
 import mediator.Mediator;
 import memento.Caretaker;
@@ -55,6 +56,8 @@ public class GameController {
 	private final PlayerController playerController;
 	private final UnitController unitController;
 	private BoardController boardController;
+	
+	private SoundManager soundManager = new SoundManager("bin/sound/death.wav");
 
 	// Memento
 	Caretaker ct = new Caretaker();
@@ -64,7 +67,6 @@ public class GameController {
 
 	// Constructor
 	public GameController(JFrame mainWindow) {
-	    
 		this.mainWindow = mainWindow;
 		mainWindow.setResizable(false);
 		this.game = Game.getInstance();
@@ -436,6 +438,7 @@ public class GameController {
                     + cell.getUnit().getClass().getSimpleName());
             if (cell.getUnit().die(this.rollDice())){
             	ActionInvoker.getInstance().kill(game.getCurrentTurn(), cell); 
+            	soundManager.play();
             	mediator.alertHit(true);
             }
             else {
