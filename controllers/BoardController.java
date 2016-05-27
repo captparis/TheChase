@@ -366,6 +366,10 @@ public class BoardController {
 			case "load":
 				gameController.load();
 				break;
+			case "exit":
+				gameController.showMainMenu();
+				mediator.changeBoardScreen(false, false);
+				break;
 			default:
 				break;
 			}	

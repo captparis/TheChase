@@ -22,6 +22,7 @@ public class HudView extends JPanel{
 	private JButton actionButton;
 	private JButton menuButton;
 	private JButton menuBackButton;
+	private JButton undo;
 	
 	private ImageIcon diceIcon;
 	private ImageIcon endTurnIcon;
@@ -35,9 +36,9 @@ public class HudView extends JPanel{
 
 	public HudView(ActionListener hudListener){
 		
-		Color bluegrey = new Color(179, 204, 204);
-		this.setBackground(bluegrey);
-		this.setPreferredSize(new Dimension(700, 50));
+		Color grey = new Color(194, 194, 194);
+		this.setBackground(grey);
+		this.setPreferredSize(new Dimension(700, 70));
 		
 		isExplorer = true;
 		
@@ -81,6 +82,15 @@ public class HudView extends JPanel{
         menuBackButton.addActionListener(hudListener);
         menuBackButton.setFocusPainted(false);
 		
+        ImageIcon undoIcon = new ImageIcon("bin/images/hourglass.png");
+        Image undoImage = undoIcon.getImage();
+        undoImage = undoImage.getScaledInstance( 20, 20,  java.awt.Image.SCALE_SMOOTH ) ;
+		undoIcon.setImage(undoImage);
+		
+		undo = new JButton(undoIcon);
+        undo.setName("undo");
+        undo.addActionListener(hudListener);
+        undo.setFocusPainted(false);
 		
 		diceIcon = new ImageIcon("bin/images/diceIcon.png");
 		diceImage = diceIcon.getImage();
@@ -111,12 +121,15 @@ public class HudView extends JPanel{
 	    hud.add(currentPlayer);
 	    hud.add(Box.createHorizontalStrut(20));
 	    hud.add(playerName);
+	    hud.add(Box.createHorizontalStrut(20));
+	    hud.add(undo);
 	    
 	    menu.add(menuBackButton);
 	    
 	    hudCards.add(hud, "hud");
 	    hudCards.add(menu, "menu");
 	    this.add(hudCards);
+	    this.add(Box.createVerticalStrut(70));
 	    
 	    cards = (CardLayout) hudCards.getLayout();
 	    
