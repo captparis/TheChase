@@ -21,7 +21,7 @@ import javax.swing.*;
 
 import commands.ActionInvoker;
 import controllers.GameController.State;
-import decorators.*;
+import decorators.AgileUnitDecorator;
 import flyweight.ItemFactory;
 import mediator.Mediator;
 import models.*;
@@ -101,9 +101,7 @@ public class BoardController {
 		System.out.println("Creating boardView");
 
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
-		
-		
-		
+
 		hudView = new HudView(hudListener);
 		unitHudView = new UnitHudView(hudListener);
 		this.initItems();
@@ -128,7 +126,7 @@ public class BoardController {
 	public void initUnit(){
 	    for (Player player : gameController.getPlayers().values()) {
             for (Unit unit : player.getUnits().values()) {
-                setCellUnit(unit.getInitX(), unit.getInitY(), unit);
+                setCellUnit(unit.getInitX(), unit.getInitY(), new AgileUnitDecorator(unit));
             }
         }
 	    
