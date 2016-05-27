@@ -10,6 +10,7 @@ public class Settings {
 	public int rows = 8;
 	public int columns = 8;
 	
+	public Boolean setup = false;
 	
 	public Map<String, Boolean> activeUnits = new HashMap<String, Boolean>();
 	

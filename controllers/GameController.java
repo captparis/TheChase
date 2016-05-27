@@ -133,7 +133,13 @@ public class GameController {
 		// resize the main window to fit the size of the components.
 		mainWindow.pack();
 	       System.out.println("set Gate!!!");
+	       if (settings.setup){
 	            game.setGameState(State.SET_GATE);
+	       }
+	       else {
+	    	   boardController.initUnit();
+	    	   game.setGameState(State.DICE_ROLL);
+	       }
 
 	}
 
@@ -473,6 +479,7 @@ public class GameController {
 	public void hudButtonClicked() {
 		// Determines what actions should be completed when HUD button is
 		// pressed and instigates them
+		
 	    if(game.getGameState() == State.SET_GATE)
 	    {
 	        boardController.storeGate();
