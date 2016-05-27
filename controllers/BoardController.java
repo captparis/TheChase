@@ -20,8 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 
+import commands.ActionInvoker;
 import controllers.GameController.State;
-import decorators.AbstractUnitDecorator;
+import decorators.*;
 import mediator.Mediator;
 import models.*;
 import models.explorers.Explorer;
@@ -109,7 +110,7 @@ public class BoardController {
 
 		for (Player player : gameController.getPlayers().values()) {
 			for (Unit unit : player.getUnits().values()) {
-				setCellUnit(unit.getInitX(), unit.getInitY(), unit);
+				setCellUnit(unit.getInitX(), unit.getInitY(), new AgileUnitDecorator(unit));
 			}
 		}
 		initItems();
@@ -146,7 +147,7 @@ public class BoardController {
 
 	// Sets the unit for the cell
 	public void setCellUnit(int x, int y, Unit unit) {
-		board.getCells()[x][y].setUnit(unit);
+		board.getCells()[x][y].setUnitCarrier(new UnitCarrier(unit));
 	}
 	public Cell getCell(int x, int y)
 	{
@@ -174,23 +175,14 @@ public class BoardController {
 	}
 
 	// assumes origin contains a movable unit and can legally move to target.
-	public int move(Cell origin, Cell target) {
-	    // move the unit from the origin to the target and replace the origin
-        // with ground.
-        target.setUnit(origin.getUnit());
-        origin.setUnit(null);
+	public int move(Turn turn, Cell origin, Cell target) {		
+		ActionInvoker.getInstance().move(turn, origin, target);
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
 	}
-	
-	public void kill(Cell target){
-	    (target.getUnit()).setStatus(false);
-		target.setUnit(null);
-	
-	}
 
 	// calculates the absolute distance between two given cells
-	private int getDistance(Cell origin, Cell target) {
+	public int getDistance(Cell origin, Cell target) {
 		int x1 = origin.getXPos();
 		int y1 = origin.getYPos();
 		int x2 = target.getXPos();
@@ -208,10 +200,10 @@ public class BoardController {
 	    
 	   
 	}
-	 // returns the array of possible coordinates for a unit to move or attack to.
+	
+	// returns the array of possible coordinates for a unit to move or attack to.
 	public List<Cell> getAbleList(Cell origin,State type)
 	{
-	    
 	    List<Cell> cells = new ArrayList<>();
 	    int xPos = origin.getXPos();
         int yPos = origin.getYPos();

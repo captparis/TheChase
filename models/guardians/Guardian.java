@@ -24,10 +24,6 @@ public abstract class Guardian extends AbstractUnit {
 	@Override
 	public abstract boolean attackable(int x, int y);
 	@Override
-	public boolean moveable(int x, int y)
-	{
-	    
-        return this.initMoveable(x, y);
-	    
-	}
+	public abstract boolean moveable(int x, int y);
+
 }

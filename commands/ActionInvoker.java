@@ -5,6 +5,7 @@ import java.util.Stack;
 import models.Cell;
 import models.Turn;
 import models.Unit;
+import models.UnitCarrier;
 
 public class ActionInvoker {
     
@@ -16,7 +17,7 @@ public class ActionInvoker {
         this.turnStack = new Stack<>();
     };
     
-    public ActionInvoker getInstance(){
+    public static ActionInvoker getInstance(){
         if(instance == null){
             instance = new ActionInvoker();
         }
@@ -29,14 +30,14 @@ public class ActionInvoker {
         turn.pushActionCommand(moveCommand);
     }
     
-    public void attack(Turn turn, Cell target){
-        KillCommand attackCommand = new KillCommand(target);
-        attackCommand.execute();
-        turn.pushActionCommand(attackCommand);
+    public void kill(Turn turn, Cell target){
+        KillCommand killCommand = new KillCommand(target);
+        killCommand.execute();
+        turn.pushActionCommand(killCommand);
     }
     
-    public void changeMode(Turn turn, Unit unit){
-        ModeChangeCommand modeChangeCommand = new ModeChangeCommand();
+    public void changeMode(Turn turn, UnitCarrier unitCarrier, Unit newDecoratedUnit ){
+        ModeChangeCommand modeChangeCommand = new ModeChangeCommand(unitCarrier, newDecoratedUnit);
         turn.addModeChangeCommand(modeChangeCommand);
     }
     

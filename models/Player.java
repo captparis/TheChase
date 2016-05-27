@@ -54,9 +54,6 @@ public class Player implements Serializable{
 			return unit;
 		}
 	}
-	public void setUnit(String type,Unit unit) throws Exception {
-	    units.put(type, unit);
-	}
 
 	public int getCurrentRoll() {
 		return currentRoll;
@@ -82,6 +79,9 @@ public class Player implements Serializable{
 	}
 
 	public boolean hasUnit(Unit unit) {
-		return units.containsValue(unit);
+		if(unit == null){
+			return false;
+		}
+		return units.containsValue(unit.getInnerUnit());
 	}
 }

@@ -20,7 +20,6 @@ public class EndTurnCommand implements ActionCommand{
         for(ModeChangeCommand mcc : modeChangeCommands){
             mcc.execute();
         }
-        
     }
 
     @Override

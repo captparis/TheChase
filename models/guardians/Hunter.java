@@ -27,7 +27,7 @@ public class Hunter extends Guardian {
 	}
 
 	@Override
-	public boolean initMoveable(int x, int y) {
+	public boolean moveable(int x, int y) {
 		// Hunter can only move on the diagonal
 		if (Math.abs(x) == Math.abs(y)) {
 			return true;

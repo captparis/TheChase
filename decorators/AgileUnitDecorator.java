@@ -11,10 +11,14 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
     public AgileUnitDecorator(Unit unit) {
         super(unit);
     }
+    
+    public AgileUnitDecorator(){
+    	super();
+    }
 
     @Override
     public boolean moveable(int x, int y) {
-        return super.initMoveable(x, y);
+        return super.getInnerUnit().moveable(x, y);//super.initMoveable(x, y);
     }
 
     @Override

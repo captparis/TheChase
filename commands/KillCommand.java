@@ -3,11 +3,12 @@ package commands;
 
 import models.Cell;
 import models.Unit;
+import models.UnitCarrier;
 
 public class KillCommand implements ActionCommand{
     
     private Cell target;
-    private Unit unit;
+    private UnitCarrier unitCarrier;
     
     public KillCommand(Cell target){
         this.target = target;
@@ -15,14 +16,14 @@ public class KillCommand implements ActionCommand{
 
     @Override
     public void execute() {
-        unit = target.getUnit();
-        unit.setStatus(false);
-        target.setUnit(null);
+        unitCarrier = target.getUnitCarrier();
+        unitCarrier.setStatus(false);
+        target.setUnitCarrier(null);
     }
 
     @Override
     public void undo() {
-        target.setUnit(unit);
-        unit.setStatus(true);
+        target.setUnitCarrier(unitCarrier);
+        unitCarrier.setStatus(true);
     }
 }
