@@ -113,6 +113,7 @@ public class GameController {
 	}
 
 	public void startGame() {
+		this.clearGame();
 		System.out.println("Start Game");
 		try {
 			setupTeams();
@@ -209,6 +210,7 @@ public class GameController {
 	public void showMainMenu() {
 		CardLayout cardLayout = (CardLayout) cards.getLayout();
 		cardLayout.show(cards, "mainMenu");
+		mainWindow.pack();
 	}
 	
 	public void showOptions() {
@@ -528,22 +530,15 @@ public class GameController {
 		System.out.println("Applied new settings");
 		
 		ArrayList<String> inactiveUnits = optionsMenuView.getInactiveUnits();
+		
+		//Reset all units to active
 		for (Map.Entry<String, Boolean> entry : settings.activeUnits.entrySet()){
-			for (String t : inactiveUnits){
-				if (inactiveUnits != null){
-					if (entry.getKey() == t){
-						settings.activeUnits.put(t, false);
-						System.out.println(entry.getKey() + " is disabled");
-					}
-					else {
-						System.out.println("there are inactive units but " + entry.getKey() + " is enabled");
-						entry.setValue(true);
-					}
-				}
-				else {
-					System.out.println(entry.getKey() + " is enabled");
-					entry.setValue(true);
-				}
+			entry.setValue(true);
+		}
+		
+		if (inactiveUnits != null){
+			for (String t: inactiveUnits){
+				settings.activeUnits.put(t, false);
 			}
 		}
 	}
