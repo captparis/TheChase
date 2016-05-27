@@ -66,5 +66,13 @@ public abstract class AbstractUnitDecorator implements Unit, Serializable{
 	public boolean attackable(int x, int y){
 		return unit.attackable(x, y);
 	}
+	
+	public String getMod(){
+        return unit.getMod();
+	    
+	}
+	public void setMod(boolean mod){
+	    unit.setMod(mod);
+	}
     
 }

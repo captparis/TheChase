@@ -16,9 +16,11 @@ public abstract class AbstractUnit implements Drawable, Unit, Serializable {
 	private boolean alive;
 	private int initX;
 	private int initY;
+	private boolean mod;
 
 	public AbstractUnit() {
 		this.alive = true;
+		this.mod = false;
 	}
 
 	public ImageIcon getIcon() {
@@ -79,6 +81,13 @@ public abstract class AbstractUnit implements Drawable, Unit, Serializable {
 	
 	public void setInnerUnit(Unit innerUnit){
 		return;
+	}
+	public boolean mod()
+	{
+	    return this.mod;
+	}
+	public void setMod(boolean mod){
+	    this.mod = mod;
 	}
 
 }

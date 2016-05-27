@@ -35,7 +35,7 @@ public class PlayerController {
 
 		while (!accepted) {
 			try {
-				name = validatedName(getNameInput(team));
+				name = validatedName(getNameInput(team));	
 				accepted = true;
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Your name must be between 1 "
@@ -63,7 +63,7 @@ public class PlayerController {
 
 	private String getNameInput(String team) {
 		String playerName = (String) JOptionPane.showInputDialog("What is your" + ""
-				+ " name " + team + "?");
+				+ " name " + team + "?", "");
 
 		return playerName;
 	}

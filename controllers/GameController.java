@@ -301,13 +301,15 @@ public class GameController {
 	    
 	    try{
 		    if((selectedUnit instanceof AgileUnitDecorator) && !mode.equals("modeAgile")){	        
-		            if(currentTeam.equals("Explorer")){	
+		        selectedUnit.setMod(true);    
+		        if(currentTeam.equals("Explorer")){	
 		            	actionInvoker.changeMode(turn, selectedUnitCarrier, new DefensiveUnitDecorator());
 		            }
 		            else{
 		            	actionInvoker.changeMode(turn, selectedUnitCarrier, new AttackUnitDecorator());
 		            }
-		    }else if (!(selectedUnit instanceof AgileUnitDecorator) && mode.equals("modeAgile") ){     
+		    }else if (!(selectedUnit instanceof AgileUnitDecorator) && mode.equals("modeAgile") ){
+		        selectedUnit.setMod(false);
 		    	actionInvoker.changeMode(turn, selectedUnitCarrier, new AgileUnitDecorator() );   
 		    }
 	
@@ -349,6 +351,8 @@ public class GameController {
 		else{
 		    boardController.switchSelectedHud(true);
 		    boardController.setUnitName(cell.getUnit().toString());
+		    boardController.setMod(cell.getUnit().getMod());
+	                 
 		}
 
 		// If it is the guardians turn and the user clicks on the selected unit,
@@ -533,10 +537,20 @@ public class GameController {
 	public void applySettings(){
 		int newColumns = optionsMenuView.getColumns();
 		int newRows = optionsMenuView.getRows();
+
 		boolean setupOn = optionsMenuView.getSetup();
+
+		if( Math.min(newColumns, newRows)>2)
+		{
+
 		settings.setBoardSize(newRows, newColumns);
 		settings.setup = setupOn;
 		System.out.println("Applied new settings");
+		}
+		else{
+		    JOptionPane.showMessageDialog(null, "Rows and Columns must larger than 2");
+		    return;
+		}
 		
 		ArrayList<String> inactiveUnits = optionsMenuView.getInactiveUnits();
 		

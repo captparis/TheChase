@@ -14,6 +14,7 @@ public class AgileUnitDecorator extends AbstractUnitDecorator{
     
     public AgileUnitDecorator(){
     	super();
+
     }
 
     @Override

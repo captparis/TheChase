@@ -275,6 +275,9 @@ public class BoardController {
         }       
 	    return cells;
 	}
+	public void setMod(String mod){
+	    this.mediator.setMode(mod);
+	}
 
 
 
@@ -316,9 +319,7 @@ public class BoardController {
 			System.out.println(cell.getXPos()+"  "  +cell.getYPos());
 			System.out.println("Unit: " + cell.getUnit() + " Item: " + cell.getItem() + " DefaultItem: " + cell.getDefaultItem());	
 			gameController.cellClicked(cell);
-			if(cell.getUnit()!=null){
-				mediator.setMode(cell.getUnit().getClass().getSimpleName().replace("UnitDecorator", "")); 
-			}
+
 			
 		}
 
@@ -338,7 +339,7 @@ public class BoardController {
 			int type = 0;
 
 			if(cell.getUnit() != null) {
-			    
+			    System.out.println(cell.getUnit().getMod());
 				if (gameController.getCurrentPlayer().hasUnit(cell.getUnit())) {
 				    type = 1;
 				}
