@@ -11,7 +11,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -26,8 +25,6 @@ import decorators.*;
 import flyweight.ItemFactory;
 import mediator.Mediator;
 import models.*;
-import models.explorers.Explorer;
-import models.items.*;
 import views.BoardView;
 import views.HudView;
 import views.UnitHudView;
@@ -44,7 +41,6 @@ public class BoardController {
 	private BoardItem movableGround;
 	private BoardItem attackableGround;
 	private BoardItem gate;
-	private List<Pos> gatePos;
 	
 	private HUDActionListener hudListener;
 	
@@ -69,10 +65,6 @@ public class BoardController {
 
 		mediator = Mediator.getInstance();
 
-		gatePos = new ArrayList<Pos>();
-		gatePos.add(new Pos(0,0));
-		gatePos.add(new Pos(0,1));
-		gatePos.add(new Pos(1,0));
 
 	}
 
@@ -114,13 +106,8 @@ public class BoardController {
 		
 		hudView = new HudView(hudListener);
 		unitHudView = new UnitHudView(hudListener);
+		this.initItems();
 
-		for (Player player : gameController.getPlayers().values()) {
-			for (Unit unit : player.getUnits().values()) {
-				setCellUnit(unit.getInitX(), unit.getInitY(), new AgileUnitDecorator(unit));
-			}
-		}
-		initItems();
 	}
 
 	public void refreshBoard(int rows, int columns, Game game) {
@@ -138,13 +125,21 @@ public class BoardController {
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
 		mediator.setTeam(game.getCurrentPlayer().getTeam());
 	}
-	
+	public void initUnit(){
+	    for (Player player : gameController.getPlayers().values()) {
+            for (Unit unit : player.getUnits().values()) {
+                setCellUnit(unit.getInitX(), unit.getInitY(), unit);
+            }
+        }
+	    
+	}
 	private void initItems() {
+
 		try {
 			
 			gate = ItemFactory.getItem("Gate");
 			
-			for(Pos pos : gatePos){
+			for(Pos pos : gameController.getGate()){
 			    setCellDefaultItem(pos.getXPos(), pos.getYPos(), gate);
 			}
 			
@@ -168,16 +163,37 @@ public class BoardController {
 	{
 	    return board.getCells()[x][y];
 	}
-	public List<Pos> getGate()
-	{
-	    return gatePos;
-	}
+
 
 	// Sets the item for the cell
 	public void setCellItem(int x, int y, BoardItem item) {
 		board.getCells()[x][y].setItem(item);
 	}
+	public void setGate(Cell cell)
+	{
+	    if(cell.getDefaultItem() == gate)
+	    {
+	        cell.setDefaultItem(ground);
+	    }
+	    else
+	    {
+	        cell.setDefaultItem(gate);
+	    }
+	}
+	public void storeGate()
+	{
+	     List<Pos> gatePos = new ArrayList<Pos>();
+	    for (int x = 0; x < board.getColumns(); x++) {
+            for (int y = 0; y < board.getRows(); y++) {
+                if(this.getCell(x, y).getDefaultItem() == gate)
+                {
+                    gatePos.add(new Pos(x,y));
+                }
 
+            }
+        }
+	    gameController.saveGate(gatePos);
+	}
 
 	
 	

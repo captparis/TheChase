@@ -190,7 +190,7 @@ public class Mediator {
 	
 	public void setWinState(String winner){
 		instruction.setText(currentPlayer.getText() + " win!");
-		if (winner == "Explorer"){
+		if (winner.equals("Explorer")){
 			
 			changeBoardScreen(true, true);
 		}

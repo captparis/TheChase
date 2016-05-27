@@ -1,8 +1,10 @@
 package models;
 
+import java.io.Serializable;
+
 import javax.swing.ImageIcon;
 
-public class UnitCarrier implements Unit {
+public class UnitCarrier implements Unit, Serializable {
 	
 	Unit unit;
 	
