@@ -72,6 +72,13 @@ public abstract class AbstractUnit implements Drawable, Unit, Serializable {
         }
         return null;
     }
-
+	
+	public Unit getInnerUnit(){
+		return this;
+	}
+	
+	public void setInnerUnit(Unit innerUnit){
+		return;
+	}
 
 }

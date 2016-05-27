@@ -17,7 +17,7 @@ public class Behemoth extends Guardian {
 	}
 
 	@Override
-	public boolean initMoveable(int x, int y) {
+	public boolean moveable(int x, int y) {
 		// Behemoth can only move left right up down
 		if (x == 0 || y == 0) {
 			return true;

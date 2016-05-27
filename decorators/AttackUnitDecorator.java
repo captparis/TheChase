@@ -12,9 +12,13 @@ public class AttackUnitDecorator extends AbstractUnitDecorator{
         super(unit);
     }
 
-    @Override
+    public AttackUnitDecorator() {
+		super();
+	}
+
+	@Override
     public boolean moveable(int x, int y) {
-        boolean moveable = super.getInnerUnit().initMoveable(x,y);
+        boolean moveable = super.getInnerUnit().moveable(x, y);
         
         if(!moveable){
             return false;

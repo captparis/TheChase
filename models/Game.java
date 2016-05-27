@@ -12,6 +12,7 @@ public class Game implements Serializable {
 	private Board board;
 
 	// State variables
+	private Turn currentTurn;
 	private Player currentPlayer;
 	private Cell selectedCell;
 	private List<Cell> lastCells;
@@ -106,6 +107,14 @@ public class Game implements Serializable {
 
 	public void setPlayers(Map<String, Player> players) {
 		this.players = players;
+	}
+
+	public Turn getCurrentTurn() {
+		return this.currentTurn;
+	}
+
+	public void setCurrentTurn(Turn turn) {
+		this.currentTurn = turn;
 	}
 	
 	

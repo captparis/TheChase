@@ -14,13 +14,13 @@ public class MoveCommand implements ActionCommand{
     
     @Override
     public void execute() {
-        target.setUnit(origin.getUnit());
-        origin.setUnit(null);
+        target.setUnitCarrier(origin.getUnitCarrier());
+        origin.setUnitCarrier(null);
     }
 
     @Override
     public void undo() {
-        origin.setUnit(target.getUnit());
+        origin.setUnitCarrier(target.getUnitCarrier());
         target.setUnit(null);
     }
     

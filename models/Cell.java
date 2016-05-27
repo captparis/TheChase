@@ -28,7 +28,7 @@ public class Cell extends JButton implements Serializable {
 
 	BoardItem defaultItem;
 	BoardItem item;
-	Unit unit;
+	UnitCarrier unitCarrier;
 
 	public Cell(int x, int y, BoardItem defaultItem) {
 		this.xPos = x;
@@ -44,9 +44,9 @@ public class Cell extends JButton implements Serializable {
 		this.setBackground(null); // background color
 		this.setSize(CELL_SIZE,CELL_SIZE);
 		ImageIcon icon;
-
-		if (unit != null) {
-			icon = unit.getIcon();
+		
+		if (unitCarrier != null) {
+			icon = unitCarrier.getIcon();
 		}else if (item != null) {
 			icon = item.getIcon();
 		}else{
@@ -58,15 +58,23 @@ public class Cell extends JButton implements Serializable {
 	}
 
 	public Unit getUnit() {
-		return this.unit;
+		if (this.unitCarrier == null){
+			return null;
+		}
+		
+		return this.unitCarrier.getPassenger();
 	}
-//	public AbstractUnit getAbsUnit(){
-//        return this.getUnit();
-//	    
-//	}
+	
+	public UnitCarrier getUnitCarrier(){
+		return this.unitCarrier;
+	}
 
 	public void setUnit(Unit unit) {
-		this.unit = unit;
+		this.unitCarrier.setPassenger(unit);
+	}
+	
+	public void setUnitCarrier(UnitCarrier unitCarrier){
+		this.unitCarrier = unitCarrier;
 	}
 
 	public int getXPos() {

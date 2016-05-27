@@ -1,5 +1,5 @@
 /*
- *  OSSD Asignment 1 - The Chase
+ *  OSSD Assignment 1 - The Chase
  *  Charles Yim - S3570764
  *  Jacob Paris - S3238163
  *  Chen Liu- S3481556
@@ -18,10 +18,6 @@ import javax.swing.WindowConstants;
 
 public class TheChase {
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
 	
 	public static void main(String[] args) {
 		
@@ -39,10 +35,9 @@ public class TheChase {
 		*/
 		
 		JFrame mainWindow = new JFrame();
-		SoundManager sm = new SoundManager("bin/sound/Thunderbird.mp3");
-		sm.loop();
+		//SoundManager sm = new SoundManager("bin/sound/Thunderbird.mp3");
+		//sm.loop();
 		mainWindow.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		//mainWindow.setSize(700, 700);
 		mainWindow.setVisible(true);
 		GameController gameController = new GameController(mainWindow);
 		gameController.initialiseMenu();

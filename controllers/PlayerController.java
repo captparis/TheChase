@@ -53,7 +53,7 @@ public class PlayerController {
 			try {
 				String unitTypeName = unitType.getType();
 				AbstractUnit unit = unitController.newUnit(unitType);
-				player.addUnit(unitTypeName, new AgileUnitDecorator(unit));
+				player.addUnit(unitTypeName, unit);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
