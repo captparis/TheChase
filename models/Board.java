@@ -9,6 +9,8 @@ package models;
 
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.border.LineBorder;
 
@@ -22,6 +24,7 @@ public class Board implements Serializable{
 	private LineBorder mouseOverItem;
 	private LineBorder mouseOverEnemy;
 	private LineBorder mouseOverAlly;
+	   private List<Pos> gatePos = new ArrayList<Pos>();
 	
 
 	/*
@@ -109,6 +112,15 @@ public class Board implements Serializable{
 		}
 
 	}
+	   public List<Pos> getGate()
+	    {
+	        return gatePos;
+	    }
+	    public void setGate(List<Pos> pos)
+	    {
+	        this.gatePos = null;
+	        this.gatePos = pos;
+	    }
 
 	public int getRows() {
 		return this.rows;

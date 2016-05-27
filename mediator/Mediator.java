@@ -141,22 +141,19 @@ public class Mediator {
 		playerName.setText(newName);
 	}
    
-   public void setTeam(String team){
-	   currentPlayer.setText(team);
-   }
-   
-   public void swapPlayer(String newName){
-		if (isExplorer){
-			currentPlayer.setText("GUARDIANS");
-			currentPlayer.setForeground(Color.red);
-			isExplorer = false;
+   public void setTeam(String team, String name){
+       currentPlayer.setText(team.toUpperCase());
+		if (team.equals("Explorer")){
+			currentPlayer.setForeground(Color.blue);
+			this.specialStance.setText("DEFENSE");
+	            this.specialStance.setIcon(defenseIcon);
 		}
 		else {
-			currentPlayer.setText("EXPLORERS");
-			currentPlayer.setForeground(Color.blue);
-			isExplorer = true;
+			currentPlayer.setForeground(Color.red);
+			this.specialStance.setText("Attack");
+            this.specialStance.setIcon(attackIcon);
 		}
-		playerName.setText(newName);
+		playerName.setText(name);
 	}
    
    public void setInstruction(String newInstruction){
@@ -252,18 +249,6 @@ public class Mediator {
 		}
 	}
 	
-	//Swaps what modes are displayed depending on if Guardian or Explorers are active
-	public void swapTeam(String mod){
-	    this.specialStance.setText(mod);
-	    if(mod.equals("Attack"))
-	    {
-	        this.specialStance.setIcon(attackIcon);
-	    }
-	    else
-	    {
-	        this.specialStance.setIcon(defenseIcon);
-	    }
-	}
 	
 	//Used to update the mode buttons to show which mode is currently active upon selecting a unit
 	public void setMode(String mode){

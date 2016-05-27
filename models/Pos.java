@@ -8,9 +8,10 @@
 
 package models;
 
+import java.io.Serializable;
 
 //An inner class for a cell
-public class Pos {
+public class Pos implements Serializable {
 	
 	
 

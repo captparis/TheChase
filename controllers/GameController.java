@@ -138,6 +138,7 @@ public class GameController {
 	       System.out.println("set Gate!!!");
 	       if (settings.setup){
 	            game.setGameState(State.SET_GATE);
+	            boardController.initUnit();
 	            mediator.setInstruction("Customise board");
 	            mediator.setActionButton("Start game");
 	       }
@@ -168,6 +169,7 @@ public class GameController {
 	    game.getPlayers().clear();
         game.setWinner(null);
         Board.clearInstance();
+        mainWindow.pack();
 	}
 	
 	public void loadGame(Game game){
@@ -212,9 +214,14 @@ public class GameController {
 	}
 
 	public void showMainMenu() {
+	    
 		CardLayout cardLayout = (CardLayout) cards.getLayout();
 		cardLayout.show(cards, "mainMenu");
 		mainWindow.pack();
+	}
+	public void backMainMenu(){
+	    cards.remove(boardView);
+	    this.showMainMenu();
 	}
 	
 	public void showOptions() {
@@ -247,7 +254,7 @@ public class GameController {
 	            noPlayer.printStackTrace();
 	        }
 	    }
-	     mediator.swapPlayer(game.getCurrentPlayer().getName());
+	     mediator.setTeam(game.getCurrentPlayer().getTeam(), game.getCurrentPlayer().getName());
 	 }
 
 
@@ -262,7 +269,7 @@ public class GameController {
 	       }
 		// If it is the explorers turn, check if any units have landed on a gate.
 		   else{			   
-		       for(Pos gate : this.getGate()){
+		       for(Pos gate : boardController.getGate()){
 
 		           System.out.println("x: "+ gate.getXPos() +"y: "+gate.getYPos());
 		           if(this.getCurrentPlayer().hasUnit(boardController.getCell(gate.getXPos(), gate.getYPos()).getUnit())){
@@ -506,7 +513,6 @@ public class GameController {
 
 			// update the hud view with the new dice amount
 			mediator.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
-			boardController.swapTeam(game.getCurrentPlayer().getTeam());
 			game.setGameState(GameController.State.MOVE);
 			mediator.setUnitState();
 		} // Move to check win state, restart if nobody won
@@ -517,7 +523,7 @@ public class GameController {
 		// game state must be in CHECK_WIN
 		else {
 			if (game.getWinner() != null) {
-				showMainMenu();
+			    this.backMainMenu();
 				mediator.changeBoardScreen(false, false);
 				this.clearGame();
 			}
@@ -643,12 +649,7 @@ public class GameController {
 	public void setWinner(Player winner) {
 		game.setWinner(winner);
 	}
-	public List<Pos> getGate(){
-	    return this.settings.getGate();
-	}
-	public void saveGate(List<Pos> pos){
-	    this.settings.setGate(pos);
-	}
+
 	
 	
 	public void save (){

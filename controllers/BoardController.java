@@ -57,6 +57,7 @@ public class BoardController {
 			ground = ItemFactory.getItem("Ground");
 			movableGround = ItemFactory.getItem("MovableGround");
 			attackableGround = ItemFactory.getItem("AttackableGround");
+			gate = ItemFactory.getItem("Gate");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -121,7 +122,7 @@ public class BoardController {
 		System.out.println("refreshing boardView");
 
 		boardView = new BoardView(new MouseActionListener(), rows, columns, board.getCells(),board.getBorder());
-		mediator.setTeam(game.getCurrentPlayer().getTeam());
+		mediator.setTeam(game.getCurrentPlayer().getTeam(), game.getCurrentPlayer().getName());
 	}
 	public void initUnit(){
 	    for (Player player : gameController.getPlayers().values()) {
@@ -132,19 +133,10 @@ public class BoardController {
 	    
 	}
 	private void initItems() {
-
-		try {
-			
-			gate = ItemFactory.getItem("Gate");
-			
-			for(Pos pos : gameController.getGate()){
-			    setCellDefaultItem(pos.getXPos(), pos.getYPos(), gate);
-			}
-			
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    this.getCell(0, 0).setDefaultItem(gate);
+	    this.getCell(1, 0).setDefaultItem(gate);
+	    this.getCell(0, 1).setDefaultItem(gate);
+	    this.storeGate();
 
 	}
 	
@@ -160,6 +152,9 @@ public class BoardController {
 	public Cell getCell(int x, int y)
 	{
 	    return board.getCells()[x][y];
+	}
+	public List<Pos> getGate(){
+	    return board.getGate();
 	}
 
 
@@ -190,7 +185,7 @@ public class BoardController {
 
             }
         }
-	    gameController.saveGate(gatePos);
+	    board.setGate(gatePos);
 	}
 
 	
@@ -223,16 +218,6 @@ public class BoardController {
 		int y2 = target.getYPos();
 
 		return Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
-	}
-	public void swapTeam(String team){
-	    if(team.equals("Guardian")){
-	    	mediator.swapTeam("Attack");
-	    }
-	    else{
-	    	mediator.swapTeam("Defense");
-	    }
-	    
-	   
 	}
 	
 	// returns the array of possible coordinates for a unit to move or attack to.
@@ -394,7 +379,7 @@ public class BoardController {
 				gameController.load();
 				break;
 			case "exit":
-				gameController.showMainMenu();
+			    gameController.backMainMenu();
 				mediator.changeBoardScreen(false, false);
 				break;
 			case "undo":
