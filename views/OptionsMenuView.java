@@ -18,14 +18,19 @@ import javax.swing.BoxLayout;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import mediator.Mediator;
 
 public class OptionsMenuView extends javax.swing.JPanel {
 	
 	private Image backgroundImage;
+	
+	private boolean setupOn = false;
 	
 	//Panels
 	private JPanel boardSizeButtons;
@@ -40,6 +45,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
 	private JPanel backApply;
 	private JPanel piecesGap;
 	private JPanel piecesPush;
+	private JPanel setupRow;
 	
 	//Buttons
     private JButton btnSmall;
@@ -56,6 +62,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
     private JToggleButton btnBehemoth;
     private JToggleButton btnHunter;
     private JToggleButton btnGolem;
+    private JToggleButton setupMode;
     
     
     //TextFields
@@ -66,12 +73,13 @@ public class OptionsMenuView extends javax.swing.JPanel {
     
     
     //Labels
-    private javax.swing.JLabel lblBoardSize;
-    private javax.swing.JLabel lblNumberPieces;
-    private javax.swing.JLabel lblWidth;
-    private javax.swing.JLabel lblHeight;
-    private javax.swing.JLabel lblGuardians;
-    private javax.swing.JLabel lblExplorers;
+    private JLabel lblBoardSize;
+    private JLabel lblNumberPieces;
+    private JLabel lblWidth;
+    private JLabel lblHeight;
+    private JLabel lblGuardians;
+    private JLabel lblExplorers;
+    private JLabel lblSetup;
 	
 	@Override
 	  protected void paintComponent(Graphics g) {
@@ -123,9 +131,11 @@ public class OptionsMenuView extends javax.swing.JPanel {
         guardianLabel = new JPanel();
         piecesGap = new JPanel();
         piecesPush = new JPanel();
+        setupRow = new JPanel();
         
         boardSizeButtons.setLayout(new BoxLayout(boardSizeButtons, BoxLayout.LINE_AXIS));
         boardSizeFields.setLayout(new BoxLayout(boardSizeFields, BoxLayout.LINE_AXIS));
+        setupRow.setLayout(new BoxLayout(setupRow, BoxLayout.LINE_AXIS));
         piecesFields.setLayout(new BoxLayout(piecesFields, BoxLayout.LINE_AXIS));
         backApply.setLayout(new BoxLayout(backApply, BoxLayout.LINE_AXIS));
         explorerLabel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -147,6 +157,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         explorerLabel.setOpaque(false);
         piecesGap.setOpaque(false);
         piecesPush.setOpaque(false);
+        setupRow.setOpaque(false);
         
         guardianGrid.setMinimumSize(new Dimension(100,100));
         guardianGrid.setMaximumSize(new Dimension(100,100));        
@@ -161,12 +172,13 @@ public class OptionsMenuView extends javax.swing.JPanel {
         piecesPush.setMinimumSize(new Dimension(20,100));
         piecesPush.setMaximumSize(new Dimension(20,100)); 
         
-    	lblBoardSize = new javax.swing.JLabel();
-    	lblNumberPieces = new javax.swing.JLabel();
-    	lblWidth = new javax.swing.JLabel();
-    	lblHeight = new javax.swing.JLabel(); 
-    	lblGuardians = new javax.swing.JLabel(); 
-    	lblExplorers = new javax.swing.JLabel(); 
+    	lblBoardSize = new JLabel();
+    	lblNumberPieces = new JLabel();
+    	lblWidth = new JLabel();
+    	lblHeight = new JLabel(); 
+    	lblGuardians = new JLabel(); 
+    	lblExplorers = new JLabel(); 
+    	lblSetup = new JLabel();
     	
     	btnBack = new JButton();
     	btnApply = new JButton();
@@ -181,6 +193,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         btnTactician = new JToggleButton();
         btnTrapmaster = new JToggleButton();
         btnHero = new JToggleButton();
+        setupMode = new JToggleButton();
         
         btnBehemoth.setFocusPainted(false);
         btnGolem.setFocusPainted(false);
@@ -189,6 +202,7 @@ public class OptionsMenuView extends javax.swing.JPanel {
         btnTactician.setFocusPainted(false);
         btnTrapmaster.setFocusPainted(false);
         btnHero.setFocusPainted(false);
+        setupMode.setFocusPainted(false);
         
         
         txtWidth = new javax.swing.JTextField();
@@ -271,6 +285,34 @@ public class OptionsMenuView extends javax.swing.JPanel {
         boardSizeFields.add(Box.createRigidArea(new Dimension(5,1)));
         
         this.add(boardSizeFields);
+        
+        this.add(Box.createVerticalStrut(40));
+        
+        //SETUP BOARD SECTION
+        
+        lblSetup.setText("Customise board");
+        lblSetup.setForeground(Color.WHITE);
+        setupRow.add(lblSetup);
+        
+        setupRow.add(Box.createRigidArea(new Dimension(10,1)));
+        
+        setupMode.setText("OFF");
+        setupMode.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent event) {
+                if (setupMode.isSelected()){
+                	setupMode.setText("ON");
+                	setupOn = true;
+                } else {
+                	setupMode.setText("OFF");
+                	setupOn = false;
+                }
+            }
+        });
+        
+        setupRow.add(setupMode);
+        
+        this.add(setupRow);
         
         this.add(Box.createVerticalStrut(40));
         
@@ -500,6 +542,10 @@ public class OptionsMenuView extends javax.swing.JPanel {
     	String tempString = txtHeight.getText();
     	int newRows = Integer.parseInt(tempString);
     	return newRows;
+    }
+    
+    public boolean getSetup(){
+    	return setupOn;
     }
     
     @SuppressWarnings("null")

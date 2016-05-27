@@ -159,6 +159,14 @@ public class Mediator {
 		playerName.setText(newName);
 	}
    
+   public void setInstruction(String newInstruction){
+	   instruction.setText(newInstruction);
+   }
+   
+   public void setActionButton(String newText){
+	   actionButton.setText(newText);
+   }
+   
    public void setDiceState(){
 		instruction.setText("Please roll dice");
 		actionButton.setText("Roll dice");

@@ -138,6 +138,8 @@ public class GameController {
 	       System.out.println("set Gate!!!");
 	       if (settings.setup){
 	            game.setGameState(State.SET_GATE);
+	            mediator.setInstruction("Customise board");
+	            mediator.setActionButton("Start game");
 	       }
 	       else {
 	    	   boardController.initUnit();
@@ -490,6 +492,8 @@ public class GameController {
 	        boardController.storeGate();
 	        boardController.initUnit();
 	        game.setGameState(GameController.State.DICE_ROLL);
+	        mediator.setInstruction("Please roll dice");
+            mediator.setActionButton("Roll dice");
 	        
 	    }
 	    else if (game.getGameState() == GameController.State.DICE_ROLL) {
@@ -529,7 +533,9 @@ public class GameController {
 	public void applySettings(){
 		int newColumns = optionsMenuView.getColumns();
 		int newRows = optionsMenuView.getRows();
+		boolean setupOn = optionsMenuView.getSetup();
 		settings.setBoardSize(newRows, newColumns);
+		settings.setup = setupOn;
 		System.out.println("Applied new settings");
 		
 		ArrayList<String> inactiveUnits = optionsMenuView.getInactiveUnits();
