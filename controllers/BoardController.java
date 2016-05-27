@@ -23,6 +23,7 @@ import javax.swing.*;
 import commands.ActionInvoker;
 import controllers.GameController.State;
 import decorators.*;
+import flyweight.ItemFactory;
 import mediator.Mediator;
 import models.*;
 import models.explorers.Explorer;
@@ -56,9 +57,15 @@ public class BoardController {
 	public BoardController(GameController gameController) {
 
 		this.gameController = gameController;
-		ground = new Ground();
-		movableGround = new MovableGround();
-		attackableGround = new AttackableGround();
+		try {
+			ground = ItemFactory.getItem("Ground");
+			movableGround = ItemFactory.getItem("MovableGround");
+			attackableGround = ItemFactory.getItem("AttackableGround");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 		mediator = Mediator.getInstance();
 
@@ -133,11 +140,19 @@ public class BoardController {
 	}
 	
 	private void initItems() {
-		gate = new Gate();
-		for(Pos pos : gatePos)
-		{
-		    setCellDefaultItem(pos.getXPos(), pos.getYPos(), gate);
+		try {
+			
+			gate = ItemFactory.getItem("Gate");
+			
+			for(Pos pos : gatePos){
+			    setCellDefaultItem(pos.getXPos(), pos.getYPos(), gate);
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 	}
 	
 	// Sets the default item for the cell

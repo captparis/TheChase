@@ -273,6 +273,10 @@ public class GameController {
 	    String currentTeam = game.getCurrentPlayer().getTeam();
 	    Turn turn = game.getCurrentTurn();
 	    
+	    if(!game.getCurrentPlayer().hasUnit(selectedUnit)){
+	    	return;
+	    }
+	    
 	    try{
 		    if((selectedUnit instanceof AgileUnitDecorator) && !mode.equals("modeAgile")){	        
 		            if(currentTeam.equals("Explorer")){	
@@ -312,7 +316,7 @@ public class GameController {
 			return;
 		}
 		//If the selected cell doesn't have a unit
-		if (cell.getUnit() == null) {
+		if (cell.getUnit() == null || !game.getCurrentPlayer().hasUnit(cell.getUnit())) {
             boardController.switchSelectedHud(false);
         }
 		else{
@@ -438,9 +442,6 @@ public class GameController {
             mediator.setWinState(game.getWinner().getTeam());
         }
 	}
-	
-
-	
 
 	private void quitGame() {
 		// System.exit(0);
