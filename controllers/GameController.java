@@ -383,11 +383,13 @@ public class GameController {
                 // reset the movable squares to ground and repaint the board
                 boardController.resetCells(game.getLastCells());
         	}
-        }else if (game.getCurrentPlayer().hasUnit(cell.getUnit().getInnerUnit())) {
+        }else if (game.getCurrentPlayer().hasUnit(cell.getUnit())) {
             boardController.resetCells(game.getLastCells());
             game.setLastCells(boardController.getAbleList(cell, this.getGameState()));
             boardController.drawActionCells(game.getLastCells(), game.getGameState());
-        } 
+        }else{
+        	boardController.resetCells(game.getLastCells());
+        }
 	}
 	private void attack(Cell cell){
 	 // If the selected cell belongs to the current player show its
