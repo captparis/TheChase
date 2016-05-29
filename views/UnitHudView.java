@@ -99,10 +99,8 @@ public class UnitHudView extends JPanel{
 		exit.setName("exit");
 		undoMove = new JButton(undoMoveIcon);
 		undoMove.setName("undomove");
-		undoMove.addActionListener(hudListener);
 		undoTurn = new JButton(undoTurnIcon);
 		undoTurn.setName("undoturn");
-		undoTurn.addActionListener(hudListener);
 
 		agileStance.setFocusPainted(false);
 		specialStance.setFocusPainted(false);
