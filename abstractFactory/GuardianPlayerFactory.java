@@ -14,7 +14,7 @@ public class GuardianPlayerFactory extends AbstractPlayerFactory {
 	}
 
 	@Override
-	public Player getPlayer() {
+	public Player getPlayer() throws Exception {
 		String playerName = super.getPlayerName("Guardian");
 		Player newPlayer = new Player(playerName, "Guardian");
 		initUnits(newPlayer);

@@ -13,11 +13,11 @@ public abstract class AbstractPlayerFactory {
 		this.unitController = unitController;
 	}
 	
-	public abstract Player getPlayer();
+	public abstract Player getPlayer() throws Exception;
 	
 	abstract void initUnits(Player player);
 	
-	String getPlayerName(String team){
+	String getPlayerName(String team) throws Exception{
 		boolean accepted = false;
 		String name = null;
 
@@ -26,8 +26,12 @@ public abstract class AbstractPlayerFactory {
 				name = validatedName(getNameInput(team));	
 				accepted = true;
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Your name must be between 1 "
-						+ "and 50 characters long.");
+				if(e.getMessage().equals("Cancel")){
+					throw e;
+				}else{
+					JOptionPane.showMessageDialog(null, "Your name must be between 1 "
+							+ "and 50 characters long.");
+				}
 			}
 		}
 		return name;
@@ -36,13 +40,15 @@ public abstract class AbstractPlayerFactory {
 	private String getNameInput(String team) {
 		String playerName = (String) JOptionPane.showInputDialog("What is your" + ""
 				+ " name " + team + "?", "");
-
+		
 		return playerName;
 	}
 
 	private String validatedName(String nameInput) throws Exception {
-		if (nameInput.length() < 1 || nameInput.length() > 50) {
-			throw new Exception("Name length is out of bounds");
+		if(nameInput == null){
+			throw new Exception("Cancel");
+		}else if (nameInput.length() < 1 || nameInput.length() > 50) {
+			throw new Exception("Out Of Bounds");
 		}
 		return nameInput;
 	}

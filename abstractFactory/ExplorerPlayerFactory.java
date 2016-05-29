@@ -16,7 +16,7 @@ public class ExplorerPlayerFactory extends AbstractPlayerFactory {
 	}
 
 	@Override
-	public Player getPlayer() {
+	public Player getPlayer() throws Exception {
 		
 		String playerName = super.getPlayerName("Explorer");
 		Player newPlayer = new Player(playerName, "Explorer");

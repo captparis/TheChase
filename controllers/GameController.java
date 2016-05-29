@@ -87,7 +87,11 @@ public class GameController {
 			System.out.println("Explorer: " + game.getPlayer("Explorer").getName());
 			System.out.println("Guardian: " + game.getPlayer("Guardian").getName());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			if(e.getMessage()=="Cancel"){
+				return;
+			}else{
+				e.printStackTrace(System.out);
+			}
 		}
 
 		boardView = boardController.buildBoard();
