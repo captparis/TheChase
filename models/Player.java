@@ -17,11 +17,17 @@ public class Player implements Serializable{
 	private Map<String, Unit> units;
 	private int currentRoll;
 	private int remainingMoves;
+	private boolean undoAllowed;
+	private int turnsUndone;
 
 	public Player(String name, String team) {
 		this.name = name;
 		this.team = team;
 		this.units = new HashMap<>();
+		
+		this.undoAllowed = true;
+		this.turnsUndone =0;
+		
 	}
 
 	public String getName() {
@@ -83,5 +89,21 @@ public class Player implements Serializable{
 			return false;
 		}
 		return units.containsValue(unit.getInnerUnit());
+	}
+
+	public int getTurnsUndone() {
+		return turnsUndone;
+	}
+
+	public void incrementTurnsUndone() {
+		this.turnsUndone++;
+	}
+
+	public boolean isUndoAllowed() {
+		return undoAllowed;
+	}
+
+	public void setUndoAllowed(boolean undoAllowed) {
+		this.undoAllowed = undoAllowed;
 	}
 }

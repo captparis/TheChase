@@ -46,5 +46,9 @@ public class Turn implements  Serializable {
 	public boolean hasActionCommand() {
 		return !actions.isEmpty();
 	}
+
+	public Player getPlayer() {
+		return this.player;
+	}
     
 }

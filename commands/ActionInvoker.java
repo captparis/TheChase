@@ -3,11 +3,10 @@ package commands;
 
 import java.util.EmptyStackException;
 import java.util.Stack;
-
 import javax.swing.JOptionPane;
-
 import controllers.GameController;
 import models.Cell;
+import models.Player;
 import models.Turn;
 import models.Unit;
 import models.UnitCarrier;
@@ -88,6 +87,13 @@ public class ActionInvoker {
     
     public void undoTurn(){
 	    
+    	Player player = turnStack.peek().getPlayer();
+    	
+    	if (player.getTurnsUndone() > 2){
+    		JOptionPane.showMessageDialog(null, "You have undone the maximum number of turns");
+    		return;
+    	}
+    	
 		if(turnStack.size()<3){
 			JOptionPane.showMessageDialog(null, "Can't undo past the start of the game...");
 			return;
@@ -103,6 +109,8 @@ public class ActionInvoker {
     	while(turn.hasActionCommand()){
     		undoAction(turn);
     	};
+    	
+    	player.incrementTurnsUndone();
 
     }
 }
