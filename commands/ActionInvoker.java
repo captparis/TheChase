@@ -1,7 +1,12 @@
 
 package commands;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
+
+import javax.swing.JOptionPane;
+
+import controllers.GameController;
 import models.Cell;
 import models.Turn;
 import models.Unit;
@@ -55,18 +60,49 @@ public class ActionInvoker {
         Turn turn = turnStack.peek();
     	EndTurnCommand endTurnCommand = new EndTurnCommand(turn);
         endTurnCommand.execute();
-        turn.pushActionCommand(endTurnCommand); //TODO not sure if this is needed
+        //turn.pushActionCommand(endTurnCommand); //TODO not sure if this is needed
     }
     
-    public void undoAction(){
-    	turnStack.peek().popActionCommand().undo();
-    }
-    public void undoTurn(){
-    	Turn turn = turnStack.pop();
-    	while(turn.hasActionCommand()){
-    		ActionCommand command = turn.popActionCommand();
+    public void undoAction(GameController gameController, Turn turn){
+
+    	
+    	ActionCommand command = turn.popActionCommand();
+    	
+    	if(command == null ){
+    		JOptionPane.showMessageDialog(null, "There are no more actions in this turn");
+    	}else{
     		command.undo();
+    	}
+    }
+    
+    public void undoAction(GameController gameController){
+
+    	Turn turn = turnStack.peek();
+    	
+    	ActionCommand command = turn.popActionCommand();
+    	
+    	if(command == null ){
+    		JOptionPane.showMessageDialog(null, "There are no more actions in this turn");
+    	}else{
+    		command.undo();
+    	}
+    }
+    
+    public void undoTurn(GameController gameController){
+	    
+    	Turn turn;
+    	
+    	try{
+    		turn = turnStack.pop();
+		} catch (EmptyStackException e) {
+			JOptionPane.showMessageDialog(null, "Can't undo past the start of the game...");
+			return;
+		}
+    	
+    	while(turn.hasActionCommand()){
+    		undoAction(gameController, turn);
     	};
+    	gameController.swapPlayer();
     	
     }
 }

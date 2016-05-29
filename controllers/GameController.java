@@ -270,8 +270,11 @@ public class GameController {
 	    }
 	    
 	    try{
-		    if((selectedUnit instanceof AgileUnitDecorator) && !mode.equals("modeAgile")){	        
-
+	    	
+	    	if (mode.equals("modeAgile")){
+		        selectedUnit.setMod(false);
+		    	actionInvoker.changeMode(selectedUnitCarrier, new AgileUnitDecorator() );   
+		    }else{
 		        selectedUnit.setMod(true);    
 		        if(currentTeam.equals("Explorer")){	
 		            	actionInvoker.changeMode(selectedUnitCarrier, new DefensiveUnitDecorator());
@@ -279,12 +282,7 @@ public class GameController {
 		            else{
 		            	actionInvoker.changeMode(selectedUnitCarrier, new AttackUnitDecorator());
 		            }
-
-		    }else if (!(selectedUnit instanceof AgileUnitDecorator) && mode.equals("modeAgile") ){
-		        selectedUnit.setMod(false);
-		    	actionInvoker.changeMode(selectedUnitCarrier, new AgileUnitDecorator() );   
-		    }
-	
+		    } 
 		}
 	    catch(Exception e) {
             e.printStackTrace();
@@ -323,7 +321,7 @@ public class GameController {
 		else{
 		    boardController.switchSelectedHud(true);
 		    boardController.setUnitName(cell.getUnit().toString());
-		    boardController.setMod(cell.getUnit().getMod());
+		    boardController.setMode(cell.getUnit().getMod());
 	                 
 		}
 

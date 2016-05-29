@@ -23,7 +23,7 @@ public class MoveCommand implements ActionCommand, Serializable{
     @Override
     public void undo() {
         origin.setUnitCarrier(target.getUnitCarrier());
-        target.setUnit(null);
+        target.setUnitCarrier(null);
     }
     
 }

@@ -45,8 +45,6 @@ public class BoardController {
 	private HUDActionListener hudListener;
 	
 	private JPanel southPanel;
-	private JPanel hudCards;
-	
 	private Mediator mediator;
 
 
@@ -63,7 +61,6 @@ public class BoardController {
 			e.printStackTrace();
 		}
 
-
 		mediator = Mediator.getInstance();
 
 
@@ -75,7 +72,7 @@ public class BoardController {
 		JPanel contentPanel = new JPanel(new BorderLayout());
 		JPanel boardSpace = new JPanel(new GridBagLayout());		
 		southPanel = new JPanel (new BorderLayout());
-		hudCards = new JPanel (new CardLayout());
+		new JPanel (new CardLayout());
 		
 		boardSpace.add(boardView);
 		contentPanel.add(boardSpace, BorderLayout.CENTER);
@@ -140,11 +137,6 @@ public class BoardController {
 
 	}
 	
-	// Sets the default item for the cell
-	private void setCellDefaultItem(int x, int y, BoardItem defaultItem) {
-		board.getCells()[x][y].setDefaultItem(defaultItem);
-	}
-
 	// Sets the unit for the cell
 	public void setCellUnit(int x, int y, Unit unit) {
 		board.getCells()[x][y].setUnitCarrier(new UnitCarrier(unit));
@@ -156,7 +148,6 @@ public class BoardController {
 	public List<Pos> getGate(){
 	    return board.getGate();
 	}
-
 
 	// Sets the item for the cell
 	public void setCellItem(int x, int y, BoardItem item) {
@@ -175,7 +166,7 @@ public class BoardController {
 	}
 	public void storeGate()
 	{
-	     List<Pos> gatePos = new ArrayList<Pos>();
+	    List<Pos> gatePos = new ArrayList<Pos>();
 	    for (int x = 0; x < board.getColumns(); x++) {
             for (int y = 0; y < board.getRows(); y++) {
                 if(this.getCell(x, y).getDefaultItem() == gate)
@@ -260,15 +251,13 @@ public class BoardController {
         }       
 	    return cells;
 	}
-	public void setMod(String mod){
-	    this.mediator.setMode(mod);
+	
+	public void setMode(String mode){
+	    this.mediator.setMode(mode);
 	}
-
-
 
 	// Assumes the draw cells passed in are on the board
 	public void drawActionCells(List<Cell> Cells , State state) {
-		
 		for (Cell cell : Cells) {
 			if(state == State.MOVE){
 				cell.setItem(movableGround);
@@ -279,6 +268,7 @@ public class BoardController {
 			cell.repaint();
 		}
 	}
+	
 	
 	public void resetCells(List<Cell> Cells) {
 		for (Cell Cell : Cells) {
@@ -347,15 +337,8 @@ public class BoardController {
 
 		public void actionPerformed(ActionEvent e) {
 		    String option ;
-		    if(e.getSource().getClass().getSimpleName().equals("JButton"))
-		    {
-			 option = ((JButton) e.getSource()).getName();
-		    }
-		    else
-		    {
-		         option = "mode";
-		    }
-			
+
+			option = ((AbstractButton) e.getSource()).getName();
 
 			switch (option) {
 			case "actionButton":
@@ -369,8 +352,9 @@ public class BoardController {
 				mediator.swapMenuView(false);
 				mediator.swapScreens("selectionScreen");
 				break;
-			case "mode":
-			    gameController.swapMode(((JToggleButton) e.getSource()).getName());
+			case "modeAgile":
+			case "modeSpecial":
+			    gameController.swapMode(option);
 				break;
 			case "save":
 				gameController.save();
@@ -386,11 +370,11 @@ public class BoardController {
 				mediator.swapScreens("undo");
 				break;
 			case "undoturn":
-				ActionInvoker.getInstance().undoTurn();
+				ActionInvoker.getInstance().undoTurn(gameController);
 				System.out.println("Undoing Turn!");
 				break;
 			case "undomove":
-				ActionInvoker.getInstance().undoAction();
+				ActionInvoker.getInstance().undoAction(gameController);
 				System.out.println("Undoing Action");
 				break;
 			default:

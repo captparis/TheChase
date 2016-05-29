@@ -89,7 +89,7 @@ public class UnitHudView extends JPanel{
 		agileStance = new JToggleButton ("Agile");
 		agileStance.setName("modeAgile");
 		specialStance = new JToggleButton ("Defense");
-		specialStance.setName("modeDefense");
+		specialStance.setName("modeSpecial");
 		ability = new JButton ("Ability");
 		save = new JButton("Save");
 		save.setName("save");

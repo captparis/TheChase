@@ -1,7 +1,8 @@
 
 package commands;
 
-import java.util.List;
+import java.util.Queue;
+
 import models.Turn;
 
 public class EndTurnCommand implements ActionCommand{
@@ -15,17 +16,18 @@ public class EndTurnCommand implements ActionCommand{
     @Override
     public void execute() {
         //execute all the mode change commands
-        List<ModeChangeCommand> modeChangeCommands = turn.getModeChangeCommands();
+        Queue<ModeChangeCommand> modeChangeCommands = turn.getModeChangeCommands();
         
         for(ModeChangeCommand mcc : modeChangeCommands){
             mcc.execute();
+            System.out.println("Mode Changed with:" + mcc.toString());
         }
     }
 
     @Override
     public void undo() {
         //execute all the mode change commands
-        List<ModeChangeCommand> modeChangeCommands = turn.getModeChangeCommands();
+        Queue<ModeChangeCommand> modeChangeCommands = turn.getModeChangeCommands();
         
         for(ModeChangeCommand mcc : modeChangeCommands){
             mcc.undo();
