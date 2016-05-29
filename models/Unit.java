@@ -20,6 +20,10 @@ public interface Unit {
 	public abstract void setInitX(int x);
 	
 	public abstract void setInitY(int y);
+	
+	public abstract void setMod(boolean mod);
+	
+	public abstract String getMod();
 
 	public abstract String toString();
 

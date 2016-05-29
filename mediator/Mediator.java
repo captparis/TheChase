@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 public class Mediator {
 	
@@ -42,8 +43,17 @@ public class Mediator {
 	private CardLayout unitHudLayout;
 	private JPanel unitHudCards;
 	
+	private JLabel unitName;
+	
+	private JToggleButton agileStance;
+	private JToggleButton specialStance;
+	
 	//unit hud variables
 	private Boolean selectionViewShowing = false;
+	
+	public ImageIcon agileIcon;
+	public ImageIcon defenseIcon;
+	public ImageIcon attackIcon;
 	
 	// singleton
 	private static Mediator instance;
@@ -82,13 +92,15 @@ public class Mediator {
 	   this.endTurnIcon = endTurnIcon;
    }
    
-   public void registerUnitHudColleagues(CardLayout unitHudLayout, JPanel unitHudCards){
+   public void registerUnitHudColleagues(CardLayout unitHudLayout, JPanel unitHudCards, JToggleButton agileStance, JToggleButton specialStance, ImageIcon agileIcon, ImageIcon defenseIcon, ImageIcon attackIcon, JLabel unitName){
 	   this.unitHudLayout = unitHudLayout;
 	   this.unitHudCards = unitHudCards;
-   }
-   
-   public void registerBoardColleagues(){
-	   
+	   this.agileStance = agileStance;
+	   this.specialStance = specialStance;
+	   this.agileIcon = agileIcon;
+	   this.defenseIcon = defenseIcon;
+	   this.attackIcon = attackIcon;
+	   this.unitName = unitName;
    }
    
    public void registerBoardColleagues(JPanel boardCards, JLabel background, Image explorersWinImage, Image guardiansWinImage){
@@ -98,27 +110,6 @@ public class Mediator {
 	   this.background = background;
    }
    
-   
-   
-   public void startGame(){
-
-   }
-   
-   public void quitGame(){
-	   
-   }
-   
-   public void options(){
-	   
-   }
-   
-   public void hudMenu(){
-	   
-   }
-   
-   public void hudUndo(){
-	   
-   }
    
    //Board methods
    public void changeBoardScreen(Boolean showWin, Boolean isExplorers){
@@ -150,23 +141,28 @@ public class Mediator {
 		playerName.setText(newName);
 	}
    
-   public void setTeam(String team){
-	   currentPlayer.setText(team);
-   }
-   
-   public void swapPlayer(String newName){
-		if (isExplorer){
-			currentPlayer.setText("GUARDIANS");
-			currentPlayer.setForeground(Color.red);
-			isExplorer = false;
+   public void setTeam(String team, String name){
+       currentPlayer.setText(team.toUpperCase());
+		if (team.equals("Explorer")){
+			currentPlayer.setForeground(Color.blue);
+			this.specialStance.setText("DEFENSE");
+	            this.specialStance.setIcon(defenseIcon);
 		}
 		else {
-			currentPlayer.setText("EXPLORERS");
-			currentPlayer.setForeground(Color.blue);
-			isExplorer = true;
+			currentPlayer.setForeground(Color.red);
+			this.specialStance.setText("Attack");
+            this.specialStance.setIcon(attackIcon);
 		}
-		playerName.setText(newName);
+		playerName.setText(name);
 	}
+   
+   public void setInstruction(String newInstruction){
+	   instruction.setText(newInstruction);
+   }
+   
+   public void setActionButton(String newText){
+	   actionButton.setText(newText);
+   }
    
    public void setDiceState(){
 		instruction.setText("Please roll dice");
@@ -229,6 +225,7 @@ public class Mediator {
 	
 	//Unit HUD methods
 	
+	//Swaps Unit HUD area to display different screens
 	public void swapScreens(String toSwap){
 		if (toSwap == "menu"){
 			unitHudLayout.show(unitHudCards, "menu");
@@ -250,6 +247,30 @@ public class Mediator {
 		else if (toSwap == "undo"){
 			unitHudLayout.show(unitHudCards,  "undo");
 		}
+	}
+	
+	
+	//Used to update the mode buttons to show which mode is currently active upon selecting a unit
+	public void setMode(String mode){
+		if (mode.equals("Agile")){
+			agileStance.setSelected(true);
+			specialStance.setSelected(false);
+		}
+		else{
+			agileStance.setSelected(false);
+			specialStance.setSelected(true);
+		}
+		
+	}
+	
+	//Functions to handle changes to the Unit HUD based on state changes
+	public void changeUnitName(String selectedUnit){
+		unitName.setText(selectedUnit);
+	}
+
+	
+	public void setUnitName(String newUnitName){
+		unitName.setText(newUnitName);
 	}
 
 }

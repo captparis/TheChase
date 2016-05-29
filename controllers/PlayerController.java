@@ -10,13 +10,9 @@
 
 package controllers;
 
-import javax.swing.*;
-
-import decorators.*;
+import abstractFactory.*;
 import models.Unit;
-import models.UnitType;
 import models.Player;
-import models.AbstractUnit;
 
 public class PlayerController {
 
@@ -28,52 +24,29 @@ public class PlayerController {
 		this.unitController = unitController;
 	}
 
-	public Player newPlayer(String team) {
+	
+	
+	public Player newPlayer(String team) throws Exception {
 
-		boolean accepted = false;
-		String name = null;
-
-		while (!accepted) {
-			try {
-				name = validatedName(getNameInput(team));
-				accepted = true;
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(null, "Your name must be between 1 "
-						+ "and 50 characters long.");
-			}
+		AbstractPlayerFactory playerFactory;
+		
+		switch(team){
+		case("Guardian"):
+			playerFactory = new GuardianPlayerFactory(unitController);
+		break;
+		case("Explorer"):
+			playerFactory = new ExplorerPlayerFactory(unitController);
+		break;
+		default:
+			throw new Exception("Team not implemented");
 		}
-		Player newPlayer = new Player(name, team);
-		initUnits(newPlayer);
-		return newPlayer;
+		
+		return playerFactory.getPlayer();
+
 	}
 
-	private void initUnits(Player player) {
 
-		for (UnitType unitType : gameController.getTeamSetup().get(player.getTeam())) {
-			try {
-				String unitTypeName = unitType.getType();
-				AbstractUnit unit = unitController.newUnit(unitType);
-				player.addUnit(unitTypeName, unit);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
-		}
-	}
-
-	private String getNameInput(String team) {
-		String playerName = (String) JOptionPane.showInputDialog("What is your" + ""
-				+ " name " + team + "?");
-
-		return playerName;
-	}
-
-	private String validatedName(String nameInput) throws Exception {
-		if (nameInput.length() < 1 || nameInput.length() > 50) {
-			throw new Exception("Name length is out of bounds");
-		}
-		return nameInput;
-	}
 
 	public void newDiceRoll(Player player, int diceAmount) {
 		player.setCurrentRoll(diceAmount);

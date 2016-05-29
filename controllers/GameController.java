@@ -13,7 +13,6 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import javax.swing.*;
 
@@ -21,6 +20,7 @@ import commands.ActionInvoker;
 import decorators.*;
 import models.*;
 import models.items.*;
+import sound.SoundManager;
 import main.*;
 import mediator.Mediator;
 import memento.Caretaker;
@@ -55,6 +55,8 @@ public class GameController {
 	private final PlayerController playerController;
 	private final UnitController unitController;
 	private BoardController boardController;
+	
+	private SoundManager soundManager = new SoundManager("bin/sound/death.wav");
 
 	// Memento
 	Caretaker ct = new Caretaker();
@@ -64,7 +66,6 @@ public class GameController {
 
 	// Constructor
 	public GameController(JFrame mainWindow) {
-	    
 		this.mainWindow = mainWindow;
 		mainWindow.setResizable(false);
 		this.game = Game.getInstance();
@@ -77,45 +78,11 @@ public class GameController {
 		actionInvoker = ActionInvoker.getInstance();
 	}
 
-	private void setupTeams() {
-
-		teamSetup = new HashMap<>();
-		
-		List<UnitType> explorerUnitTypes = new ArrayList<UnitType>();
-		if (settings.activeUnits.get("hero") == true){
-			explorerUnitTypes.add(new UnitType("Hero", "models.explorers", 
-					settings.rows - 1, settings.columns - 2));
-		}
-		if (settings.activeUnits.get("trapmaster") == true){
-			explorerUnitTypes.add(new UnitType("TrapMaster", "models.explorers", 
-					settings.rows - 2, settings.columns - 2));
-		}
-		if (settings.activeUnits.get("tactician") == true){
-			explorerUnitTypes.add(new UnitType("Tactician", "models.explorers", settings.rows - 1, settings.columns - 1));
-		}
-		if (settings.activeUnits.get("scout") == true){
-			explorerUnitTypes.add(new UnitType("Scout", "models.explorers", settings.rows - 2, settings.columns - 1));
-		}
-		
-		List<UnitType> guardianUnitTypes = new ArrayList<UnitType>();;
-		if (settings.activeUnits.get("golem") == true){
-			guardianUnitTypes.add(new UnitType("Golem", "models.guardians", 0, settings.columns - 1));
-		}
-		if (settings.activeUnits.get("hunter") == true){
-			guardianUnitTypes.add(new UnitType("Hunter", "models.guardians", settings.rows - 1, 0));
-		}
-		if (settings.activeUnits.get("behemoth") == true){
-			guardianUnitTypes.add(new UnitType("Behemoth", "models.guardians", 0, 0));
-		}
-		
-		teamSetup.put("Explorer", explorerUnitTypes);
-		teamSetup.put("Guardian", guardianUnitTypes);
-	}
 
 	public void startGame() {
+		this.clearGame();
 		System.out.println("Start Game");
 		try {
-			setupTeams();
 			initGame();
 			System.out.println("Explorer: " + game.getPlayer("Explorer").getName());
 			System.out.println("Guardian: " + game.getPlayer("Guardian").getName());
@@ -135,6 +102,9 @@ public class GameController {
 	       System.out.println("set Gate!!!");
 	       if (settings.setup){
 	            game.setGameState(State.SET_GATE);
+	            boardController.initUnit();
+	            mediator.setInstruction("Customise board");
+	            mediator.setActionButton("Start game");
 	       }
 	       else {
 	    	   boardController.initUnit();
@@ -163,6 +133,7 @@ public class GameController {
 	    game.getPlayers().clear();
         game.setWinner(null);
         Board.clearInstance();
+        mainWindow.pack();
 	}
 	
 	public void loadGame(Game game){
@@ -207,8 +178,14 @@ public class GameController {
 	}
 
 	public void showMainMenu() {
+	    
 		CardLayout cardLayout = (CardLayout) cards.getLayout();
 		cardLayout.show(cards, "mainMenu");
+		mainWindow.pack();
+	}
+	public void backMainMenu(){
+	    cards.remove(boardView);
+	    this.showMainMenu();
 	}
 	
 	public void showOptions() {
@@ -241,7 +218,7 @@ public class GameController {
 	            noPlayer.printStackTrace();
 	        }
 	    }
-	     mediator.swapPlayer(game.getCurrentPlayer().getName());
+	     mediator.setTeam(game.getCurrentPlayer().getTeam(), game.getCurrentPlayer().getName());
 	 }
 
 
@@ -256,7 +233,7 @@ public class GameController {
 	       }
 		// If it is the explorers turn, check if any units have landed on a gate.
 		   else{			   
-		       for(Pos gate : this.getGate()){
+		       for(Pos gate : boardController.getGate()){
 
 		           System.out.println("x: "+ gate.getXPos() +"y: "+gate.getYPos());
 		           if(this.getCurrentPlayer().hasUnit(boardController.getCell(gate.getXPos(), gate.getYPos()).getUnit())){
@@ -294,14 +271,18 @@ public class GameController {
 	    
 	    try{
 		    if((selectedUnit instanceof AgileUnitDecorator) && !mode.equals("modeAgile")){	        
-		            if(currentTeam.equals("Explorer")){	
+
+		        selectedUnit.setMod(true);    
+		        if(currentTeam.equals("Explorer")){	
 		            	actionInvoker.changeMode(selectedUnitCarrier, new DefensiveUnitDecorator());
 		            }
 		            else{
 		            	actionInvoker.changeMode(selectedUnitCarrier, new AttackUnitDecorator());
 		            }
-		    }else if (!(selectedUnit instanceof AgileUnitDecorator) && mode.equals("modeAgile") ){     
-		    	actionInvoker.changeMode( selectedUnitCarrier, new AgileUnitDecorator() );   
+
+		    }else if (!(selectedUnit instanceof AgileUnitDecorator) && mode.equals("modeAgile") ){
+		        selectedUnit.setMod(false);
+		    	actionInvoker.changeMode(selectedUnitCarrier, new AgileUnitDecorator() );   
 		    }
 	
 		}
@@ -342,6 +323,8 @@ public class GameController {
 		else{
 		    boardController.switchSelectedHud(true);
 		    boardController.setUnitName(cell.getUnit().toString());
+		    boardController.setMod(cell.getUnit().getMod());
+	                 
 		}
 
 		// If it is the guardians turn and the user clicks on the selected unit,
@@ -433,6 +416,7 @@ public class GameController {
                     + cell.getUnit().getClass().getSimpleName());
             if (cell.getUnit().die(this.rollDice())){
             	ActionInvoker.getInstance().kill(cell); 
+            	soundManager.play();
             	mediator.alertHit(true);
             }
             else {
@@ -466,7 +450,7 @@ public class GameController {
 	}
 
 	private void quitGame() {
-		// System.exit(0);
+		 System.exit(0);
 		return;
 	}
 
@@ -484,6 +468,8 @@ public class GameController {
 	        boardController.storeGate();
 	        boardController.initUnit();
 	        game.setGameState(GameController.State.DICE_ROLL);
+	        mediator.setInstruction("Please roll dice");
+            mediator.setActionButton("Roll dice");
 	        
 	    }
 	    else if (game.getGameState() == GameController.State.DICE_ROLL) {
@@ -495,7 +481,6 @@ public class GameController {
 
 			// update the hud view with the new dice amount
 			mediator.setDiceRoll(game.getCurrentPlayer().getRemainingMoves());
-			boardController.swapTeam(game.getCurrentPlayer().getTeam());
 			game.setGameState(GameController.State.MOVE);
 			mediator.setUnitState();
 		} // Move to check win state, restart if nobody won
@@ -506,7 +491,7 @@ public class GameController {
 		// game state must be in CHECK_WIN
 		else {
 			if (game.getWinner() != null) {
-				showMainMenu();
+			    this.backMainMenu();
 				mediator.changeBoardScreen(false, false);
 				this.clearGame();
 			}
@@ -526,26 +511,31 @@ public class GameController {
 	public void applySettings(){
 		int newColumns = optionsMenuView.getColumns();
 		int newRows = optionsMenuView.getRows();
+
+		boolean setupOn = optionsMenuView.getSetup();
+
+		if( Math.min(newColumns, newRows)>2)
+		{
+
 		settings.setBoardSize(newRows, newColumns);
+		settings.setup = setupOn;
 		System.out.println("Applied new settings");
+		}
+		else{
+		    JOptionPane.showMessageDialog(null, "Rows and Columns must larger than 2");
+		    return;
+		}
 		
 		ArrayList<String> inactiveUnits = optionsMenuView.getInactiveUnits();
+		
+		//Reset all units to active
 		for (Map.Entry<String, Boolean> entry : settings.activeUnits.entrySet()){
-			for (String t : inactiveUnits){
-				if (inactiveUnits != null){
-					if (entry.getKey() == t){
-						settings.activeUnits.put(t, false);
-						System.out.println(entry.getKey() + " is disabled");
-					}
-					else {
-						System.out.println("there are inactive units but " + entry.getKey() + " is enabled");
-						entry.setValue(true);
-					}
-				}
-				else {
-					System.out.println(entry.getKey() + " is enabled");
-					entry.setValue(true);
-				}
+			entry.setValue(true);
+		}
+		
+		if (inactiveUnits != null){
+			for (String t: inactiveUnits){
+				settings.activeUnits.put(t, false);
 			}
 		}
 	}
@@ -627,12 +617,7 @@ public class GameController {
 	public void setWinner(Player winner) {
 		game.setWinner(winner);
 	}
-	public List<Pos> getGate(){
-	    return this.settings.getGate();
-	}
-	public void saveGate(List<Pos> pos){
-	    this.settings.setGate(pos);
-	}
+
 	
 	
 	public void save (){

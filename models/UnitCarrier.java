@@ -86,4 +86,17 @@ public class UnitCarrier implements Unit, Serializable {
 		unit.setInnerUnit(innerUnit);
 	}
 
+    @Override
+    public String getMod() {
+        // TODO Auto-generated method stub
+        return unit.getMod();
+    }
+
+    @Override
+    public void setMod(boolean mod) {
+        unit.setMod(mod);
+        // TODO Auto-generated method stub
+        
+    }
+
 }

@@ -25,5 +25,18 @@ public abstract class Guardian extends AbstractUnit {
 	public abstract boolean attackable(int x, int y);
 	@Override
 	public abstract boolean moveable(int x, int y);
+	   @Override
+	    public String getMod(){
+	        if(!super.mod())
+	        {
+	            return "Agile";
+	            
+	        }
+	        else
+	        {
+	            return "Attack";
+	        }
+	        
+	    }
 
 }

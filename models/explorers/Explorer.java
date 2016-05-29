@@ -16,5 +16,20 @@ public abstract class Explorer extends AbstractUnit {
     public boolean moveable(int x, int y) {
 		return true;
     }
+	
+	@Override
+	public String getMod(){
+        if(!super.mod())
+        {
+            return "Agile";
+            
+        }
+        else
+        {
+            return "Defensive";
+        }
+	    
+	}
+	
 
 }
