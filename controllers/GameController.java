@@ -102,7 +102,6 @@ public class GameController {
 	       System.out.println("set Gate!!!");
 	       if (settings.setup){
 	            game.setGameState(State.SET_GATE);
-	            boardController.initUnit();
 	            mediator.setInstruction("Customise board");
 	            mediator.setActionButton("Start game");
 	       }

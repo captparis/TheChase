@@ -368,6 +368,7 @@ public class BoardController {
 				break;
 			case "undo":
 				mediator.swapScreens("undo");
+				System.out.println("undo!");
 				break;
 			case "undoturn":
 				ActionInvoker.getInstance().undoTurn();
@@ -375,7 +376,6 @@ public class BoardController {
 				break;
 			case "undomove":
 				ActionInvoker.getInstance().undoAction();
-				System.out.println("Undoing Action");
 				break;
 			default:
 				break;
