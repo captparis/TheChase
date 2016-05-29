@@ -74,7 +74,13 @@ public class ActionInvoker {
     
     public void undoAction(){
 
-    	Turn turn = turnStack.peek();
+    	Turn turn;
+		try {
+			turn = turnStack.peek();
+		} catch (EmptyStackException e) {
+			JOptionPane.showMessageDialog(null,"There are no actions to undo yet.");
+			return;
+		}
     	
     	ActionCommand command = turn.popActionCommand();
     	
@@ -83,11 +89,18 @@ public class ActionInvoker {
     	}else{
     		command.undo();
     	}
+    	turn.getPlayer().setUndoAllowed(false);
     }
     
     public void undoTurn(){
 	    
-    	Player player = turnStack.peek().getPlayer();
+    	Player player;
+		try {
+			player = turnStack.peek().getPlayer();
+		} catch (EmptyStackException e) {
+			JOptionPane.showMessageDialog(null,"There are no turns to undo yet.");
+			return;
+		}
     	
     	if (player.getTurnsUndone() > 2){
     		JOptionPane.showMessageDialog(null, "You have undone the maximum number of turns");
@@ -111,6 +124,7 @@ public class ActionInvoker {
     	};
     	
     	player.incrementTurnsUndone();
+    	player.setUndoAllowed(false);
 
     }
 }

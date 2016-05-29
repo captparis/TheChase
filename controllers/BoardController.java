@@ -376,6 +376,7 @@ public class BoardController {
 				break;
 			case "undomove":
 				ActionInvoker.getInstance().undoAction();
+				System.out.println("Undoing Action!");
 				break;
 			default:
 				break;

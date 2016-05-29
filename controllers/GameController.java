@@ -99,16 +99,19 @@ public class GameController {
 
 		// resize the main window to fit the size of the components.
 		mainWindow.pack();
-	       System.out.println("set Gate!!!");
-	       if (settings.setup){
-	            game.setGameState(State.SET_GATE);
-	            mediator.setInstruction("Customise board");
-	            mediator.setActionButton("Start game");
-	       }
-	       else {
-	    	   boardController.initUnit();
-	    	   game.setGameState(State.DICE_ROLL);
-	       }
+       System.out.println("set Gate!!!");
+       if (settings.setup){
+            game.setGameState(State.SET_GATE);
+            mediator.setInstruction("Customise board");
+            mediator.setActionButton("Start game");
+       }
+       else {
+    	   boardController.initUnit();
+    	   game.setGameState(State.DICE_ROLL);
+       }
+       
+		// create the new turn object
+   		ActionInvoker.getInstance().startTurn(new Turn(game.getCurrentPlayer()));
 
 	}
 
@@ -441,9 +444,13 @@ public class GameController {
             this.swapPlayer();
             game.setCurrentTurn(new Turn(game.getCurrentPlayer()));
             game.setGameState(GameController.State.DICE_ROLL);
+            mediator.setUndoButton(game.getCurrentPlayer().isUndoAllowed());
+			// create the new turn object
+	    	ActionInvoker.getInstance().startTurn(new Turn(game.getCurrentPlayer()));
         } else {
             mediator.setWinState(game.getWinner().getTeam());
         }
+        
 	}
 
 	private void quitGame() {
@@ -469,10 +476,7 @@ public class GameController {
             mediator.setActionButton("Roll dice");
 	        
 	    }
-	    else if (game.getGameState() == GameController.State.DICE_ROLL) {
-			// create the new turn object
-	    	ActionInvoker.getInstance().startTurn(new Turn(game.getCurrentPlayer()));
-	    	
+	    else if (game.getGameState() == GameController.State.DICE_ROLL) {	    	
 	    	// player rolls dice
 			playerController.newDiceRoll(game.getCurrentPlayer(), rollDice());
 
