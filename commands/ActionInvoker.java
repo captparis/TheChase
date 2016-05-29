@@ -60,12 +60,10 @@ public class ActionInvoker {
         Turn turn = turnStack.peek();
     	EndTurnCommand endTurnCommand = new EndTurnCommand(turn);
         endTurnCommand.execute();
-        //turn.pushActionCommand(endTurnCommand); //TODO not sure if this is needed
+        turn.pushActionCommand(endTurnCommand); 
     }
     
-    public void undoAction(GameController gameController, Turn turn){
-
-    	
+    private void undoAction(Turn turn){    	
     	ActionCommand command = turn.popActionCommand();
     	
     	if(command == null ){
@@ -75,7 +73,7 @@ public class ActionInvoker {
     	}
     }
     
-    public void undoAction(GameController gameController){
+    public void undoAction(){
 
     	Turn turn = turnStack.peek();
     	
@@ -88,21 +86,23 @@ public class ActionInvoker {
     	}
     }
     
-    public void undoTurn(GameController gameController){
+    public void undoTurn(){
 	    
-    	Turn turn;
-    	
-    	try{
-    		turn = turnStack.pop();
-		} catch (EmptyStackException e) {
+		if(turnStack.size()<3){
 			JOptionPane.showMessageDialog(null, "Can't undo past the start of the game...");
 			return;
 		}
-    	
+    	//Undo the current player's turn
+    	Turn turn = turnStack.pop();
     	while(turn.hasActionCommand()){
-    		undoAction(gameController, turn);
+    		undoAction(turn);
     	};
-    	gameController.swapPlayer();
     	
+    	//Undo the other player's turn
+    	turn = turnStack.pop();
+    	while(turn.hasActionCommand()){
+    		undoAction(turn);
+    	};
+
     }
 }
