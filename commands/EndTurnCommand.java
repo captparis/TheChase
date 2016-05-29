@@ -24,7 +24,12 @@ public class EndTurnCommand implements ActionCommand{
 
     @Override
     public void undo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //execute all the mode change commands
+        List<ModeChangeCommand> modeChangeCommands = turn.getModeChangeCommands();
+        
+        for(ModeChangeCommand mcc : modeChangeCommands){
+            mcc.undo();
+        }
     }
     
 }

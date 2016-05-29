@@ -24,28 +24,49 @@ public class ActionInvoker {
         return instance;
     }
     
-    public void move(Turn turn, Cell origin, Cell target){
-        MoveCommand moveCommand = new MoveCommand(origin, target);
-        moveCommand.execute();
-        turn.pushActionCommand(moveCommand);
-    }
-    
-    public void kill(Turn turn, Cell target){
-        KillCommand killCommand = new KillCommand(target);
-        killCommand.execute();
-        turn.pushActionCommand(killCommand);
-    }
-    
-    public void changeMode(Turn turn, UnitCarrier unitCarrier, Unit newDecoratedUnit ){
-        ModeChangeCommand modeChangeCommand = new ModeChangeCommand(unitCarrier, newDecoratedUnit);
-        turn.addModeChangeCommand(modeChangeCommand);
-    }
-    
-    public void endTurn(Turn turn){
-        EndTurnCommand endTurnCommand = new EndTurnCommand(turn);
-        endTurnCommand.execute();
-        turn.pushActionCommand(endTurnCommand); //TODO not sure if this is needed
+    public void startTurn(Turn turn){
         turnStack.push(turn);
     }
     
+    public void move(Cell origin, Cell target){
+        MoveCommand moveCommand = new MoveCommand(origin, target);
+        moveCommand.execute();
+        
+        Turn turn = turnStack.peek();
+        turn.pushActionCommand(moveCommand);
+    }
+    
+    public void kill(Cell target){
+        KillCommand killCommand = new KillCommand(target);
+        killCommand.execute();
+        
+        Turn turn = turnStack.peek();
+        turn.pushActionCommand(killCommand);
+    }
+    
+    public void changeMode(UnitCarrier unitCarrier, Unit newDecoratedUnit ){
+        ModeChangeCommand modeChangeCommand = new ModeChangeCommand(unitCarrier, newDecoratedUnit);
+        
+        Turn turn = turnStack.peek();
+        turn.addModeChangeCommand(modeChangeCommand);
+    }
+    
+    public void endTurn(){
+        Turn turn = turnStack.peek();
+    	EndTurnCommand endTurnCommand = new EndTurnCommand(turn);
+        endTurnCommand.execute();
+        turn.pushActionCommand(endTurnCommand); //TODO not sure if this is needed
+    }
+    
+    public void undoAction(){
+    	turnStack.peek().popActionCommand().undo();
+    }
+    public void undoTurn(){
+    	Turn turn = turnStack.pop();
+    	while(turn.hasActionCommand()){
+    		ActionCommand command = turn.popActionCommand();
+    		command.undo();
+    	};
+    	
+    }
 }

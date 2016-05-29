@@ -41,5 +41,9 @@ public class Turn implements  Serializable {
     public List<ModeChangeCommand> getModeChangeCommands(){
         return this.modeChanges;
     }
+
+	public boolean hasActionCommand() {
+		return !actions.isEmpty();
+	}
     
 }

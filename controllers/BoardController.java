@@ -210,7 +210,7 @@ public class BoardController {
 
 	// assumes origin contains a movable unit and can legally move to target.
 	public int move(Turn turn, Cell origin, Cell target) {		
-		ActionInvoker.getInstance().move(turn, origin, target);
+		ActionInvoker.getInstance().move(origin, target);
 		// return the distance that the unit moved.
 		return getDistance(origin, target);
 	}
@@ -400,12 +400,12 @@ public class BoardController {
 				mediator.swapScreens("undo");
 				break;
 			case "undoturn":
+				ActionInvoker.getInstance().undoTurn();
+				System.out.println("Undoing Turn!");
 				break;
 			case "undomove":
-				break;
-			case "redoturn":
-				break;
-			case "redomove":
+				ActionInvoker.getInstance().undoAction();
+				System.out.println("Undoing Action");
 				break;
 			default:
 				break;

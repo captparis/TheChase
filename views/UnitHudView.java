@@ -110,12 +110,11 @@ public class UnitHudView extends JPanel{
 		exit.setName("exit");
 		undoMove = new JButton(undoMoveIcon);
 		undoMove.setName("undomove");
-		redoMove = new JButton(redoMoveIcon);
-		redoMove.setName("redomove");
+		undoMove.addActionListener(hudListener);
 		undoTurn = new JButton(undoTurnIcon);
 		undoTurn.setName("undoturn");
-		redoTurn = new JButton (redoTurnIcon);
-		redoTurn.setName("redoturn");
+		undoTurn.addActionListener(hudListener);
+
 		
 		
 		agileStance.setFocusPainted(false);
@@ -199,14 +198,10 @@ public class UnitHudView extends JPanel{
         undoScreen.add(undoTurn);
         undoScreen.add(undoMove);
         undoScreen.add(undoLabel);
-        undoScreen.add(redoMove);
-        undoScreen.add(redoTurn);
         
         notSelectedHud.add(noSelection);
         
-        
-       
-		
+
 		unitHudCards.add(selectedHud, "selected");
 		unitHudCards.add(notSelectedHud, "notselected");
 		unitHudCards.add(menuPanel, "menu");

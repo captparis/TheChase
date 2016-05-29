@@ -287,7 +287,6 @@ public class GameController {
 	    Unit selectedUnit = game.getSelectedCell().getUnit();
 	    UnitCarrier selectedUnitCarrier = game.getSelectedCell().getUnitCarrier();
 	    String currentTeam = game.getCurrentPlayer().getTeam();
-	    Turn turn = game.getCurrentTurn();
 	    
 	    if(!game.getCurrentPlayer().hasUnit(selectedUnit)){
 	    	return;
@@ -296,13 +295,13 @@ public class GameController {
 	    try{
 		    if((selectedUnit instanceof AgileUnitDecorator) && !mode.equals("modeAgile")){	        
 		            if(currentTeam.equals("Explorer")){	
-		            	actionInvoker.changeMode(turn, selectedUnitCarrier, new DefensiveUnitDecorator());
+		            	actionInvoker.changeMode(selectedUnitCarrier, new DefensiveUnitDecorator());
 		            }
 		            else{
-		            	actionInvoker.changeMode(turn, selectedUnitCarrier, new AttackUnitDecorator());
+		            	actionInvoker.changeMode(selectedUnitCarrier, new AttackUnitDecorator());
 		            }
 		    }else if (!(selectedUnit instanceof AgileUnitDecorator) && mode.equals("modeAgile") ){     
-		    	actionInvoker.changeMode(turn, selectedUnitCarrier, new AgileUnitDecorator() );   
+		    	actionInvoker.changeMode( selectedUnitCarrier, new AgileUnitDecorator() );   
 		    }
 	
 		}
@@ -380,7 +379,7 @@ public class GameController {
         	if(cell.getItem() instanceof MovableGround){
         		// move the unit in the selected cell to the clicked cell
                 boardController.resetCells(game.getLastCells());
-                ActionInvoker.getInstance().move(game.getCurrentTurn(),game.getSelectedCell(), cell);
+                ActionInvoker.getInstance().move(game.getSelectedCell(), cell);
                 int moveDistance = boardController.getDistance(game.getSelectedCell(), cell);
 
                 // subtract the current players remaining moves by the distance
@@ -433,7 +432,7 @@ public class GameController {
             System.out.println(game.getSelectedCell().getUnit().getClass().getSimpleName() + " is attacking "
                     + cell.getUnit().getClass().getSimpleName());
             if (cell.getUnit().die(this.rollDice())){
-            	ActionInvoker.getInstance().kill(game.getCurrentTurn(), cell); 
+            	ActionInvoker.getInstance().kill(cell); 
             	mediator.alertHit(true);
             }
             else {
@@ -457,7 +456,7 @@ public class GameController {
             mediator.setDiceState();
             // Swap to the next player, this could be changed later to
             // facilitate more than 2 players
-            ActionInvoker.getInstance().endTurn(game.getCurrentTurn());
+            ActionInvoker.getInstance().endTurn();
             this.swapPlayer();
             game.setCurrentTurn(new Turn(game.getCurrentPlayer()));
             game.setGameState(GameController.State.DICE_ROLL);
@@ -488,7 +487,10 @@ public class GameController {
 	        
 	    }
 	    else if (game.getGameState() == GameController.State.DICE_ROLL) {
-			// player rolls dice
+			// create the new turn object
+	    	ActionInvoker.getInstance().startTurn(new Turn(game.getCurrentPlayer()));
+	    	
+	    	// player rolls dice
 			playerController.newDiceRoll(game.getCurrentPlayer(), rollDice());
 
 			// update the hud view with the new dice amount
